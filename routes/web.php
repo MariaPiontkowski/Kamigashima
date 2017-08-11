@@ -11,6 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    dd('ok');
+Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('/', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('senha/recuperar', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('senha/recuperar', 'Auth\ResetPasswordController@reset');
+Route::get('senha/recuperar/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('senha/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+    Route::get('/', 'Admin\DashboardController@index')->name('admin.dashboard');
+    Route::resource('fornecedor', 'Admin\ProviderController', ['except' => ['show']]);
+    Route::resource('fornecedor.produtos', 'Admin\ProductController', ['except' => ['show']]);
 });
