@@ -34,26 +34,23 @@
                     <table class="table table-bordered table-striped table-hover table-basic">
                         <thead>
                         <tr>
-                            <th>Referência</th>
                             <th>Nome</th>
-                            <th>Comissão</th>
+                            <th>CPF</th>
                             <th width="15%">Ações</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>Referência</th>
                             <th>Nome</th>
-                            <th>Comissão</th>
+                            <th>CPF</th>
                             <th>Ações</th>
                         </tr>
                         </tfoot>
                         <tbody>
                         @foreach ($patients as $patient)
                             <tr>
-                                <td>{{ $patient->reference }}</td>
                                 <td>{{ $patient->name }}</td>
-                                <td>{{ $patient->commission }}%</td>
+                                <td>{{ $patient->document ?: null }}</td>
                                 <td>
                                     <div class="pull-right">
                                         <a href="{{ route('paciente.edit', $patient->id) }}" data-toggle="tooltip"

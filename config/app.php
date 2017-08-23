@@ -172,7 +172,6 @@ return [
         * 3rd Party Service Providers...
         */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Yajra\Datatables\DatatablesServiceProvider::class,
 
         /*
          * Application Service Providers...
