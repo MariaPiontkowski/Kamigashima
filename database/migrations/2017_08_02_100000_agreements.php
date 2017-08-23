@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableProducts extends Migration
+class Agreements extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateTableProducts extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('agreements', function (Blueprint $table) {
+            $table->engine = "InnoDB";
 
             $table->increments('id');
-            $table->integer('provider_id')->unsigned();
-            $table->integer('reference');
-            $table->string('path');
-            $table->float('value');
-            $table->foreign('provider_id')
+            $table->integer('agreement_operator_id')->unsigned();
+            $table->string('agreement', 80);
+            $table->foreign('agreement_operator_id')
                 ->references('id')
-                ->on('providers')
+                ->on('agreement_operators')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();
@@ -37,6 +35,6 @@ class CreateTableProducts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('agreements');
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Provider;
+use App\Http\Controllers\Controller;
+use App\Patient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class ProviderController extends Controller
+class PatientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        return view('admin.provider.index', [
-            'providers' => Provider::all()
+        return view('admin.patient.index', [
+            'patients' => Patient::all()
         ]);
     }
 
@@ -28,8 +28,8 @@ class ProviderController extends Controller
      */
     public function create()
     {
-        return view('admin.provider.create', [
-            'provider' => new Provider(),
+        return view('admin.patient.create', [
+            'patient' => new Patient(),
             'action' => route('fornecedor.store'),
             'method' => 'post'
         ]);
@@ -47,14 +47,14 @@ class ProviderController extends Controller
         $birthday = Carbon::parse(str_replace('/', '-', $request->birthday))
             ->format('Y-m-d');
 
-        $provider = new Provider();
-        $provider->reference = $request->reference;
-        $provider->name = $name;
-        $provider->phone = $request->phone;
-        $provider->email = $request->email;
-        $provider->birthday = $birthday;
-        $provider->commission = $request->commission;
-        $provider->save();
+        $patient = new Patient();
+        $patient->reference = $request->reference;
+        $patient->name = $name;
+        $patient->phone = $request->phone;
+        $patient->email = $request->email;
+        $patient->birthday = $birthday;
+        $patient->commission = $request->commission;
+        $patient->save();
 
         return redirect()
             ->route('fornecedor.index')
@@ -69,8 +69,8 @@ class ProviderController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.provider.edit', [
-            'provider' => Provider::find($id),
+        return view('admin.patient.edit', [
+            'patient' => Patient::find($id),
             'action' => route('fornecedor.update', $id),
             'method' => 'put'
         ]);
@@ -89,14 +89,14 @@ class ProviderController extends Controller
         $birthday = Carbon::parse(str_replace('/', '-', $request->birthday))
             ->format('Y-m-d');
 
-        $provider = Provider::find($id);
-        $provider->reference = $request->reference;
-        $provider->name = $name;
-        $provider->phone = $request->phone;
-        $provider->email = $request->email;
-        $provider->birthday = $birthday;
-        $provider->commission = $request->commission;
-        $provider->save();
+        $patient = Patient::find($id);
+        $patient->reference = $request->reference;
+        $patient->name = $name;
+        $patient->phone = $request->phone;
+        $patient->email = $request->email;
+        $patient->birthday = $birthday;
+        $patient->commission = $request->commission;
+        $patient->save();
 
         return redirect()
             ->route('fornecedor.index')
@@ -111,10 +111,10 @@ class ProviderController extends Controller
      */
     public function destroy($id)
     {
-        $provider = Provider::find($id);
-        $name = $provider->name;
+        $patient = Patient::find($id);
+        $name = $patient->name;
 
-        Provider::destroy($id);
+        Patient::destroy($id);
 
         return redirect()
             ->route('fornecedor.index')

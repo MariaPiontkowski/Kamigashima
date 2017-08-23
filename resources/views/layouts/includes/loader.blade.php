@@ -1,7 +1,7 @@
 <div class="page-loader-wrapper">
     <div class="loader">
         <div class="preloader">
-            <div class="spinner-layer pl-blue">
+            <div class="spinner-layer pl-blue-grey">
                 <div class="circle-clipper left">
                     <div class="circle"></div>
                 </div>

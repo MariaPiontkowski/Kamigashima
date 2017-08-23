@@ -7,7 +7,7 @@
         @if($errors->has('email'))
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                    >&times;</span></button>
                 <strong>Oops!</strong> {{ $errors->first('email') }}
             </div>
         @endif
@@ -43,6 +43,6 @@
                        placeholder="Confirmar Senha" required>
             </div>
         </div>
-        <button class="btn btn-block btn-lg bg-teal waves-effect" type="submit">Redefinir Senha</button>
+        <button class="btn btn-block btn-lg bg-blue-grey waves-effect">Redefinir Senha</button>
     </form>
 @endsection

@@ -22,6 +22,5 @@ Route::post('senha/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/', 'Admin\DashboardController@index')->name('admin.dashboard');
-    Route::resource('fornecedor', 'Admin\ProviderController', ['except' => ['show']]);
-    Route::resource('fornecedor.produtos', 'Admin\ProductController', ['except' => ['show']]);
+    Route::resource('paciente', 'Admin\PatientController', ['except' => ['show']]);
 });

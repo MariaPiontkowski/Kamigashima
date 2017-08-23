@@ -1,8 +1,8 @@
-@extends('layouts.admin', ['title' => 'Adicionar Fornecedor'])
+@extends('layouts.admin', ['title' => 'Editar Fornecedor'])
 
 @section('breadcrumb')
     <li><a href="{{ route('fornecedor.index') }}"><i class="material-icons">supervisor_account</i> Fornecedores</a></li>
-    <li class="active">Adicionar Fornecedor</li>
+    <li class="active">Editar Fornecedor</li>
 @endsection
 
 @section('content')
@@ -11,11 +11,11 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Adicionar Fornecedor
+                        Editar Fornecedor
                     </h2>
                 </div>
                 <div class="body">
-                    @include('admin.provider.form')
+                    @include('admin.patient.form')
                 </div>
             </div>
         </div>

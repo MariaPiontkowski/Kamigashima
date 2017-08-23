@@ -5,8 +5,9 @@
         {{ csrf_field() }}
         @if($errors->has('email'))
             <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span>&times;</span>
+                </button>
                 <strong>Oops!</strong> {{ $errors->first('email') }}
             </div>
         @endif
@@ -35,11 +36,11 @@
         <div class="row">
             <div class="col-xs-7 p-t-5">
                 <input type="checkbox" name="remember" id="remember"
-                       class="filled-in chk-col-teal" {{ old('remember') ? 'checked' : '' }}>
+                       class="filled-in chk-col-blue-grey" {{ old('remember') ? 'checked' : '' }}>
                 <label for="remember">Manter-me conectado</label>
             </div>
             <div class="col-xs-5">
-                <button class="btn btn-block bg-teal waves-effect" type="submit">Entrar</button>
+                <button class="btn btn-block bg-blue-grey waves-effect">Entrar</button>
             </div>
         </div>
         <div class="row m-t-20 m-b--5 align-center">

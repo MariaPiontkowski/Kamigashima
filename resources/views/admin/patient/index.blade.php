@@ -1,14 +1,13 @@
-@extends('layouts.admin', ['title' => 'Fornecedores'])
+@extends('layouts.admin', ['title' => 'Pacientes'])
 
 @section('breadcrumb')
-    <li class="active"><i class="material-icons">supervisor_account</i> Fornecedores</li>
+    <li class="active"><i class="material-icons">supervisor_account</i> Pacientes</li>
 @endsection
 
 @section('content')
     @if (session('success'))
         <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span>&times;</span></button>
             {{ session('success') }}
         </div>
     @endif
@@ -17,17 +16,16 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Lista de Fornecedores
+                        Lista de Pacientes
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
                             <a href="#" onclick="event.preventDefault()" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button"
-                               aria-haspopup="true" aria-expanded="false">
+                               aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ route('fornecedor.create') }}">Adicionar Fornecedor</a></li>
+                                <li><a href="{{ route('paciente.create') }}">Adicionar Paciente</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -51,29 +49,24 @@
                         </tr>
                         </tfoot>
                         <tbody>
-                        @foreach ($providers as $provider)
+                        @foreach ($patients as $patient)
                             <tr>
-                                <td>{{ $provider->reference }}</td>
-                                <td>{{ $provider->name }}</td>
-                                <td>{{ $provider->commission }}%</td>
+                                <td>{{ $patient->reference }}</td>
+                                <td>{{ $patient->name }}</td>
+                                <td>{{ $patient->commission }}%</td>
                                 <td>
-                                    <a href="{{ route('fornecedor.produtos.index', $provider->id) }}"
-                                       data-toggle="tooltip"
-                                       class="btn bg-purple btn-xs waves-effect" title="Listar produtos">
-                                        <i class="material-icons">loyalty</i>
-                                    </a>
                                     <div class="pull-right">
-                                        <a href="{{ route('fornecedor.edit', $provider->id) }}" data-toggle="tooltip"
-                                           class="btn btn-default btn-xs waves-effect" title="Editar fornecedor">
+                                        <a href="{{ route('paciente.edit', $patient->id) }}" data-toggle="tooltip"
+                                           class="btn btn-default btn-xs waves-effect" title="Editar paciente">
                                             <i class="material-icons">edit</i>
                                         </a>
-                                        <form action="{{ route('fornecedor.destroy', $provider->id) }}" method="post"
+                                        <form action="{{ route('paciente.destroy', $patient->id) }}" method="post"
                                               class="visible-lg-inline">
                                             {{ csrf_field() }}
                                             {{ method_field('delete') }}
                                             <button type="button" class="btn bg-red btn-xs waves-effect dialog-btn"
                                                     data-type="confirm" data-toggle="tooltip"
-                                                    title="Excluir fornecedor">
+                                                    title="Excluir paciente">
                                                 <i class="material-icons">delete</i>
                                             </button>
                                         </form>

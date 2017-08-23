@@ -20,7 +20,7 @@
 
     <div class="login-box">
         <div class="logo align-center">
-            <img src="{{ asset('images/logo3.png') }}" alt="">
+            <img src="{{ asset('images/logo.png') }}" alt="">
         </div>
         <div class="card">
             <div class="body">

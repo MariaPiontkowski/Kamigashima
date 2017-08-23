@@ -10,7 +10,7 @@
                     </h2>
                 </div>
                 <div class="body">
-                    @include('admin.provider.form')
+                    @include('admin.patient.form')
                 </div>
             </div>
         </div>

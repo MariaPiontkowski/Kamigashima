@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableProviders extends Migration
+class Patients extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateTableProviders extends Migration
      */
     public function up()
     {
-        Schema::create('providers', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('patients', function (Blueprint $table) {
+            $table->engine = "InnoDB";
 
             $table->increments('id');
-            $table->integer('reference');
-            $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('phone');
+            $table->string('name', 80);
+            $table->char('gender', 1)->nullable();
             $table->date('birthday')->nullable();
-            $table->integer('commission');
+            $table->string('document', 14);
+            $table->string('profession', 60)->nullable();
+            $table->string('email', 60)->nullable();
+            $table->string('indication', 60)->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +35,6 @@ class CreateTableProviders extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('providers');
+        Schema::dropIfExists('patients');
     }
 }

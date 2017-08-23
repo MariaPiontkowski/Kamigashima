@@ -18,11 +18,11 @@
     @stack('styles')
 
     <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/themes/theme-blue.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/themes/theme-blue-grey.min.css') }}">
 
 
 </head>
-<body class="theme-blue">
+<body class="theme-blue-grey">
 
     @include('layouts.includes.loader')
     @include('layouts.includes.topbar')
@@ -31,7 +31,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <ol class="breadcrumb breadcrumb-bg-teal">
+                <ol class="breadcrumb breadcrumb-bg-grey">
                     @yield('breadcrumb')
                 </ol>
             </div>
