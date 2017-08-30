@@ -1,92 +1,92 @@
-<form class="form-horizontal form-validation" action="{{ $action }}" method="post">
+<form class="form-validation" action="{{ $action }}" method="post">
     {{ csrf_field() }}
     {{ method_field($method) }}
-    <div class="row clearfix">
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-            <label for="reference">Referência</label>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-            <div class="form-group">
-                <div class="form-line">
-                    <input id="reference" name="reference" class="form-control"
-                           value="{{ $provider->reference }}"
-                           placeholder="Digite a referência do fornecedor" required autofocus>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+    <div class="row">
+        <div class="col-sm-6">
             <label for="name">Nome</label>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
             <div class="form-group">
                 <div class="form-line">
-                    <input id="name" name="name" class="form-control" value="{{ $provider->name }}"
-                           placeholder="Digite o nome do fornecedor" required>
+                    <input id="name" name="name" class="form-control" value="{{ $patient->name }}"
+                           placeholder="Digite o nome do paciente" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label for="document">CPF</label>
+            <div class="form-group">
+                <div class="form-line">
+                    <input id="document" name="document" class="form-control" value="{{ $patient->document }}"
+                           placeholder="Digite o documento do paciente" required>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row clearfix">
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+    <div class="row">
+        <div class="col-sm-6">
             <label for="email">E-mail</label>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="email" id="email" name="email" class="form-control" value="{{ $provider->email }}"
-                           placeholder="Digite o e-mail do fornecedor">
+                    <input type="email" id="email" name="email" class="form-control" value="{{ $patient->email }}"
+                           placeholder="Digite o e-mail do paciente">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label for="gender">Sexo</label>
+            <div class="form-group">
+                <div class="form-line">
+                    <select name="gender" class="form-control show-tick selectpicker"
+                            title="Selecione o sexo do paciente">
+                        <option value="F" {{ $patient->gender == "F" ? 'selected' : '' }}>Feminino</option>
+                        <option value="M" {{ $patient->gender == "M" ? 'selected' : '' }}>Masculino</option>
+                    </select>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row clearfix">
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-            <label for="phone">Telefone</label>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-            <div class="form-group">
-                <div class="form-line">
-                    <input id="phone" name="phone" class="form-control" value="{{ $provider->phone }}"
-                           placeholder="Digite o telefone do fornecedor" required>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+    <div class="row">
+        <div class="col-sm-6">
             <label for="birthday">Data de Aniversário</label>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
             <div class="form-group">
                 <div class="form-line">
                     <input id="birthday" name="birthday" class="datepicker form-control"
-                           value="{{ $provider->birthday ? \Carbon\Carbon::parse($provider->birthday)->format('d/m/Y') : '' }}"
-                           placeholder="Escolha a data de aniversário do fornecedor">
+                           value="{{ $patient->birthday ? \Carbon\Carbon::parse($patient->birthday)->format('d/m/Y') : '' }}"
+                           placeholder="Escolha a data de aniversário do paciente">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label for="profession">Profissão</label>
+            <div class="form-group">
+                <div class="form-line">
+                    <input id="profession" name="profession" class="form-control" value="{{ $patient->profession }}"
+                           placeholder="Digite a profissão do paciente">
                 </div>
             </div>
         </div>
     </div>
-    <div class="row clearfix">
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-            <label for="commission">Comissão (<span class="nouislider-value"></span>)</label>
+    <div class="row button-demo">
+        <div class="col-sm-10">
+            <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
+            <a href="{{ route('paciente.index') }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-7">
-            <div class="form-group">
-                <input type="hidden" id="commission" name="commission" value="{{ $provider->commission }}">
-                <div id="nouislider" class="m-t-10"></div>
+        @if($patient->id)
+            <div class="col-sm-2">
+                <a href="#" class="btn bg-red m-t-15 waves-effect dialog-btn" data-form="form-delete"
+                   data-type="confirm">
+                    Remover Paciente
+                </a>
             </div>
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-offset-2 col-sm-offset-4 col-xs-offset-5 col-md-2 col-sm-3 col-xs-7">
-            <div class="form-group">
-                <button class="btn btn-block bg-light-green m-t-15 waves-effect">Salvar</button>
-            </div>
-        </div>
+        @endif
     </div>
 </form>
+
+@if($patient->id)
+    <form id="form-delete" action="{{ route('paciente.destroy', $patient->id) }}" method="post">
+        {{ csrf_field() }}
+        {{ method_field('delete') }}
+    </form>
+@endif
 
 @push('styles')
     <link rel="stylesheet"
@@ -118,35 +118,16 @@
                 clearIncomplete: true
             });
 
-            var sliderBasic = document.getElementById('nouislider');
-            var inputHidden = document.getElementById('commission');
-            var start = inputHidden.value === '' ? 50 : inputHidden.value;
-
-            noUiSlider.create(sliderBasic, {
-                start: start,
-                connect: 'lower',
-                step: 5,
-                range: {
-                    'min': [0],
-                    'max': [100]
-                }
+            $('#document').inputmask({
+                mask: "999.999.999-99",
+                showMaskOnHover: false,
+                clearIncomplete: true
             });
-            getNoUISliderValue(sliderBasic, true, inputHidden);
         });
 
-        function getNoUISliderValue(slider, percentage, input) {
-            slider.noUiSlider.on('update', function () {
-                var val = slider.noUiSlider.get();
-                if (percentage) {
-                    val = parseInt(val);
-                    input.value = val;
-                    val += '%';
-                }
-                $('.nouislider-value').text(val);
-            });
-        }
     </script>
 @endpush
 
+@include('layouts.modules.dialogs')
 @include('layouts.modules.validation')
 

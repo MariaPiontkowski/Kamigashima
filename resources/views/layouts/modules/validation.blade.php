@@ -11,6 +11,9 @@
                     },
                     password_confirmation: {
                         equalTo: "#password"
+                    },
+                    document: {
+                        verifyCPF: true
                     }
                 },
                 highlight: function (input) {
@@ -29,6 +32,58 @@
         $.validator.addMethod("myEmail", function (value, element) {
             return this.optional(element) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/.test(value)
                 && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test(value) );
-        }, 'Por favor, forneça um endereço de email válido.');
+        }, 'Informe um endereço de e-mail válido.');
+
+        $.validator.addMethod("verifyCPF", function (value) {
+            var ret = true;
+
+            var invalidos = [
+                '111.111.111-11',
+                '222.222.222-22',
+                '333.333.333-33',
+                '444.444.444-44',
+                '555.555.555-55',
+                '666.666.666-66',
+                '777.777.777-77',
+                '888.888.888-88',
+                '999.999.999-99',
+                '000.000.000-00'
+            ];
+            for (var i = 0; i < invalidos.length; i++) {
+                if (invalidos[i] === value) {
+                    ret = false;
+                }
+            }
+
+            value = value.replace("-", "");
+            value = value.replace(/\./g, "");
+
+            var add = 0;
+            for (i = 0; i < 9; i++) {
+                add += parseInt(value.charAt(i), 10) * (10 - i);
+            }
+
+            var rev = 11 - ( add % 11 );
+            if (rev === 10 || rev === 11) {
+                rev = 0;
+            }
+            if (rev !== parseInt(value.charAt(9), 10)) {
+                ret = false;
+            }
+
+            add = 0;
+            for (i = 0; i < 10; i++) {
+                add += parseInt(value.charAt(i), 10) * (11 - i);
+            }
+            rev = 11 - ( add % 11 );
+            if (rev === 10 || rev === 11) {
+                rev = 0;
+            }
+            if (rev !== parseInt(value.charAt(10), 10)) {
+                ret = false;
+            }
+
+            return ret;
+        }, "Informe um CPF válido.");
     </script>
 @endpush

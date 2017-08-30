@@ -48,12 +48,6 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="">
-                        <i class="material-icons">swap_vert</i>
-                        <span>Trocar Produtos</span>
-                    </a>
-                </li>
             </ul>
         </div>
     </aside>

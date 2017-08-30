@@ -31,47 +31,23 @@
                     </ul>
                 </div>
                 <div class="body">
-                    <table class="table table-bordered table-striped table-hover table-basic">
+                    <table class="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
                             <th>Nome</th>
                             <th>CPF</th>
-                            <th width="15%">Ações</th>
+                            <th width="5%">Status</th>
+                            <th width="5%">Ações</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
                             <th>Nome</th>
                             <th>CPF</th>
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                         </tfoot>
-                        <tbody>
-                        @foreach ($patients as $patient)
-                            <tr>
-                                <td>{{ $patient->name }}</td>
-                                <td>{{ $patient->document ?: null }}</td>
-                                <td>
-                                    <div class="pull-right">
-                                        <a href="{{ route('paciente.edit', $patient->id) }}" data-toggle="tooltip"
-                                           class="btn btn-default btn-xs waves-effect" title="Editar paciente">
-                                            <i class="material-icons">edit</i>
-                                        </a>
-                                        <form action="{{ route('paciente.destroy', $patient->id) }}" method="post"
-                                              class="visible-lg-inline">
-                                            {{ csrf_field() }}
-                                            {{ method_field('delete') }}
-                                            <button type="button" class="btn bg-red btn-xs waves-effect dialog-btn"
-                                                    data-type="confirm" data-toggle="tooltip"
-                                                    title="Excluir paciente">
-                                                <i class="material-icons">delete</i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -81,3 +57,23 @@
 
 @include('layouts.modules.datatables')
 @include('layouts.modules.dialogs')
+
+@push('scripts')
+    <script>
+        $('.table').DataTable({
+            language: {
+                url: "{{ asset('plugins/jquery-datatable/i18n/Portuguese-Brasil.json') }}"
+            },
+            autoWidth: false,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('api.patient.data') }}',
+            columns: [
+                {data: "name"},
+                {data: "document"},
+                {data: "status", orderable: false, searchable: false},
+                {data: "action", orderable: false, searchable: false}
+            ]
+        });
+    </script>
+@endpush

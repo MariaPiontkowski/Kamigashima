@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 
-class Patient extends Model
+class Patient extends Eloquent
 {
 
 }

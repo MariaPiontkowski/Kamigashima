@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Patient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 
 class PatientController extends Controller
 {
@@ -16,9 +17,48 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return view('admin.patient.index', [
-            'patients' => Patient::all()
+        return view('admin.patient.index');
+    }
+
+    /**
+     * Display DataTables result.
+     *
+     * @return Datatables
+     */
+    public function getPatientsData()
+    {
+        $patients = Patient::select([
+            'name',
+            'id',
+            'document',
+            'updated_at'
         ]);
+
+        return Datatables::of($patients)
+            ->addColumn('status', function ($patient) {
+                $status = 'done_all';
+                $class = 'col-green';
+
+                if (!$patient->updated_at) {
+                    $status = 'warning';
+                    $class = 'col-yellow';
+                }
+
+                if (!$patient->document) {
+                    $status = 'error';
+                    $class = 'col-red';
+                }
+
+                return '<i class="material-icons ' . $class . '">' . $status . '</i>';
+            })
+            ->addColumn('action', function ($patient) {
+                return '<a href="' . route('paciente.edit', $patient->id) . '" 
+                        class="btn bg-grey btn-xs waves-effect" title="Editar paciente"> 
+                            <i class="material-icons">edit</i>
+                        </a>';
+            })
+            ->escapeColumns(false)
+            ->make(true);
     }
 
     /**
@@ -30,7 +70,7 @@ class PatientController extends Controller
     {
         return view('admin.patient.create', [
             'patient' => new Patient(),
-            'action' => route('fornecedor.store'),
+            'action' => route('paciente.store'),
             'method' => 'post'
         ]);
     }
@@ -48,17 +88,17 @@ class PatientController extends Controller
             ->format('Y-m-d');
 
         $patient = new Patient();
-        $patient->reference = $request->reference;
         $patient->name = $name;
-        $patient->phone = $request->phone;
+        $patient->document = $request->document;
         $patient->email = $request->email;
+        $patient->gender = $request->gender;
         $patient->birthday = $birthday;
-        $patient->commission = $request->commission;
+        $patient->profession = $request->profession;
         $patient->save();
 
         return redirect()
-            ->route('fornecedor.index')
-            ->with('success', 'Fornecedor "' . $name . '" cadastrado com sucesso!');
+            ->route('paciente.index')
+            ->with('success', 'Paciente "' . $name . '" cadastrado com sucesso!');
     }
 
     /**
@@ -71,7 +111,7 @@ class PatientController extends Controller
     {
         return view('admin.patient.edit', [
             'patient' => Patient::find($id),
-            'action' => route('fornecedor.update', $id),
+            'action' => route('paciente.update', $id),
             'method' => 'put'
         ]);
     }
@@ -90,17 +130,17 @@ class PatientController extends Controller
             ->format('Y-m-d');
 
         $patient = Patient::find($id);
-        $patient->reference = $request->reference;
         $patient->name = $name;
-        $patient->phone = $request->phone;
+        $patient->document = $request->document;
         $patient->email = $request->email;
+        $patient->gender = $request->gender;
         $patient->birthday = $birthday;
-        $patient->commission = $request->commission;
+        $patient->profession = $request->profession;
         $patient->save();
 
         return redirect()
-            ->route('fornecedor.index')
-            ->with('success', 'Fornecedor "' . $name . '" editado com sucesso!');
+            ->route('paciente.index')
+            ->with('success', 'Paciente "' . $name . '" editado com sucesso!');
     }
 
     /**
@@ -117,7 +157,7 @@ class PatientController extends Controller
         Patient::destroy($id);
 
         return redirect()
-            ->route('fornecedor.index')
-            ->with('success', 'Fornecedor "' . $name . '" cadastrado com sucesso!');
+            ->route('paciente.index')
+            ->with('success', 'Paciente "' . $name . '" excluído com sucesso!');
     }
 }

@@ -7,7 +7,8 @@
 
     <script>
         $(function () {
-            $('.dialog-btn').on('click', function () {
+            $('.dialog-btn').on('click', function (e) {
+                e.preventDefault();
                 var type = $(this).data('type');
                 switch (type) {
                     case 'confirm':
@@ -19,16 +20,17 @@
 
         function showConfirmMessage(button) {
             swal({
-                title: "Deseja realmente excluir?",
+                title: "Deseja realmente remover?",
                 text: "Você não poderá mais recuperar esta informação!",
                 type: "warning",
                 showCancelButton: true,
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Sim, quero excluir!",
+                confirmButtonText: "Sim, quero remover!",
                 closeOnConfirm: false
             }, function () {
-                button.closest('form').submit();
+                var form = $("#" + button.data('form'));
+                form.submit();
             });
         }
     </script>
