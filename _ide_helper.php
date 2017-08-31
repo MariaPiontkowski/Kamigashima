@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.4.33 on 2017-08-23.
+ * Generated for Laravel 5.4.36 on 2017-08-30.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -416,7 +416,7 @@ namespace Illuminate\Support\Facades {
          * Register a deferred provider and service.
          *
          * @param string $provider
-         * @param string $service
+         * @param string|null $service
          * @return void 
          * @static 
          */ 
@@ -11591,6 +11591,86 @@ namespace Illuminate\Support\Facades {
  
 }
 
+namespace Yajra\Datatables\Facades { 
+
+    class Datatables {
+        
+        /**
+         * Gets query and returns instance of class.
+         *
+         * @param mixed $source
+         * @return mixed 
+         * @throws \Exception
+         * @static 
+         */ 
+        public static function of($source)
+        {
+            return \Yajra\Datatables\Datatables::of($source);
+        }
+        
+        /**
+         * Get request object.
+         *
+         * @return \Yajra\Datatables\Request 
+         * @static 
+         */ 
+        public static function getRequest()
+        {
+            return \Yajra\Datatables\Datatables::getRequest();
+        }
+        
+        /**
+         * Datatables using Query Builder.
+         *
+         * @param \Illuminate\Database\Query\Builder|mixed $builder
+         * @return \Yajra\Datatables\Engines\QueryBuilderEngine 
+         * @static 
+         */ 
+        public static function queryBuilder($builder)
+        {
+            return \Yajra\Datatables\Datatables::queryBuilder($builder);
+        }
+        
+        /**
+         * Datatables using Eloquent Builder.
+         *
+         * @param \Illuminate\Database\Eloquent\Builder|mixed $builder
+         * @return \Yajra\Datatables\Engines\EloquentEngine 
+         * @static 
+         */ 
+        public static function eloquent($builder)
+        {
+            return \Yajra\Datatables\Datatables::eloquent($builder);
+        }
+        
+        /**
+         * Datatables using Collection.
+         *
+         * @param \Illuminate\Support\Collection|mixed $collection
+         * @return \Yajra\Datatables\Engines\CollectionEngine 
+         * @static 
+         */ 
+        public static function collection($collection)
+        {
+            return \Yajra\Datatables\Datatables::collection($collection);
+        }
+        
+        /**
+         * Get html builder instance.
+         *
+         * @return \Yajra\Datatables\Html\Builder 
+         * @throws \Exception
+         * @static 
+         */ 
+        public static function getHtmlBuilder()
+        {
+            return \Yajra\Datatables\Datatables::getHtmlBuilder();
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -12277,6 +12357,18 @@ namespace  {
             }
          
             /**
+             * Add a relationship count / exists condition to the query with an "or".
+             *
+             * @param string $relation
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function orDoesntHave($relation)
+            {    
+                return \Illuminate\Database\Eloquent\Builder::orDoesntHave($relation);
+            }
+         
+            /**
              * Add a relationship count / exists condition to the query with where clauses.
              *
              * @param string $relation
@@ -12317,6 +12409,19 @@ namespace  {
             public static function whereDoesntHave($relation, $callback = null)
             {    
                 return \Illuminate\Database\Eloquent\Builder::whereDoesntHave($relation, $callback);
+            }
+         
+            /**
+             * Add a relationship count / exists condition to the query with where clauses and an "or".
+             *
+             * @param string $relation
+             * @param \Closure $callback
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function orWhereDoesntHave($relation, $callback = null)
+            {    
+                return \Illuminate\Database\Eloquent\Builder::orWhereDoesntHave($relation, $callback);
             }
          
             /**
@@ -13654,6 +13759,8 @@ namespace  {
     class Validator extends \Illuminate\Support\Facades\Validator {}
 
     class View extends \Illuminate\Support\Facades\View {}
+
+    class Datatables extends \Yajra\Datatables\Facades\Datatables {}
  
 }
 

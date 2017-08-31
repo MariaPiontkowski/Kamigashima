@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class PatientAddress extends Migration
+class PatientAddresses extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class PatientAddress extends Migration
      */
     public function up()
     {
-        Schema::create('patient_address', function (Blueprint $table) {
+        Schema::create('patient_addresses', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
@@ -41,6 +41,6 @@ class PatientAddress extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_address');
+        Schema::dropIfExists('patient_addresses');
     }
 }

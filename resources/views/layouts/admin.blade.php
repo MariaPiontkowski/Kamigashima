@@ -46,12 +46,11 @@
     <script src="{{ asset('js/admin.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('plugins/node-waves/waves.min.js') }}"></script>
 
     <script>
-        $('[data-toggle="tooltip"]').tooltip({
-            container: 'body'
+        $("body").tooltip({
+            selector: "[data-toggle=tooltip]"
         });
     </script>
 

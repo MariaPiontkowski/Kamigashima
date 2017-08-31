@@ -1,14 +1,14 @@
-@extends('layouts.admin', ['title' => 'Pacientes'])
+@extends("layouts.admin", ["title" => "Pacientes"])
 
-@section('breadcrumb')
+@section("breadcrumb")
     <li class="active"><i class="material-icons">supervisor_account</i> Pacientes</li>
 @endsection
 
-@section('content')
-    @if (session('success'))
+@section("content")
+    @if (session("success"))
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span>&times;</span></button>
-            {{ session('success') }}
+            {{ session("success") }}
         </div>
     @endif
     <div class="row clearfix">
@@ -25,7 +25,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ route('paciente.create') }}">Adicionar Paciente</a></li>
+                                <li><a href="{{ route("paciente.create") }}">Adicionar Paciente</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -55,19 +55,19 @@
     </div>
 @endsection
 
-@include('layouts.modules.datatables')
-@include('layouts.modules.dialogs')
+@include("layouts.modules.datatables")
+@include("layouts.modules.dialogs")
 
-@push('scripts')
+@push("scripts")
     <script>
-        $('.table').DataTable({
+        $(".table").DataTable({
             language: {
-                url: "{{ asset('plugins/jquery-datatable/i18n/Portuguese-Brasil.json') }}"
+                url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
             },
             autoWidth: false,
             processing: true,
             serverSide: true,
-            ajax: '{{ route('api.patient.data') }}',
+            ajax: "{{ route("api.patient.data") }}",
             columns: [
                 {data: "name"},
                 {data: "document"},

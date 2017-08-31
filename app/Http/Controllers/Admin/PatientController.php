@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Patient;
+use App\Models\Patient;
+use App\Models\PatientAddress;
+use App\Models\PatientPhone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -17,48 +19,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return view('admin.patient.index');
-    }
-
-    /**
-     * Display DataTables result.
-     *
-     * @return Datatables
-     */
-    public function getPatientsData()
-    {
-        $patients = Patient::select([
-            'name',
-            'id',
-            'document',
-            'updated_at'
-        ]);
-
-        return Datatables::of($patients)
-            ->addColumn('status', function ($patient) {
-                $status = 'done_all';
-                $class = 'col-green';
-
-                if (!$patient->updated_at) {
-                    $status = 'warning';
-                    $class = 'col-yellow';
-                }
-
-                if (!$patient->document) {
-                    $status = 'error';
-                    $class = 'col-red';
-                }
-
-                return '<i class="material-icons ' . $class . '">' . $status . '</i>';
-            })
-            ->addColumn('action', function ($patient) {
-                return '<a href="' . route('paciente.edit', $patient->id) . '" 
-                        class="btn bg-grey btn-xs waves-effect" title="Editar paciente"> 
-                            <i class="material-icons">edit</i>
-                        </a>';
-            })
-            ->escapeColumns(false)
-            ->make(true);
+        return view("admin.patient.index");
     }
 
     /**
@@ -68,10 +29,10 @@ class PatientController extends Controller
      */
     public function create()
     {
-        return view('admin.patient.create', [
-            'patient' => new Patient(),
-            'action' => route('paciente.store'),
-            'method' => 'post'
+        return view("admin.patient.create", [
+            "patient" => new Patient(),
+            "action" => route("paciente.store"),
+            "method" => "post"
         ]);
     }
 
@@ -83,22 +44,11 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->name;
-        $birthday = Carbon::parse(str_replace('/', '-', $request->birthday))
-            ->format('Y-m-d');
-
-        $patient = new Patient();
-        $patient->name = $name;
-        $patient->document = $request->document;
-        $patient->email = $request->email;
-        $patient->gender = $request->gender;
-        $patient->birthday = $birthday;
-        $patient->profession = $request->profession;
-        $patient->save();
+        $this->savePatient(new Patient(), $request);
 
         return redirect()
-            ->route('paciente.index')
-            ->with('success', 'Paciente "' . $name . '" cadastrado com sucesso!');
+            ->route("paciente.index")
+            ->with("success", 'Paciente "' . $request->name . '" cadastrado com sucesso!');
     }
 
     /**
@@ -109,10 +59,10 @@ class PatientController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.patient.edit', [
-            'patient' => Patient::find($id),
-            'action' => route('paciente.update', $id),
-            'method' => 'put'
+        return view("admin.patient.edit", [
+            "patient" => Patient::find($id),
+            "action" => route("paciente.update", $id),
+            "method" => "put"
         ]);
     }
 
@@ -125,22 +75,11 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $name = $request->name;
-        $birthday = Carbon::parse(str_replace('/', '-', $request->birthday))
-            ->format('Y-m-d');
-
-        $patient = Patient::find($id);
-        $patient->name = $name;
-        $patient->document = $request->document;
-        $patient->email = $request->email;
-        $patient->gender = $request->gender;
-        $patient->birthday = $birthday;
-        $patient->profession = $request->profession;
-        $patient->save();
+        $this->savePatient(Patient::find($id), $request);
 
         return redirect()
-            ->route('paciente.index')
-            ->with('success', 'Paciente "' . $name . '" editado com sucesso!');
+            ->route("paciente.index")
+            ->with("success", 'Paciente "' . $request->name . '" editado com sucesso!');
     }
 
     /**
@@ -152,12 +91,162 @@ class PatientController extends Controller
     public function destroy($id)
     {
         $patient = Patient::find($id);
-        $name = $patient->name;
-
         Patient::destroy($id);
 
         return redirect()
-            ->route('paciente.index')
-            ->with('success', 'Paciente "' . $name . '" excluído com sucesso!');
+            ->route("paciente.index")
+            ->with("success", 'Paciente "' . $patient->name . '" removido com sucesso!');
+    }
+
+    /**
+     * Display DataTables result.
+     *
+     * @return Datatables
+     */
+    public function getPatientsData()
+    {
+        $patients = Patient::select([
+            "name",
+            "id",
+            "document",
+            "updated_at"
+        ]);
+
+        return Datatables::of($patients)
+            ->addColumn("status", function ($patient) {
+                $status = "done_all";
+                $class = "col-green";
+                $title = "Paciente atualizado";
+
+                if (!$patient->updated_at) {
+                    $status = "warning";
+                    $class = "col-yellow";
+                    $title = "Paciente desatualizado";
+                }
+
+                if (!$patient->document) {
+                    $status = "error";
+                    $class = "col-red";
+                    $title = "Paciente incompleto";
+                }
+
+                return '<i class="material-icons ' . $class . '" title="' . $title . '" 
+                        data-toggle="tooltip" data-placement="top" 
+                        style="cursor:default">' . $status . '</i>';
+            })
+            ->addColumn("action", function ($patient) {
+                return '<a href="' . route("paciente.edit", $patient->id) . '" 
+                        class="btn bg-grey btn-xs waves-effect" title="Editar paciente"
+                        data-toggle="tooltip" data-placement="top"> 
+                            <i class="material-icons">edit</i>
+                        </a>';
+            })
+            ->escapeColumns(false)
+            ->make(true);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function getPatientsByDocument(Request $request)
+    {
+        $patient = [];
+
+        if ($request->document) {
+            $document = mask("###.###.###-##", $request->document);
+            $patient = Patient::where("document", $document)->first();
+        }
+
+        return $patient;
+    }
+
+    /**
+     * @param Patient $patient
+     * @param Request $request
+     */
+    private function savePatient(Patient $patient, Request $request)
+    {
+        $birthday = Carbon::parse(str_replace("/", "-", $request->birthday))
+            ->format("Y-m-d");
+
+        $patient->name = $request->name;
+
+        if (!$patient->document) {
+            $patient->document = $request->document;
+        }
+
+        $patient->email = $request->email;
+        $patient->gender = $request->gender;
+        $patient->birthday = $birthday;
+        $patient->profession = $request->profession;
+        $patient->indication = $request->indication;
+
+        $patient->save();
+
+        $this->saveAddress($patient, $request);
+        $this->savePhones($patient, $request);
+
+    }
+
+    /**
+     * @param Patient $patient
+     * @param Request $request
+     */
+    private function saveAddress(Patient $patient, Request $request)
+    {
+        if ($request->zip) {
+            $address = new PatientAddress();
+
+            if ($patient->address) {
+                $address = $patient->address;
+            }
+
+            $address->patient_id = $patient->id;
+            $address->address = $request->address;
+            $address->number = $request->number;
+            $address->complement = $request->complement;
+            $address->district = $request->district;
+            $address->city = $request->city;
+            $address->state = $request->state;
+            $address->zip_code = $request->zip;
+
+            $address->save();
+        }
+    }
+
+    /**
+     * @param Patient $patient
+     * @param Request $request
+     */
+    private function savePhones(Patient $patient, Request $request)
+    {
+        if ($phoneNumber = $request->phone) {
+            $phone = new PatientPhone();
+
+            if (count($patient->phones->where("type", 1)) > 0) {
+                $phone = $patient->phones->where("type", 1)->first();
+            }
+
+            $phone->patient_id = $patient->id;
+            $phone->phone = $phoneNumber;
+            $phone->type = 1;
+
+            $phone->save();
+        }
+
+        if ($mobileNumber = $request->mobile) {
+            $mobile = new PatientPhone();
+
+            if (count($patient->phones->where("type", 2)) > 0) {
+                $mobile = $patient->phones->where("type", 2)->first();
+            }
+
+            $mobile->patient_id = $patient->id;
+            $mobile->phone = $mobileNumber;
+            $mobile->type = 2;
+
+            $mobile->save();
+        }
     }
 }

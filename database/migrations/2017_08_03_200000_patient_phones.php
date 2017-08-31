@@ -19,6 +19,7 @@ class PatientPhones extends Migration
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->string('phone', 15);
+            $table->boolean('type');
             $table->foreign('patient_id')
                 ->references('id')
                 ->on('patients')

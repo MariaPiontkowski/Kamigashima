@@ -11,4 +11,8 @@
 |
 */
 
-Route::get('patient-data', 'Admin\PatientController@getPatientsData')->name('api.patient.data');
+Route::group(["prefix" => "patient"], function () {
+    Route::get('data', 'Admin\PatientController@getPatientsData')->name('api.patient.data');
+    Route::get('document', 'Admin\PatientController@getPatientsByDocument')
+        ->name('api.patient.document');
+});
