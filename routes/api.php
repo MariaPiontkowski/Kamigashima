@@ -12,7 +12,12 @@
 */
 
 Route::group(["prefix" => "patient"], function () {
-    Route::get('data', 'Admin\PatientController@getPatientsData')->name('api.patient.data');
-    Route::get('document', 'Admin\PatientController@getPatientsByDocument')
+    Route::get('data', 'Api\PatientApiController@getPatientsData')->name('api.patient.data');
+    Route::get('document', 'Api\PatientApiController@getPatientsByDocument')
         ->name('api.patient.document');
 });
+
+Route::group(["prefix" => "agreement"], function () {
+    Route::get('data', 'Api\AgreementApiController@getAgreementsData')->name('api.agreement.data');
+});
+

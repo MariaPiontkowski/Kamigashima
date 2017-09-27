@@ -44,7 +44,7 @@
                     </a>
                     <ul class="ml-menu">
                         <li>
-                            <a href="">Convênios</a>
+                            <a href="{{ route('convenio.index') }}">Convênios</a>
                         </li>
                     </ul>
                 </li>

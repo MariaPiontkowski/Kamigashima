@@ -14,11 +14,11 @@
             <i class="material-icons">import_contacts</i> Contato
         </a>
     </li>
-    {{--<li role="presentation">--}}
-        {{--<a href="#tab-agreements" data-toggle="tab">--}}
-            {{--<i class="material-icons">card_membership</i> Convênio--}}
-        {{--</a>--}}
-    {{--</li>--}}
+    <li role="presentation">
+        <a href="#tab-agreements" data-toggle="tab">
+            <i class="material-icons">card_membership</i> Convênio
+        </a>
+    </li>
 </ul>
 
 <form class="form-validation" action="{{ $action }}" method="post">
@@ -339,7 +339,7 @@
         }
 
         function getZip(zip) {
-            zip.on("keyup", function () {
+            zip.on("keyup change", function () {
                 if (zip.val() && /^\d{5}-\d{3}$/.test(zip.val())) {
                     var zipValue = zip.val().replace("-", "");
                     $.ajax({
