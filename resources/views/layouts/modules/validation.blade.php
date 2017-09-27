@@ -17,6 +17,9 @@
                     document: {
                         verifyCPF: true,
                         verifyCPFExists: true
+                    },
+                    responsibleDocument: {
+                        verifyCPF: true
                     }
                 },
                 invalidHandler: function (e, validator) {
@@ -48,6 +51,10 @@
         $.validator.addMethod("verifyCPF", function (value) {
             var ret = true;
 
+            if (value === "") {
+                return true;
+            }
+
             var invalidos = [
                 "111.111.111-11",
                 "222.222.222-22",
@@ -60,6 +67,7 @@
                 "999.999.999-99",
                 "000.000.000-00"
             ];
+
             for (var i = 0; i < invalidos.length; i++) {
                 if (invalidos[i] === value) {
                     ret = false;

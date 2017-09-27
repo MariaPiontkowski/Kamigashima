@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent;
 
-class AgreementOperator extends Eloquent
+class PatientAgreement extends Eloquent
 {
 
 }

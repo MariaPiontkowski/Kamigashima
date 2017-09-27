@@ -13,7 +13,7 @@ class PatientResponsibles extends Migration
      */
     public function up()
     {
-        Schema::create('patient_responsible', function (Blueprint $table) {
+        Schema::create('patient_responsibles', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
@@ -36,6 +36,6 @@ class PatientResponsibles extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_responsible');
+        Schema::dropIfExists('patient_responsibles');
     }
 }

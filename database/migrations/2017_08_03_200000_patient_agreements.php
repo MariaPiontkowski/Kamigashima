@@ -20,6 +20,7 @@ class PatientAgreements extends Migration
             $table->integer('patient_id')->unsigned();
             $table->integer('agreement_id')->unsigned();
             $table->string('code', 30);
+            $table->string('type', 80);
             $table->date('validity');
             $table->foreign('patient_id')
                 ->references('id')

@@ -19,6 +19,11 @@
             <i class="material-icons">card_membership</i> Convênio
         </a>
     </li>
+    <li role="presentation">
+        <a href="#tab-responsible" data-toggle="tab">
+            <i class="material-icons">card_membership</i> Responsável
+        </a>
+    </li>
 </ul>
 
 <form class="form-validation" action="{{ $action }}" method="post">
@@ -41,7 +46,8 @@
                     <div class="form-group">
                         <label for="document">CPF</label>
                         <div class="form-line">
-                            <input id="document" name="document" class="form-control" value="{{ $patient->document }}"
+                            <input id="document" name="document" class="form-control document"
+                                   value="{{ $patient->document }}"
                                    placeholder="Digite o documento do paciente"
                                    {{ $patient->document ? "disabled" : "" }} required>
                         </div>
@@ -65,7 +71,7 @@
                     <div class="form-group">
                         <label for="birthday">Data de Aniversário <span></span></label>
                         <div class="form-line">
-                            <input id="birthday" name="birthday" class="datepicker form-control"
+                            <input id="birthday" name="birthday" class="form-control"
                                    value="{{ $patient->birthday ? \Carbon\Carbon::parse($patient->birthday)->format("d/m/Y") : "" }}"
                                    placeholder="Escolha a data de aniversário do paciente">
                         </div>
@@ -226,9 +232,85 @@
         </div>
 
         <div id="tab-agreements" class="tab-pane fade" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="agreement">Convênio</label>
+                        <div class="form-line">
+                            <select name="agreement" class="form-control show-tick selectpicker agreement-group"
+                                    title="Selecione o convênio">
+                                @foreach($agreements as $agreement)
+                                    <option value="{{ $agreement->id }}" {{ $agreement->id == $patient->agreement->agreement_id ? "selected" : "" }}>
+                                        {{ $agreement->agreement }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="code">Código do Convênio</label>
+                        <div class="form-line">
+                            <input type="text" id="code" name="code" class="form-control agreement-group"
+                                   value="{{ $patient->agreement ? $patient->agreement->code : "" }}"
+                                   placeholder="Digite o código do convênio">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="type">Tipo do Convênio</label>
+                        <div class="form-line">
+                            <input type="text" id="type" name="type" class="form-control agreement-group"
+                                   value="{{ $patient->agreement ? $patient->agreement->type : "" }}"
+                                   placeholder="Digite o tipo do convênio">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="validity">Validade<span></span></label>
+                        <div class="form-line">
+                            <input id="validity" name="validity" class="form-control agreement-group"
+                                   value="{{ $patient->agreement ? \Carbon\Carbon::parse($patient->agreement->validity)->format("d/m/Y") : "" }}"
+                                   placeholder="Escolha a data de validade do convênio">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div id="tab-responsible" class="tab-pane fade" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="responsible">Responsável</label>
+                        <div class="form-line">
+                            <input type="text" id="responsible" name="responsible"
+                                   class="form-control responsible-group"
+                                   value="{{ $patient->responsible ? $patient->responsible->name : "" }}"
+                                   placeholder="Digite o nome do responsável">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="responsibleDocument">Documento</label>
+                        <div class="form-line">
+                            <input type="text" id="responsibleDocument" name="responsibleDocument"
+                                   class="form-control document responsible-group"
+                                   value="{{ $patient->responsible ? $patient->responsible->document : "" }}"
+                                   placeholder="Digite o documento do responsável">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <div class="row button-demo">
         <div class="col-sm-10">
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
@@ -264,16 +346,6 @@
 
     <script>
         $(function () {
-            $(".datepicker").bootstrapMaterialDatePicker({
-                format: "DD/MM/YYYY",
-                clearButton: true,
-                time: false,
-                lang: "pt-br",
-                maxDate: new Date(),
-                cancelText: "Cancelar",
-                clearText: "Limpar"
-            });
-
             $("#phone").inputmask({
                 mask: "(99) 9999-9999",
                 showMaskOnHover: false,
@@ -286,10 +358,20 @@
                 clearIncomplete: true
             });
 
-            $("#document").inputmask({
+            $(".document").inputmask({
                 mask: "999.999.999-99",
                 showMaskOnHover: false,
                 clearIncomplete: true
+            });
+
+            $("#validity").bootstrapMaterialDatePicker({
+                format: "DD/MM/YYYY",
+                clearButton: true,
+                time: false,
+                lang: "pt-br",
+                minDate: new Date(),
+                cancelText: "Cancelar",
+                clearText: "Limpar"
             });
 
             var zip = $("#zip");
@@ -302,6 +384,15 @@
             });
 
             var birthday = $("#birthday");
+            birthday.bootstrapMaterialDatePicker({
+                format: "DD/MM/YYYY",
+                clearButton: true,
+                time: false,
+                lang: "pt-br",
+                maxDate: new Date(),
+                cancelText: "Cancelar",
+                clearText: "Limpar"
+            });
             calculateAge(birthday);
 
             birthday.on("change", function () {
@@ -311,6 +402,16 @@
             var addressGroup = $('.address-group');
             addressGroup.on("keyup", function () {
                 requiredGroup(addressGroup);
+            });
+
+            var agreementGroup = $('.agreement-group');
+            agreementGroup.on("keyup change", function () {
+                requiredGroup(agreementGroup);
+            });
+
+            var responsibleGroup = $('.responsible-group');
+            responsibleGroup.on("keyup", function () {
+                requiredGroup(responsibleGroup);
             });
 
         });

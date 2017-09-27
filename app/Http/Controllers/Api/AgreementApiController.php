@@ -4,11 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agreement;
-use App\Models\AgreementOperator;
 use App\Models\Patient;
-use App\Models\PatientAddress;
-use App\Models\PatientPhone;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
@@ -22,7 +18,7 @@ class AgreementApiController extends Controller
      */
     public function getAgreementsData()
     {
-        $agreements = AgreementOperator::all();
+        $agreements = Agreement::all();
 
         return Datatables::of($agreements)
             ->addColumn("action", function ($agreement) {

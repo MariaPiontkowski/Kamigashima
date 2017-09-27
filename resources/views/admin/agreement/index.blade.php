@@ -66,7 +66,7 @@
             serverSide: true,
             ajax: "{{ route("api.agreement.data") }}",
             columns: [
-                {data: "name"},
+                {data: "agreement"},
                 {data: "action", orderable: false, searchable: false}
             ]
         });

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agreement;
 use App\Models\Patient;
 use App\Models\PatientAddress;
+use App\Models\PatientAgreement;
 use App\Models\PatientPhone;
+use App\Models\PatientResponsible;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -31,6 +34,7 @@ class PatientController extends Controller
     {
         return view("admin.patient.create", [
             "patient" => new Patient(),
+            "agreements" => Agreement::all(),
             "action" => route("paciente.store"),
             "method" => "post"
         ]);
@@ -61,6 +65,7 @@ class PatientController extends Controller
     {
         return view("admin.patient.edit", [
             "patient" => Patient::find($id),
+            "agreements" => Agreement::all(),
             "action" => route("paciente.update", $id),
             "method" => "put"
         ]);
@@ -123,6 +128,8 @@ class PatientController extends Controller
 
         $this->saveAddress($patient, $request);
         $this->savePhones($patient, $request);
+        $this->saveAgreement($patient, $request);
+        $this->saveResponsible($patient, $request);
 
     }
 
@@ -184,6 +191,45 @@ class PatientController extends Controller
             $mobile->type = 2;
 
             $mobile->save();
+        }
+    }
+
+    private function saveAgreement(Patient $patient, Request $request)
+    {
+        if ($request->agreement) {
+            $agreement = new PatientAgreement();
+
+            if ($patient->agreement) {
+                $agreement = $patient->agreement;
+            }
+
+            $validity = Carbon::parse(str_replace("/", "-", $request->validity))
+                ->format("Y-m-d");
+
+            $agreement->patient_id = $patient->id;
+            $agreement->agreement_id = $request->agreement;
+            $agreement->code = $request->code;
+            $agreement->type = $request->type;
+            $agreement->validity = $validity;
+
+            $agreement->save();
+        }
+    }
+
+    private function saveResponsible(Patient $patient, Request $request)
+    {
+        if ($request->responsible) {
+            $responsible = new PatientResponsible();
+
+            if ($patient->responsible) {
+                $responsible = $patient->responsible;
+            }
+
+            $responsible->patient_id = $patient->id;
+            $responsible->name = $request->responsible;
+            $responsible->document = $request->responsibleDocument;
+
+            $responsible->save();
         }
     }
 }

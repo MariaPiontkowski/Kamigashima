@@ -17,13 +17,7 @@ class Agreements extends Migration
             $table->engine = "InnoDB";
 
             $table->increments('id');
-            $table->integer('agreement_operator_id')->unsigned();
             $table->string('agreement', 80);
-            $table->foreign('agreement_operator_id')
-                ->references('id')
-                ->on('agreement_operators')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->timestamps();
         });
     }

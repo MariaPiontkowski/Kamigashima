@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AgreementOperator;
+use App\Models\Agreement;
 use Illuminate\Http\Request;
 
 class AgreementController extends Controller
@@ -26,7 +26,7 @@ class AgreementController extends Controller
     public function create()
     {
         return view("admin.agreement.create", [
-            "agreement" => new AgreementOperator(),
+            "agreement" => new Agreement(),
             "action" => route("convenio.store"),
             "method" => "post"
         ]);
@@ -40,7 +40,7 @@ class AgreementController extends Controller
      */
     public function store(Request $request)
     {
-        $this->saveAgreement(new AgreementOperator(), $request);
+        $this->saveAgreement(new Agreement(), $request);
 
         return redirect()
             ->route("convenio.index")
@@ -56,7 +56,7 @@ class AgreementController extends Controller
     public function edit($id)
     {
         return view("admin.agreement.edit", [
-            "agreement" => AgreementOperator::find($id),
+            "agreement" => Agreement::find($id),
             "action" => route("convenio.update", $id),
             "method" => "put"
         ]);
@@ -71,7 +71,7 @@ class AgreementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->saveAgreement(AgreementOperator::find($id), $request);
+        $this->saveAgreement(Agreement::find($id), $request);
 
         return redirect()
             ->route("convenio.index")
@@ -86,8 +86,8 @@ class AgreementController extends Controller
      */
     public function destroy($id)
     {
-        $patient = AgreementOperator::find($id);
-        AgreementOperator::destroy($id);
+        $patient = Agreement::find($id);
+        Agreement::destroy($id);
 
         return redirect()
             ->route("convenio.index")
@@ -95,12 +95,12 @@ class AgreementController extends Controller
     }
 
     /**
-     * @param AgreementOperator $operator
+     * @param Agreement $operator
      * @param Request $request
      */
-    private function saveAgreement(AgreementOperator $operator, Request $request)
+    private function saveAgreement(Agreement $operator, Request $request)
     {
-        $operator->name = $request->name;
+        $operator->agreement = $request->name;
         $operator->save();
     }
 }
