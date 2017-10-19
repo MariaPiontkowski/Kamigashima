@@ -11,22 +11,22 @@
 |
 */
 
-Route::group(["prefix" => "patient"], function () {
-    Route::get('data', 'Api\PatientApiController@getPatientsData')->name('api.patient.data');
-    Route::get('document', 'Api\PatientApiController@getPatientsByDocument')
-        ->name('api.patient.document');
-});
+Route::group( [ "prefix" => "patient" ], function () {
+	Route::get( 'data', 'Api\PatientApiController@getPatientsData' )->name( 'api.patient.data' );
+	Route::get( 'document', 'Api\PatientApiController@getPatientsByDocument' )
+	     ->name( 'api.patient.document' );
+} );
 
-Route::group(["prefix" => "record"], function () {
-    Route::get('data', 'Api\PatientRecordApiController@getRecordsData')->name('api.record.data');
-});
+Route::group( [ "prefix" => "record" ], function () {
+	Route::get( 'data/{patient}', 'Api\PatientRecordApiController@getRecordsData' )->name( 'api.record.data' );
+} );
 
-Route::group(["prefix" => "agreement"], function () {
-    Route::get('data', 'Api\AgreementApiController@getAgreementsData')->name('api.agreement.data');
-});
+Route::group( [ "prefix" => "agreement" ], function () {
+	Route::get( 'data', 'Api\AgreementApiController@getAgreementsData' )->name( 'api.agreement.data' );
+} );
 
-Route::group(["prefix" => "cid"], function () {
-    Route::get('data', 'Api\CidApiController@getCidsData')->name('api.cid.data');
-});
+Route::group( [ "prefix" => "cid" ], function () {
+	Route::get( 'data', 'Api\CidApiController@getCidsData' )->name( 'api.cid.data' );
+} );
 
 

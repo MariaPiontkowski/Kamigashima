@@ -26,7 +26,7 @@
     <div class="row button-demo">
         <div class="col-sm-10">
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
-            <a href="{{ route("convenio.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
+            <a href="{{ route("cid.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
         </div>
         @if($cid->id)
             <div class="col-sm-2">
@@ -40,7 +40,7 @@
 </form>
 
 @if($cid->id)
-    <form id="form-delete" action="{{ route("convenio.destroy", $cid->id) }}" method="post">
+    <form id="form-delete" action="{{ route("cid.destroy", $cid->id) }}" method="post">
         {{ csrf_field() }}
         {{ method_field("delete") }}
     </form>

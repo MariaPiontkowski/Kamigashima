@@ -1,9 +1,10 @@
-@extends('layouts.admin', ['title' => 'Adicionar Convênio'])
+@extends('layouts.admin', ['title' => 'Adicionar Histórico'])
 
 @section('breadcrumb')
-    <li class="active"><i class="material-icons">playlist_add_check</i> Administração</li>
-    <li class="active"><a href="{{ route('convenio.index') }}">Convênios</a></li>
-    <li class="active">Adicionar Convênio</li>
+    <li><a href="{{ route('paciente.index') }}"><i class="material-icons">supervisor_account</i> Pacientes</a></li>
+    <li><a href="{{ route('paciente.prontuario.index', $patient->id) }}"><i
+                    class="material-icons">supervisor_account</i> Prontuário</a></li>
+    <li class="active">Adicionar Histórico</li>
 @endsection
 
 @section('content')
@@ -12,11 +13,11 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Adicionar Convênio
+                        Adicionar Histórico
                     </h2>
                 </div>
                 <div class="body">
-                    @include('admin.agreement.form')
+                    @include('admin.records.form')
                 </div>
             </div>
         </div>

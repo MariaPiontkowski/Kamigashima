@@ -9,28 +9,31 @@ use App\Models\PatientRecord;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
-class PatientRecordApiController extends Controller
-{
+class PatientRecordApiController extends Controller {
 
-    /**
-     * Display DataTables result.
-     *
-     * @return Datatables
-     */
-    public function getRecordsData()
-    {
-        $records = PatientRecord::all();
+	/**
+	 * Display DataTables result.
+	 *
+	 * @param $patient
+	 *
+	 * @return Datatables
+	 */
+	public function getRecordsData( $patient ) {
+		$records = PatientRecord::where( 'patient_id', $patient )->get();
 
-        return Datatables::of($records)
-            ->addColumn("action", function ($record) {
-                return '<a href="' . route("convenio.edit", $record->id) . '" 
+		return Datatables::of( $records )
+		                 ->addColumn( "action", function ( $record ) use ( $patient ) {
+			                 return '<a href="' . route( "paciente.prontuario.edit", [
+					                 'paciente'   => $patient,
+					                 'prontuario' => $record
+				                 ] ) . '" 
                         class="btn bg-grey btn-xs waves-effect" title="Editar histórico"
                         data-toggle="tooltip" data-placement="top"> 
                             <i class="material-icons">edit</i>
                         </a>';
-            })
-            ->escapeColumns(false)
-            ->make(true);
-    }
+		                 } )
+		                 ->escapeColumns( false )
+		                 ->make( true );
+	}
 
 }

@@ -67,7 +67,7 @@
             autoWidth: false,
             processing: true,
             serverSide: true,
-            ajax: "{{ route("api.record.data") }}",
+            ajax: "{{ route("api.record.data", $patient->id) }}",
             columns: [
                 {data: "date_at"},
                 {data: "hour_at"},

@@ -1,9 +1,9 @@
-@extends('layouts.admin', ['title' => 'Adicionar Convênio'])
+@extends('layouts.admin', ['title' => 'Adicionar Cid'])
 
 @section('breadcrumb')
     <li class="active"><i class="material-icons">playlist_add_check</i> Administração</li>
-    <li class="active"><a href="{{ route('convenio.index') }}">Convênios</a></li>
-    <li class="active">Adicionar Convênio</li>
+    <li class="active"><a href="{{ route('cid.index') }}">Cids</a></li>
+    <li class="active">Adicionar Cid</li>
 @endsection
 
 @section('content')
@@ -12,11 +12,11 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Adicionar Convênio
+                        Adicionar Cid
                     </h2>
                 </div>
                 <div class="body">
-                    @include('admin.agreement.form')
+                    @include('admin.cid.form')
                 </div>
             </div>
         </div>
