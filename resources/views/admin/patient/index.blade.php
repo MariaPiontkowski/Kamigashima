@@ -37,7 +37,7 @@
                             <th>Nome</th>
                             <th>CPF</th>
                             <th width="5%">Status</th>
-                            <th width="5%">Ações</th>
+                            <th width="12%">Ações</th>
                         </tr>
                         </thead>
                         <tfoot>

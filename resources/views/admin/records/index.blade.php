@@ -1,8 +1,8 @@
-@extends("layouts.admin", ["title" => "Convênios"])
+@extends("layouts.admin", ["title" => "Prontuário"])
 
 @section("breadcrumb")
-    <li class="active"><i class="material-icons">playlist_add_check</i> Administração</li>
-    <li class="active">Convênios</li>
+    <li><a href="{{ route('paciente.index') }}"><i class="material-icons">supervisor_account</i> Pacientes</a></li>
+    <li class="active">Prontuário</li>
 @endsection
 
 @section("content")
@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Lista de Convênios
+                        Prontuário de {{ $patient->name }}
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -26,7 +26,8 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ route("convenio.create") }}">Adicionar Convênio</a></li>
+                                <li><a href="{{ route("paciente.prontuario.create", $patient->id) }}">Adicionar
+                                        Histórico</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -35,13 +36,15 @@
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>Convênio</th>
+                            <th>Data</th>
+                            <th>Hora</th>
                             <th width="5%">Ações</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>Convênio</th>
+                            <th>Data</th>
+                            <th>Hora</th>
                             <th>Ações</th>
                         </tr>
                         </tfoot>
@@ -64,9 +67,10 @@
             autoWidth: false,
             processing: true,
             serverSide: true,
-            ajax: "{{ route("api.agreement.data") }}",
+            ajax: "{{ route("api.record.data") }}",
             columns: [
-                {data: "agreement"},
+                {data: "date_at"},
+                {data: "hour_at"},
                 {data: "action", orderable: false, searchable: false}
             ]
         });

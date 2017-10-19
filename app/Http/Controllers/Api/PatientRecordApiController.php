@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Agreement;
 use App\Models\Patient;
+use App\Models\PatientRecord;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
-class AgreementApiController extends Controller
+class PatientRecordApiController extends Controller
 {
 
     /**
@@ -16,14 +17,14 @@ class AgreementApiController extends Controller
      *
      * @return Datatables
      */
-    public function getAgreementsData()
+    public function getRecordsData()
     {
-        $agreements = Agreement::all();
+        $records = PatientRecord::all();
 
-        return Datatables::of($agreements)
-            ->addColumn("action", function ($agreement) {
-                return '<a href="' . route("convenio.edit", $agreement->id) . '" 
-                        class="btn bg-grey btn-xs waves-effect" title="Editar convênio"
+        return Datatables::of($records)
+            ->addColumn("action", function ($record) {
+                return '<a href="' . route("convenio.edit", $record->id) . '" 
+                        class="btn bg-grey btn-xs waves-effect" title="Editar histórico"
                         data-toggle="tooltip" data-placement="top"> 
                             <i class="material-icons">edit</i>
                         </a>';

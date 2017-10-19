@@ -1,8 +1,8 @@
-@extends("layouts.admin", ["title" => "Convênios"])
+@extends("layouts.admin", ["title" => "CID"])
 
 @section("breadcrumb")
     <li class="active"><i class="material-icons">playlist_add_check</i> Administração</li>
-    <li class="active">Convênios</li>
+    <li class="active">CID</li>
 @endsection
 
 @section("content")
@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Lista de Convênios
+                        Lista de CID
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -26,7 +26,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ route("convenio.create") }}">Adicionar Convênio</a></li>
+                                <li><a href="{{ route("cid.create") }}">Adicionar CID</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -35,13 +35,15 @@
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>Convênio</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
                             <th width="5%">Ações</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>Convênio</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
                             <th>Ações</th>
                         </tr>
                         </tfoot>
@@ -64,9 +66,10 @@
             autoWidth: false,
             processing: true,
             serverSide: true,
-            ajax: "{{ route("api.agreement.data") }}",
+            ajax: "{{ route("api.cid.data") }}",
             columns: [
-                {data: "agreement"},
+                {data: "code"},
+                {data: "description"},
                 {data: "action", orderable: false, searchable: false}
             ]
         });

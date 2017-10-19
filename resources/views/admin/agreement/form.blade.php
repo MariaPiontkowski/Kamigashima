@@ -5,7 +5,7 @@
     <div class="form-group">
         <label for="name">Convênio</label>
         <div class="form-line">
-            <input id="name" name="name" class="form-control" value="{{ $agreement->name }}"
+            <input id="name" name="name" class="form-control" value="{{ $agreement->agreement }}"
                    placeholder="Digite o convênio" required autofocus>
         </div>
     </div>

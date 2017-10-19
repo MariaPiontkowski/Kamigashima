@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agreement;
+use App\Models\Cid;
 use Illuminate\Http\Request;
 
-class AgreementController extends Controller
+class CidController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class AgreementController extends Controller
      */
     public function index()
     {
-        return view("admin.agreement.index");
+        return view("admin.cid.index");
     }
 
     /**
@@ -25,9 +25,9 @@ class AgreementController extends Controller
      */
     public function create()
     {
-        return view("admin.agreement.create", [
-            "agreement" => new Agreement(),
-            "action" => route("convenio.store"),
+        return view("admin.cid.create", [
+            "cid" => new Cid(),
+            "action" => route("cid.store"),
             "method" => "post"
         ]);
     }
@@ -40,11 +40,11 @@ class AgreementController extends Controller
      */
     public function store(Request $request)
     {
-        $this->saveAgreement(new Agreement(), $request);
+        $this->saveCid(new Cid(), $request);
 
         return redirect()
-            ->route("convenio.index")
-            ->with("success", 'Convênio "' . $request->name . '" cadastrado com sucesso!');
+            ->route("cid.index")
+            ->with("success", 'CID "' . $request->code . '" cadastrado com sucesso!');
     }
 
     /**
@@ -55,9 +55,9 @@ class AgreementController extends Controller
      */
     public function edit($id)
     {
-        return view("admin.agreement.edit", [
-            "agreement" => Agreement::find($id),
-            "action" => route("convenio.update", $id),
+        return view("admin.cid.edit", [
+            "cid" => Cid::find($id),
+            "action" => route("cid.update", $id),
             "method" => "put"
         ]);
     }
@@ -71,11 +71,11 @@ class AgreementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->saveAgreement(Agreement::find($id), $request);
+        $this->saveCid(Cid::find($id), $request);
 
         return redirect()
-            ->route("convenio.index")
-            ->with("success", 'Convênio "' . $request->name . '" editado com sucesso!');
+            ->route("cid.index")
+            ->with("success", 'CID "' . $request->code . '" editado com sucesso!');
     }
 
     /**
@@ -86,21 +86,22 @@ class AgreementController extends Controller
      */
     public function destroy($id)
     {
-        $agreement = Agreement::find($id);
-        Agreement::destroy($id);
+        $cid = Cid::find($id);
+        Cid::destroy($id);
 
         return redirect()
-            ->route("convenio.index")
-            ->with("success", 'Convênio "' . $agreement->name . '" removido com sucesso!');
+            ->route("cid.index")
+            ->with("success", 'CID "' . $cid->code . '" removido com sucesso!');
     }
 
     /**
-     * @param Agreement $operator
+     * @param Cid $operator
      * @param Request $request
      */
-    private function saveAgreement(Agreement $operator, Request $request)
+    private function saveCid(Cid $operator, Request $request)
     {
-        $operator->agreement = $request->name;
+        $operator->code = $request->code;
+        $operator->description = $request->description;
         $operator->save();
     }
 }

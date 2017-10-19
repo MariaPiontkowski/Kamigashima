@@ -46,6 +46,9 @@
                         <li>
                             <a href="{{ route('convenio.index') }}">Convênios</a>
                         </li>
+                        <li>
+                            <a href="{{ route('cid.index') }}">CID</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

@@ -54,6 +54,11 @@ class PatientApiController extends Controller
                         class="btn bg-grey btn-xs waves-effect" title="Editar paciente"
                         data-toggle="tooltip" data-placement="top"> 
                             <i class="material-icons">edit</i>
+                        </a>
+                        <a href="' . route("paciente.prontuario.index", $patient->id) . '" 
+                        class="btn bg-grey btn-xs waves-effect" title="Editar prontuário"
+                        data-toggle="tooltip" data-placement="top"> 
+                            <i class="material-icons">assignment</i>
                         </a>';
             })
             ->escapeColumns(false)

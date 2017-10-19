@@ -95,7 +95,7 @@
                         <div class="form-line">
                             <input id="indication" name="indication" class="form-control"
                                    value="{{ $patient->indication }}"
-                                   placeholder="Digite a profissão do paciente">
+                                   placeholder="Digite quem indicou o paciente">
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                             <label for="zip">CEP</label>
                             <input id="zip" name="zip" class="form-control address-group"
                                    value="{{ $patient->address ? $patient->address->zip_code : "" }}"
-                                   placeholder="Digite o endereço do paciente">
+                                   placeholder="Digite o CEP do paciente">
                         </div>
                     </div>
                 </div>
@@ -240,7 +240,8 @@
                             <select name="agreement" class="form-control show-tick selectpicker agreement-group"
                                     title="Selecione o convênio">
                                 @foreach($agreements as $agreement)
-                                    <option value="{{ $agreement->id }}" {{ $agreement->id == $patient->agreement->agreement_id ? "selected" : "" }}>
+                                    <option value="{{ $agreement->id }}"
+                                            {{ $patient->agreement && $agreement->id == $patient->agreement->agreement_id ? "selected" : "" }}>
                                         {{ $agreement->agreement }}
                                     </option>
                                 @endforeach
