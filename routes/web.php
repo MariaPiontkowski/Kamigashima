@@ -27,4 +27,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('paciente.prontuario', 'Admin\PatientRecordController', ['except' => ['show']]);
     Route::resource('convenio', 'Admin\AgreementController', ['except' => ['show']]);
     Route::resource('cid', 'Admin\CidController', ['except' => ['show']]);
+    Route::resource('agenda', 'Admin\ConsultController', ['except' => ['show']]);
 });

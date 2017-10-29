@@ -29,4 +29,8 @@ Route::group( [ "prefix" => "cid" ], function () {
 	Route::get( 'data', 'Api\CidApiController@getCidsData' )->name( 'api.cid.data' );
 } );
 
+Route::group( [ "prefix" => "consult" ], function () {
+    Route::get( 'data', 'Api\ConsultApiController@getConsultsData' )->name( 'api.consult.data' );
+} );
+
 

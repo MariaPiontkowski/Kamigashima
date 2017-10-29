@@ -37,6 +37,12 @@
                         <span>Pacientes</span>
                     </a>
                 </li>
+                <li {{ Route::is('agenda.*') ? 'class=active' : '' }}>
+                    <a href="{{ route('agenda.index') }}">
+                        <i class="material-icons">event_note</i>
+                        <span>Agenda</span>
+                    </a>
+                </li>
                 <li>
                     <a href="#" onclick="event.preventDefault()" class="menu-toggle">
                         <i class="material-icons">playlist_add_check</i>
@@ -48,6 +54,9 @@
                         </li>
                         <li>
                             <a href="{{ route('cid.index') }}">CID</a>
+                        </li>
+                        <li>
+                            <a href="#">Autorização</a>
                         </li>
                     </ul>
                 </li>
