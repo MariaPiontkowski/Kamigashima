@@ -19,6 +19,7 @@
     @stack('styles')
 
     <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/themes/theme-blue-grey.min.css') }}">
 
 

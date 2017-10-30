@@ -18,66 +18,81 @@
                     <h2>
                         Consultas
                     </h2>
-                    {{--<ul class="header-dropdown m-r--5">--}}
-                        {{--<li class="dropdown">--}}
-                            {{--<a href="#" onclick="event.preventDefault()" class="dropdown-toggle" data-toggle="dropdown"--}}
-                               {{--aria-expanded="false">--}}
-                                {{--<i class="material-icons">more_vert</i>--}}
-                            {{--</a>--}}
-                            {{--<ul class="dropdown-menu pull-right">--}}
-                                {{--<li><a href="{{ route("cid.create") }}">Adicionar Consulta</a></li>--}}
-                            {{--</ul>--}}
-                        {{--</li>--}}
-                    {{--</ul>--}}
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Paciente</th>
-                            <th>Contato</th>
-                            <th>Observação</th>
-                            <th width="9%">Ações</th>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Paciente</th>
-                            <th>Contato</th>
-                            <th>Observação</th>
-                            <th width="9%">Ações</th>
-                        </tr>
-                        </tfoot>
-                    </table>
+
+                    <div class="header-dropdown m-r--5">
+                        <a href="#"
+                           class="btn bg-green btn-xs waves-effect"
+                           data-toggle="tooltip" data-placement="top">
+                            <i class="material-icons">group_add</i>
+                            <span class="i-span">Agendar Consulta</span>
+                        </a>
+                    </div>
+
+
+                    <div class="row div-calendar">
+
+                            <input type="text" value="<?php echo date("d/m/Y") ?>" id="date" class="form-control-border col-md-1" readonly/>
+
+                    </div>
+
+                    <div class="body">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Hora</th>
+                                <th>Paciente</th>
+                                <th>Contato</th>
+                                <th>Observação</th>
+                                <th width="9%">Ações</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Hora</th>
+                                <th>Paciente</th>
+                                <th>Contato</th>
+                                <th>Observação</th>
+                                <th width="9%">Ações</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+        @endsection
 
-@include("layouts.modules.datatables")
-@include("layouts.modules.dialogs")
+        @include("layouts.modules.datatables")
+        @include("layouts.modules.dialogs")
 
-@push("scripts")
-    <script>
-        $(".table").DataTable({
-            language: {
-                url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
-            },
-            autoWidth: false,
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route("api.consult.data") }}",
-            columns: [
-                {data: "hour"},
-                {data: "patient_id"},
-                {data: "patient_id"},
-                {data: "note"},
-                {data: "action", orderable: false, searchable: false}
-            ]
-        });
+        @push("scripts")
+        <script>
+            $(".table").DataTable({
+                language: {
+                    url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
+                },
+                autoWidth: false,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                bInfo: false,
+                ajax: "{{ route("api.consult.data") }}",
+                length: 21,
+                createdRow: function (row, data) {
+                    if (data['name'] !== null) {
+                        $(row).css('background-color', '#f5f5f5');
+                    }
 
-    </script>
-@endpush
+                },
+                columns: [
+                    {data: "hour"},
+                    {data: "name", id: "patient"},
+                    {data: "phone"},
+                    {data: "note"},
+                    {data: "action", orderable: false, searchable: false}
+                ]
+            });
+
+
+        </script>
+    @endpush

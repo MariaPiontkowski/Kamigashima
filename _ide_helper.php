@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.4.36 on 2017-10-28.
+ * Generated for Laravel 5.4.36 on 2017-10-30.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -1952,166 +1952,6 @@ namespace Illuminate\Support\Facades {
         public static function hasMacro($name)
         {
             return \Illuminate\Auth\SessionGuard::hasMacro($name);
-        }
-         
-    }
-
-    class Blade {
-        
-        /**
-         * Compile the view at the given path.
-         *
-         * @param string $path
-         * @return void 
-         * @static 
-         */ 
-        public static function compile($path = null)
-        {
-            \Illuminate\View\Compilers\BladeCompiler::compile($path);
-        }
-        
-        /**
-         * Get the path currently being compiled.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getPath()
-        {
-            return \Illuminate\View\Compilers\BladeCompiler::getPath();
-        }
-        
-        /**
-         * Set the path currently being compiled.
-         *
-         * @param string $path
-         * @return void 
-         * @static 
-         */ 
-        public static function setPath($path)
-        {
-            \Illuminate\View\Compilers\BladeCompiler::setPath($path);
-        }
-        
-        /**
-         * Compile the given Blade template contents.
-         *
-         * @param string $value
-         * @return string 
-         * @static 
-         */ 
-        public static function compileString($value)
-        {
-            return \Illuminate\View\Compilers\BladeCompiler::compileString($value);
-        }
-        
-        /**
-         * Strip the parentheses from the given expression.
-         *
-         * @param string $expression
-         * @return string 
-         * @static 
-         */ 
-        public static function stripParentheses($expression)
-        {
-            return \Illuminate\View\Compilers\BladeCompiler::stripParentheses($expression);
-        }
-        
-        /**
-         * Register a custom Blade compiler.
-         *
-         * @param callable $compiler
-         * @return void 
-         * @static 
-         */ 
-        public static function extend($compiler)
-        {
-            \Illuminate\View\Compilers\BladeCompiler::extend($compiler);
-        }
-        
-        /**
-         * Get the extensions used by the compiler.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getExtensions()
-        {
-            return \Illuminate\View\Compilers\BladeCompiler::getExtensions();
-        }
-        
-        /**
-         * Register a handler for custom directives.
-         *
-         * @param string $name
-         * @param callable $handler
-         * @return void 
-         * @static 
-         */ 
-        public static function directive($name, $handler)
-        {
-            \Illuminate\View\Compilers\BladeCompiler::directive($name, $handler);
-        }
-        
-        /**
-         * Get the list of custom directives.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getCustomDirectives()
-        {
-            return \Illuminate\View\Compilers\BladeCompiler::getCustomDirectives();
-        }
-        
-        /**
-         * Set the echo format to be used by the compiler.
-         *
-         * @param string $format
-         * @return void 
-         * @static 
-         */ 
-        public static function setEchoFormat($format)
-        {
-            \Illuminate\View\Compilers\BladeCompiler::setEchoFormat($format);
-        }
-        
-        /**
-         * Get the path to the compiled version of a view.
-         *
-         * @param string $path
-         * @return string 
-         * @static 
-         */ 
-        public static function getCompiledPath($path)
-        {
-            //Method inherited from \Illuminate\View\Compilers\Compiler            
-            return \Illuminate\View\Compilers\BladeCompiler::getCompiledPath($path);
-        }
-        
-        /**
-         * Determine if the view at the given path is expired.
-         *
-         * @param string $path
-         * @return bool 
-         * @static 
-         */ 
-        public static function isExpired($path)
-        {
-            //Method inherited from \Illuminate\View\Compilers\Compiler            
-            return \Illuminate\View\Compilers\BladeCompiler::isExpired($path);
-        }
-        
-        /**
-         * Compile the default values for the echo statement.
-         *
-         * @param string $value
-         * @return string 
-         * @static 
-         */ 
-        public static function compileEchoDefaults($value)
-        {
-            return \Illuminate\View\Compilers\BladeCompiler::compileEchoDefaults($value);
         }
          
     }
@@ -11679,8 +11519,6 @@ namespace  {
     class Artisan extends \Illuminate\Support\Facades\Artisan {}
 
     class Auth extends \Illuminate\Support\Facades\Auth {}
-
-    class Blade extends \Illuminate\Support\Facades\Blade {}
 
     class Broadcast extends \Illuminate\Support\Facades\Broadcast {}
 

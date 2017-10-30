@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Consult;
 use Illuminate\Support\Collection;
 use Yajra\Datatables\Datatables;
+use DB;
 
 class ConsultApiController extends Controller
 {
@@ -18,67 +19,28 @@ class ConsultApiController extends Controller
     public function getConsultsData()
     {
 
-        $consults = Consult::all();
-        $agenda = new Collection();
+        $consults = DB::select('CALL sp_se_consults(?)', ['2017-10-31']);
 
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "08:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "08:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "08:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "09:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "09:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "09:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "10:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "10:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "10:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "11:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "11:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "11:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "13:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "13:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "13:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "13:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "13:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "13:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "14:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "14:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "14:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "15:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "15:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "15:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "16:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "16:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "16:40", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "17:00", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "17:20", "note" => ""]);
-            $agenda->push(["id_agenda" => "", "patient_id" => "", "date" => "", "hour" => "17:40", "note" => ""]);
-
-
-        for($j = 0; $j<count($consults); $j++){
-
-            $hour = substr($consults[$j]['attributes']['hour'], 0, 5);
-
-            foreach ($agenda->all() as $key => $val) {
-
-                if ($val['hour'] == $hour) {
-                    $agenda->all()[$key] = $consults[$j]["attributes"];
-
-
-                }
-            }
-        }
-
-        return Datatables::of($agenda)
+        return Datatables::of($consults)
              ->addColumn("action", function ($consult) {
-                 return '<a href="' . route("agenda.edit", $consult->id) . '"
-                         class="btn bg-blue btn-xs waves-effect" title="Editar Consulta"
-                         data-toggle="tooltip" data-placement="top">
-                             <i class="material-icons">edit</i>
-                         </a>
-                         <a href="#"
-                         class="btn bg-red btn-xs waves-effect" title="Desmarcar Consulta"
-                         data-toggle="tooltip" data-placement="top">
-                             <i class="material-icons">clear</i>
-                         </a>';
+
+                 if(!$consult->name){
+                     return '<a href="#" class="btn bg-green btn-xs waves-effect" data-toggle="tooltip" data-placement="top" = title="Agendar Consulta">
+                                <i class="material-icons">group_add</i>
+                                <span class="i-span">Nova</span>
+                            </a>';
+                 }else{
+                     return '<a href="' . route("agenda.edit", $consult->hour) . '" class="btn bg-blue btn-xs waves-effect" title="Editar Consulta"
+                             data-toggle="tooltip" data-placement="top">
+                                <i class="material-icons">edit</i>
+                             </a>
+                             
+                             <a href="#" class="btn bg-red btn-xs waves-effect" title="Desmarcar Consulta"
+                             data-toggle="tooltip" data-placement="top">
+                                 <i class="material-icons">clear</i>
+                             </a>';
+                 }
+
              })
             ->escapeColumns(false)
             ->make(true);
