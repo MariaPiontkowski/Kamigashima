@@ -19,7 +19,7 @@
                         Consultas
                     </h2>
 
-                    <div class="header-dropdown m-r--5">
+                    <div class="header-button pull-right">
                         <a href="#"
                            class="btn bg-green btn-xs waves-effect"
                            data-toggle="tooltip" data-placement="top">
@@ -29,10 +29,22 @@
                     </div>
 
 
-                    <div class="row div-calendar">
 
-                            <input type="text" value="<?php echo date("d/m/Y") ?>" id="date" class="form-control-border col-md-1" readonly/>
+                    <div class="row">
+                        <div class="consult-calendar col-md-3">
 
+                            <div class="btn bg-grey btn-xs waves-effect" id="prev">
+                                <i class="material-icons">arrow_back</i>
+                            </div>
+
+                            <input type="text" value="<?php echo date("d/m/Y") ?>" id="date"
+                                   class="form-control-border col-md-6 text-center" readonly/>
+
+                            <div class="btn bg-grey btn-xs waves-effect" id="next">
+                                <i class="material-icons">arrow_forward</i>
+                            </div>
+
+                        </div>
                     </div>
 
                     <div class="body">
@@ -60,39 +72,52 @@
                 </div>
             </div>
         </div>
-        @endsection
+    </div>
+@endsection
 
-        @include("layouts.modules.datatables")
-        @include("layouts.modules.dialogs")
+@include("layouts.modules.datatables")
+@include("layouts.modules.dialogs")
 
-        @push("scripts")
-        <script>
-            $(".table").DataTable({
-                language: {
-                    url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
-                },
-                autoWidth: false,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                bInfo: false,
-                ajax: "{{ route("api.consult.data") }}",
-                length: 21,
-                createdRow: function (row, data) {
-                    if (data['name'] !== null) {
-                        $(row).css('background-color', '#f5f5f5');
-                    }
+@push("scripts")
+<script>
 
-                },
-                columns: [
-                    {data: "hour"},
-                    {data: "name", id: "patient"},
-                    {data: "phone"},
-                    {data: "note"},
-                    {data: "action", orderable: false, searchable: false}
-                ]
-            });
+    var date = new Date();
 
+    $('#prev').click(function () {
+        date.setDate(date.getDate() - 1);
+        $('#date').val(date.toLocaleDateString())
+    });
 
-        </script>
-    @endpush
+    $('#next').click(function () {
+        date.setDate(date.getDate() + 1);
+        $('#date').val(date.toLocaleDateString())
+    });
+
+    $(".table").DataTable({
+        language: {
+            url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
+        },
+        autoWidth: false,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        bInfo: false,
+        ajax: "{{ route("api.consult.data") }}",
+        length: 21,
+        columns: [
+            {data: "hour"},
+            {data: "name", id: "patient"},
+            {data: "phone"},
+            {data: "note"},
+            {data: "action", orderable: false, searchable: false}
+        ],
+        createdRow: function (row, data) {
+            if (data['name'] !== null) {
+                $(row).css('background-color', '#f5f5f5');
+            }
+
+        }
+    });
+
+</script>
+@endpush

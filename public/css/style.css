@@ -1,0 +1,19 @@
+.header-button{
+    position: absolute;
+    top: 20px;
+    right: 40px;
+}
+
+.consult-calendar{
+    float: none !important;
+    margin: auto;
+    height: 45px;
+}
+.consult-calendar input{
+    margin: 8px;
+}
+
+.consult-calendar div{
+    float:left;
+    margin: 12px 15px;
+}
