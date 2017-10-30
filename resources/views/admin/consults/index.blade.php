@@ -102,7 +102,9 @@
         serverSide: true,
         paging: false,
         bInfo: false,
-        ajax: "{{ route("api.consult.data") }}",
+        ajax: {
+           url: "{{ route("api.consult.data") }}"
+        },
         length: 21,
         columns: [
             {data: "hour"},
