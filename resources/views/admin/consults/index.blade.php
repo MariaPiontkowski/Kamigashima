@@ -121,15 +121,17 @@
         }
     });
 
-    /*$('#sandbox-container input').datepicker({
+    /*$('#date').keydown(event, function () {
+        event.preventDefault(event);
+    });*/
+
+    $('#date').datepicker({
         format: "dd/mm/yyyy",
         language: "pt-BR",
-        orientation: "bottom auto",
         daysOfWeekHighlighted: "0,6",
         autoclose: true,
-        todayHighlight: true,
-        datesDisabled: ['10/06/2017', '10/21/2017']
-    });*/
+        todayHighlight: true
+    });
 
 </script>
 @endpush
