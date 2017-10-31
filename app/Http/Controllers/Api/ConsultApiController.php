@@ -19,7 +19,10 @@ class ConsultApiController extends Controller
     public function getConsultsData()
     {
 
-        $consults = DB::select('CALL sp_se_consults(?)', ['2017-10-31']);
+        $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+
+        $consults = DB::select('CALL sp_se_consults(?)', [$date]);
+
 
         return Datatables::of($consults)
              ->addColumn("action", function ($consult) {

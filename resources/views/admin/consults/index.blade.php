@@ -31,16 +31,16 @@
 
 
                     <div class="row">
-                        <div class="consult-calendar col-md-3">
+                        <div class="consult-calendar">
 
                             <div class="btn bg-grey btn-xs waves-effect" id="prev">
                                 <i class="material-icons">arrow_back</i>
                             </div>
 
                             <input type="text" value="<?php echo date("d/m/Y") ?>" id="date"
-                                   class="form-control-border col-md-6 text-center" readonly/>
+                                   class="form-control-border text-center" readonly/>
 
-                            <div class="btn bg-grey btn-xs waves-effect" id="next">
+                            <div class="btn bg-grey btn-xs waves-effect pull-right" id="next">
                                 <i class="material-icons">arrow_forward</i>
                             </div>
 
@@ -83,43 +83,74 @@
 
     var date = new Date();
 
+    table = $(".table").DataTable({
+    language: {
+        url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
+    },
+    autoWidth: false,
+    processing: true,
+    paging: false,
+    bInfo: false,
+    ajax: {
+        url: "{{ route("api.consult.data") }}",
+        type: "post"
+    },
+    length: 21,
+    columns: [
+        {data: "hour"},
+        {data: "name", id: "patient"},
+        {data: "phone"},
+        {data: "note"},
+        {data: "action", orderable: false, searchable: false}
+    ],
+    createdRow: function (row, data) {
+        if (data['name'] !== null) {
+            $(row).css('background-color', '#f5f5f5');
+        }
+
+    }
+});
+
     $('#prev').click(function () {
+
         date.setDate(date.getDate() - 1);
-        $('#date').val(date.toLocaleDateString())
+        $('#date').val(date.toLocaleDateString());
+
+        $.ajax({
+            url: "{{ route("api.consult.data") }}",
+            data : {date : formatDate(date)},
+            type: "post"
+        }).done(function (result) {
+            table.clear().draw();
+            table.rows.add(result['data']).draw();
+        });
     });
 
     $('#next').click(function () {
         date.setDate(date.getDate() + 1);
-        $('#date').val(date.toLocaleDateString())
+        $('#date').val(date.toLocaleDateString());
+
+        $.ajax({
+            url: "{{ route("api.consult.data") }}",
+            data : {date : formatDate(date)},
+            type: "post"
+        }).done(function (result) {
+            table.clear().draw();
+            table.rows.add(result['data']).draw();
+        });
     });
 
-    $(".table").DataTable({
-        language: {
-            url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
-        },
-        autoWidth: false,
-        processing: true,
-        serverSide: true,
-        paging: false,
-        bInfo: false,
-        ajax: {
-           url: "{{ route("api.consult.data") }}"
-        },
-        length: 21,
-        columns: [
-            {data: "hour"},
-            {data: "name", id: "patient"},
-            {data: "phone"},
-            {data: "note"},
-            {data: "action", orderable: false, searchable: false}
-        ],
-        createdRow: function (row, data) {
-            if (data['name'] !== null) {
-                $(row).css('background-color', '#f5f5f5');
-            }
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
-        }
-    });
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 
 </script>
 @endpush
