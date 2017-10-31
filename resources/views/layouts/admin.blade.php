@@ -14,13 +14,10 @@
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap-select/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/node-waves/waves.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/animate-css/animate.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datepicker/css/bootstrap-datepicker.min.css') }}">
 
     @stack('styles')
 
     <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/themes/theme-blue-grey.min.css') }}">
 
 
@@ -49,8 +46,6 @@
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('plugins/node-waves/waves.min.js') }}"></script>
-    <script src="{{ asset('plugins/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('plugins/datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
 
     <script>
         $("body").tooltip({

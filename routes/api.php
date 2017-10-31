@@ -30,7 +30,7 @@ Route::group( [ "prefix" => "cid" ], function () {
 } );
 
 Route::group( [ "prefix" => "consult" ], function () {
-    Route::get( 'data', 'Api\ConsultApiController@getConsultsData' )->name( 'api.consult.data' );
+    Route::post( 'data', 'Api\ConsultApiController@getConsultsData' )->name( 'api.consult.data' );
 } );
 
 
