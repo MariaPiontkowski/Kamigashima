@@ -14,12 +14,10 @@
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap-select/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/node-waves/waves.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/animate-css/animate.min.css') }}">
 
     @stack('styles')
 
     <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/themes/theme-blue-grey.min.css') }}">
 
 

@@ -7,7 +7,7 @@
 
     <script>
         $(function () {
-            $('.dialog-btn').on('click', function (e) {
+            $('body').on('click', '.dialog-btn', function (e) {
                 e.preventDefault();
                 var type = $(this).data('type');
                 switch (type) {
