@@ -65,14 +65,14 @@ class ConsultController extends Controller
     public function destroy($date, $hour)
     {
         $consult = Consult::where([
-            'hour' => $hour,
-            'date' => $date
+            'date' => $date,
+            'hour' => $hour
         ])->first();
 
         $consult->delete();
 
         return redirect()
             ->route("agenda.index")
-            ->with("success", 'Consulta "' . $date . ' ' . $hour . '" removida com sucesso!');
+            ->with("success", 'Consulta dia' . date('d/m/Y', strtotime($date)) . ' às ' . $hour . ' removida com sucesso!');
     }
 }

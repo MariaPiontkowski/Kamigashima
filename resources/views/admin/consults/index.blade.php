@@ -45,7 +45,7 @@
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th width="9%">Ações</th>
+                                <th width="5%">Ação</th>
                             </tr>
                             </thead>
                             <tfoot>
@@ -54,7 +54,7 @@
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th width="9%">Ações</th>
+                                <th width="5%">Ação</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -78,26 +78,15 @@
 <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
 <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
 <script>
+
     var date = new Date();
 
-    $('#prev').click(function () {
-        date.setDate(date.getDate() - 1);
-        $('#date').val(date.toLocaleDateString());
-
-    });
-
-    $('#next').click(function () {
-        date.setDate(date.getDate() + 1);
-        $('#date').val(date.toLocaleDateString());
-    });
-
-    var table = $(".table").DataTable({
+    table = $(".table").DataTable({
         language: {
             url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
         },
         autoWidth: false,
         processing: true,
-        serverSide: true,
         paging: false,
         bInfo: false,
         ajax: {
@@ -120,12 +109,58 @@
         }
     });
 
-    $('#date').bootstrapMaterialDatePicker({
+    inputdate = $('#date');
+
+    $('#prev').on('click', function () {
+        date.setDate(date.getDate() - 1);
+        inputdate.val(date.toLocaleDateString());
+        agenda(formatDate(date));
+
+    });
+
+    $('#next').on('click', function () {
+        date.setDate(date.getDate() + 1);
+        inputdate.val(date.toLocaleDateString());
+        agenda(formatDate(date));
+    });
+
+    inputdate.bootstrapMaterialDatePicker({
         format: "DD/MM/YYYY",
         switchOnClick: true,
         time: false,
         lang: "pt-br",
         cancelText: "Cancelar"
     });
+
+    inputdate.on('change', function(){
+        var splitdate = this.value.split("/");
+        var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+        agenda(formatDate(inputdateval));
+    });
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    function agenda(date){
+        $.ajax({
+            url: "{{ route("api.consult.data") }}",
+            data : {date : date},
+            type: "post"
+        }).done(function (result) {
+            table.clear().draw();
+            table.rows.add(result['data']).draw();
+        });
+    }
+
+
 </script>
 @endpush
