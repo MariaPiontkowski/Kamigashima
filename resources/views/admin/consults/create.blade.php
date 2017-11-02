@@ -1,9 +1,7 @@
-@extends('layouts.admin', ['title' => 'Editar CID'])
+@extends('layouts.admin', ['title' => 'Agendar'])
 
 @section('breadcrumb')
-    <li class="active"><i class="material-icons">playlist_add_check</i> Administração</li>
-    <li class="active"><a href="{{ route('cid.index') }}">CIDs</a></li>
-    <li class="active">Editar CID</li>
+    <li class="active"><a href="{{ route('agenda.index') }}">Agenda</a></li>
 @endsection
 
 @section('content')
@@ -12,11 +10,11 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Editar CID
+                        Agendar Consulta
                     </h2>
                 </div>
                 <div class="body">
-                    @include('admin.cid.form')
+                    @include('admin.consults.form')
                 </div>
             </div>
         </div>

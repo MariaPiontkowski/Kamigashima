@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Consult;
+use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PhpParser\Node\Scalar\String_;
 
 class ConsultController extends Controller
 {
@@ -24,11 +26,14 @@ class ConsultController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($date, $hour)
     {
         return view("admin.consults.create", [
-            "cid" => new Cid(),
-            "action" => route("cid.store"),
+            "consult" => new Consult(),
+            "date" => $date,
+            "hour" => $hour,
+            "patients" => Patient::all(),
+            "action" => route("agenda.store", ['date' => $date, 'hour' => $hour]),
             "method" => "post"
         ]);
     }
@@ -37,20 +42,23 @@ class ConsultController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     * @param  String $date
+     * @param  String $hour
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $date, $hour)
     {
-
-        $cid = new Cid();
-        $cid->code = $request->code;
-        $cid->description = $request->description;
-        $cid->save();
+        $consult = new Consult();
+        $consult->date = $date;
+        $consult->hour = $hour;
+        $consult->patient_id = $request->patient;
+        $consult->note = $request->note;
+        $consult->save();
 
         return redirect()
-            ->route("cid.index")
-            ->with("success", 'CID "' . $request->code . '" cadastrado com sucesso!');
+            ->route("agenda.index")
+            ->with("success", "Consulta dia " . date('d/m/Y', strtotime($date)) . " às ". $hour. " agendada com sucesso!");
     }
 
     /**
@@ -69,10 +77,13 @@ class ConsultController extends Controller
             'hour' => $hour
         ])->first();
 
-        $consult->delete();
-
-        return redirect()
-            ->route("agenda.index")
-            ->with("success", 'Consulta dia' . date('d/m/Y', strtotime($date)) . ' às ' . $hour . ' removida com sucesso!');
+        var_dump($date);
+        var_dump($hour);
+//
+//        $consult->delete();
+//
+//        return redirect()
+//            ->route("agenda.index")
+//            ->with("success", 'Consulta dia ' . date('d/m/Y', strtotime($date)) . ' às ' . $hour . ' removida com sucesso!');
     }
 }

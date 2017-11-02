@@ -3,21 +3,50 @@
     {{ method_field($method) }}
 
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label for="code">CID</label>
+        <div class="col-sm-3">
+            <div class="form-group text-center">
+                <label for="code">Data</label>
                 <div class="form-line">
-                    <input id="code" name="code" class="form-control" value="{{ $cid->code }}"
-                           placeholder="Digite o código do CID" required autofocus>
+                    <input id="code" name="code" class="form-control text-center" value="{{ date('d/m/Y', strtotime($date)) }}" readonly>
                 </div>
             </div>
         </div>
+        <div class="col-sm-3">
+            <div class="form-group text-center">
+                <label for="code">Hora</label>
+                <div class="form-line">
+                    <input id="code" name="code" class="form-control text-center" value="{{ $hour }}" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="description">CID</label>
+                <label for="patient">Paciente</label>
                 <div class="form-line">
-                    <input id="description" name="description" class="form-control" value="{{ $cid->description }}"
-                           placeholder="Digite o código do CID" required autofocus>
+                    <select name="patient" id="patient" class="form-control show-tick selectpicker autofocus"
+                            title="Selecione o paciente" data-dropup-auto="false" data-live-search="true"
+                            data-live-search-normalize="true" data-live-search-style="contains" autofocus required>
+                        @foreach($patients as $patient)
+                            <option value="{{ $patient->id }}">
+                                {{ $patient->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="historic">Observações</label>
+                <div class="form-line">
+                    <textarea name="note" class="form-control" rows="4"
+                              placeholder="Observações" required autofocus>
+                    </textarea>
                 </div>
             </div>
         </div>
@@ -26,25 +55,10 @@
     <div class="row button-demo">
         <div class="col-sm-10">
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
-            <a href="{{ route("cid.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
+            <a href="{{ route("agenda.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
         </div>
-        @if($cid->id)
-            <div class="col-sm-2">
-                <a href="#" class="btn bg-red m-t-15 waves-effect dialog-btn" data-form="form-delete"
-                   data-type="confirm">
-                    Remover CID
-                </a>
-            </div>
-        @endif
     </div>
 </form>
-
-@if($cid->id)
-    <form id="form-delete" action="{{ route("cid.destroy", $cid->id) }}" method="post">
-        {{ csrf_field() }}
-        {{ method_field("delete") }}
-    </form>
-@endif
 
 @include("layouts.modules.dialogs")
 @include("layouts.modules.validation")

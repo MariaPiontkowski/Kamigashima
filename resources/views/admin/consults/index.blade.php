@@ -80,6 +80,30 @@
 <script>
 
     var date = new Date();
+    inputdate = $('#date');
+
+    $(function () {
+        $('body').on('click', '#btn-delete', function (e) {
+            e.preventDefault();
+            var idform = $(this).data('form');
+            swal({
+                title: "Deseja realmente desmarcar?",
+                text: "Você não poderá mais recuperar esta informação!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim, quero desmarcar!",
+                closeOnConfirm: false
+            },function () {
+                form = $("#" + idform);
+                form.submit();
+            });
+        });
+    });
+
+    var splitdate = inputdate.val().split("/");
+    var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
     table = $(".table").DataTable({
         language: {
@@ -92,7 +116,10 @@
         ajax: {
             url: "{{ route("api.consult.data") }}",
             type: 'post',
-            data: {_token: "{{ csrf_token() }}"}
+            data: {
+                _token: "{{ csrf_token() }}",
+                date: formatDate(inputdateval)
+            }
         },
         columns: [
             {data: "hour", orderable: false, searchable: false},
@@ -103,25 +130,22 @@
         ],
         createdRow: function (row, data) {
             if (data['name'] !== null) {
-                $(row).css('background-color', '#f5f5f5');
+                $(row).css('background-color', '#E1E1E1');
             }
-
         }
     });
-
-    inputdate = $('#date');
 
     $('#prev').on('click', function () {
         date.setDate(date.getDate() - 1);
         inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
+        agenda(formatDate(date), "{{ route("api.consult.data") }}");
 
     });
 
     $('#next').on('click', function () {
         date.setDate(date.getDate() + 1);
         inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
+        agenda(formatDate(date, "{{ route("api.consult.data") }}"));
     });
 
     inputdate.bootstrapMaterialDatePicker({
@@ -135,7 +159,7 @@
     inputdate.on('change', function(){
         var splitdate = this.value.split("/");
         var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
-        agenda(formatDate(inputdateval));
+        agenda(formatDate(inputdateval), "{{ route("api.consult.data") }}");
     });
 
     function formatDate(date) {
@@ -150,10 +174,13 @@
         return [year, month, day].join('-');
     }
 
-    function agenda(date){
+    function agenda(date, token){
         $.ajax({
             url: "{{ route("api.consult.data") }}",
-            data : {date : date},
+            data: {
+                _token: token,
+                date: date
+            },
             type: "post"
         }).done(function (result) {
             table.clear().draw();

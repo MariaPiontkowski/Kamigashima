@@ -8,7 +8,7 @@ class Consult extends Eloquent
 {
     public $table = 'consults';
 
-    public $primaryKey = 'hour';
+    public $primaryKey = 'date';
 
     protected $fillable=[
         'date',

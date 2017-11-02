@@ -28,6 +28,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('convenio', 'Admin\AgreementController', ['except' => ['show']]);
     Route::resource('cid', 'Admin\CidController', ['except' => ['show']]);
 
-    Route::resource('agenda', 'Admin\ConsultController', ['except' => ['show', 'edit', 'update', 'destroy']]);
-    Route::delete('agenda/{date}/{hour}', 'Admin\ConsultController@destroy')->name('agenda.destroy');
+    Route::resource('agenda', 'Admin\ConsultController', ['except' => ['show', 'edit', 'update', 'destroy', 'create', 'store']]);
+    Route::delete('agenda/desmarcar/{date}/{hour}', 'Admin\ConsultController@destroy')->name('agenda.destroy');
+    Route::get('agenda/marcar/{date}/{hour}', 'Admin\ConsultController@create')->name('agenda.create');
+    Route::get('agenda/salvar/{date}/{hour}', 'Admin\ConsultController@store')->name('agenda.store');
 });
