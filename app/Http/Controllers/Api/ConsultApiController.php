@@ -29,11 +29,11 @@ class ConsultApiController extends Controller
                                 <i class="material-icons">group_add</i>
                             </a>';
                 } else {
-                    return '<form id="form-delete' . $consult->hour . '" method="post"  
-                        action="' . e(route("agenda.destroy", ['date' => $consult->date, 'hour' => $consult->hour])) . '">
+                    return '<form id="form-delete' . $consult->id . '" method="post"  
+                        action="' . e(route("agenda.destroy", $consult->id)) . '">
                                 <button type="submit" class="btn bg-red btn-xs waves-effect" title="Desmarcar Consulta"
                                 data-toggle="tooltip" data-placement="top" id="btn-delete"
-                                data-form="form-delete' . $consult->hour . '" data-hour="' . $consult->hour . '">
+                                data-form="form-delete' . $consult->id . '" data-hour="' . $consult->hour . '">
                                     <input type="hidden" name="_token" value="' . $request->_token . '">
                                     <input type="hidden" name="_method" value="delete">
                                  <i class="material-icons">event_busy</i>

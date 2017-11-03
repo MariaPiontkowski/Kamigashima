@@ -22,7 +22,7 @@
                     <div class="row">
                         <div class="consult-calendar">
 
-                            <div class="btn bg-teal btn-xs waves-effect" id="prev">
+                            <div class="btn bg-blue-grey btn-xs waves-effect" id="prev">
                                 <i class="material-icons">arrow_back</i>
                             </div>
 
@@ -30,7 +30,7 @@
                                    data-toggle="tooltip" data-placement="top" title="Selecionar Data"
                                    readonly value="{{ date('d/m/Y') }}"/>
 
-                            <div class="btn bg-teal btn-xs waves-effect pull-right" id="next">
+                            <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next">
                                 <i class="material-icons">arrow_forward</i>
                             </div>
 
@@ -41,7 +41,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Hora</th>
+                                <th width="5%">Hora</th>
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
@@ -50,7 +50,7 @@
                             </thead>
                             <tfoot>
                             <tr>
-                                <th>Hora</th>
+                                <th width="5%">Hora</th>
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
@@ -92,11 +92,11 @@
                 type: "warning",
                 showCancelButton: true,
                 cancelButtonText: "Cancelar",
-                confirmButtonColor: "#DD6B55",
+                confirmButtonColor: "#f44336",
                 confirmButtonText: "Sim, quero desmarcar!",
                 closeOnConfirm: false
             },function () {
-                form = $("#" + idform);
+                var form = $("#" + idform);
                 form.submit();
             });
         });
@@ -138,14 +138,14 @@
     $('#prev').on('click', function () {
         date.setDate(date.getDate() - 1);
         inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date), "{{ route("api.consult.data") }}");
+        agenda(formatDate(date));
 
     });
 
     $('#next').on('click', function () {
         date.setDate(date.getDate() + 1);
         inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date, "{{ route("api.consult.data") }}"));
+        agenda(formatDate(date));
     });
 
     inputdate.bootstrapMaterialDatePicker({
@@ -159,7 +159,7 @@
     inputdate.on('change', function(){
         var splitdate = this.value.split("/");
         var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
-        agenda(formatDate(inputdateval), "{{ route("api.consult.data") }}");
+        agenda(formatDate(inputdateval));
     });
 
     function formatDate(date) {
@@ -174,12 +174,12 @@
         return [year, month, day].join('-');
     }
 
-    function agenda(date, token){
+    function agenda(date){
         $.ajax({
             url: "{{ route("api.consult.data") }}",
             data: {
-                _token: token,
-                date: date
+                date: date,
+                _token: "{{ csrf_token() }}"
             },
             type: "post"
         }).done(function (result) {

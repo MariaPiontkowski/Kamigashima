@@ -49,7 +49,10 @@ class ConsultController extends Controller
      */
     public function store(Request $request, $date, $hour)
     {
+        $id = str_replace('-', '', $date).str_replace(':', '', $hour);
+
         $consult = new Consult();
+        $consult->id = $id;
         $consult->date = $date;
         $consult->hour = $hour;
         $consult->patient_id = $request->patient;
@@ -64,26 +67,20 @@ class ConsultController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $date
-     * @param $hour
+     * @param $id
      * @return \Illuminate\Http\Response
      * @internal param int $id
      *
      */
-    public function destroy($date, $hour)
+    public function destroy($id)
     {
-        $consult = Consult::where([
-            'date' => $date,
-            'hour' => $hour
-        ])->first();
+        $consult = Consult::find($id);
+        Consult::destroy($id);
 
-        var_dump($date);
-        var_dump($hour);
-//
-//        $consult->delete();
-//
-//        return redirect()
-//            ->route("agenda.index")
-//            ->with("success", 'Consulta dia ' . date('d/m/Y', strtotime($date)) . ' às ' . $hour . ' removida com sucesso!');
+
+        return redirect()
+            ->route("agenda.index")
+            ->with("success", 'Consulta dia ' . date('d/m/Y', strtotime($consult->date)) . ' às ' . $consult->hour . ' removida com sucesso!', $consult->date);
+
     }
 }

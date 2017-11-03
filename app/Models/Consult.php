@@ -8,9 +8,10 @@ class Consult extends Eloquent
 {
     public $table = 'consults';
 
-    public $primaryKey = 'date';
+    public $primaryKey = 'id';
 
     protected $fillable=[
+        'id',
         'date',
         'hour',
         'patient_id',
