@@ -14,10 +14,10 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="description">CID</label>
+                <label for="description">Descrição</label>
                 <div class="form-line">
                     <input id="description" name="description" class="form-control" value="{{ $cid->description }}"
-                           placeholder="Digite o código do CID" required autofocus>
+                           placeholder="Digite a descrição do CID" required autofocus>
                 </div>
             </div>
         </div>
