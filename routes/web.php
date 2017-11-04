@@ -28,7 +28,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('convenio', 'Admin\AgreementController', ['except' => ['show']]);
     Route::resource('cid', 'Admin\CidController', ['except' => ['show']]);
 
-    Route::resource('agenda', 'Admin\ConsultController', ['except' => ['show', 'edit', 'update', 'create', 'store']]);
+    Route::resource('agenda', 'Admin\ConsultController', ['except' => ['show', 'create', 'store']]);
     Route::get('agenda/marcar/{date}/{hour}', 'Admin\ConsultController@create')->name('agenda.create');
     Route::post('agenda/salvar/{date}/{hour}', 'Admin\ConsultController@store')->name('agenda.store');
 });

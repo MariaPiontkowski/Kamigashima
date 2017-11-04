@@ -33,4 +33,9 @@ Route::group( [ "prefix" => "consult" ], function () {
     Route::post( 'data', 'Api\ConsultApiController@getConsultsData' )->name( 'api.consult.data' );
 } );
 
+Route::group( [ "prefix" => "consult" ], function () {
+    Route::post( 'hora', 'Api\ConsultApiController@loadHour' )->name( 'api.agenda.hour' );
+} );
+
+
 

@@ -19,7 +19,7 @@ class PatientRecordApiController extends Controller {
 	 * @return Datatables
 	 */
 	public function getRecordsData( $patient ) {
-		$records = PatientRecord::where( 'patient_id', $patient )->get();
+		$records = PatientRecord::where( 'patient_id', $patient )->orderBy('created_at', 'DESC')->get();
 
 		return Datatables::of( $records )
 		                 ->addColumn( "action", function ( $record ) use ( $patient ) {

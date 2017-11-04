@@ -27,6 +27,7 @@ class ConsultApiController extends Controller
                 if (!$consult->name) {
                     return '<a href="' . route("agenda.create",  ['date' => $consult->date, 'hour' => $consult->hour]) . '" class="btn bg-green btn-xs waves-effect" data-toggle="tooltip" data-placement="top"  title="Agendar Consulta">
                                 <i class="material-icons">group_add</i>
+                                <span>Nova</span>
                             </a>';
                 } else {
                     return '<form id="form-delete' . $consult->id . '" method="post"  
@@ -38,13 +39,27 @@ class ConsultApiController extends Controller
                                     <input type="hidden" name="_method" value="delete">
                                  <i class="material-icons">event_busy</i>
                              </button>
-                            </form>';
+                             <a href="' . route("agenda.edit",  $consult->id) . '" class="btn bg-blue-grey btn-xs waves-effect" data-toggle="tooltip" data-placement="top"  title="Remarcar Consulta">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            </form>
+                            ';
                 }
 
             })
             ->escapeColumns(false)
             ->make(true);
 
+    }
 
+
+    /**
+     * Display Hour Available result.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function loadhour(Request $request){
+        return DB::select('CALL sp_se_hour_available(?)', [$request->date]);
     }
 }

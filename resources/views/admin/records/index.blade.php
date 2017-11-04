@@ -69,8 +69,8 @@
             serverSide: true,
             ajax: "{{ route("api.record.data", $patient->id) }}",
             columns: [
-                {data: "date_at"},
-                {data: "hour_at"},
+                {data: "date_at", orderable: false},
+                {data: "hour_at", orderable: false},
                 {data: "action", orderable: false, searchable: false}
             ]
         });

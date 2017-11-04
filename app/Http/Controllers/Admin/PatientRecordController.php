@@ -51,8 +51,8 @@ class PatientRecordController extends Controller {
 		$this->saveHistoric( new PatientRecord(), $paciente, $request );
 
 		return redirect()
-			->route( "paciente.prontuario.index" )
-			->with( "success", 'CID "' . $request->code . '" cadastrado com sucesso!' );
+			->route( "paciente.prontuario.index", $paciente)
+			->with( "success", 'Histórico cadastrado com sucesso!' );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class PatientRecordController extends Controller {
 
 		return redirect()
 			->route( "paciente.prontuario.index", $paciente )
-			->with( "success", 'Histório "' . $request->code . '" editado com sucesso!' );
+			->with( "success", 'Histório "' . $request->code . '" alterado com sucesso!' );
 	}
 
 	/**

@@ -55,9 +55,6 @@
                         <li>
                             <a href="{{ route('cid.index') }}">CID</a>
                         </li>
-                        <li>
-                            <a href="#">Autorização</a>
-                        </li>
                     </ul>
                 </li>
             </ul>
