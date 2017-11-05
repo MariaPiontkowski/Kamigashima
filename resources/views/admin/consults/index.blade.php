@@ -73,20 +73,28 @@
       href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <style>
+    .sweet-alert{
+        background-color: transparent;
+    }
+
     .consult-calendar{
         float: none !important;
         margin: auto;
-        width: 246px;
+        width: 230px;
     }
 
     .consult-calendar input{
-        margin: 8px;
+        margin-top: 8px;
         width: 110px;
+        border:none;
+        border-radius: 0;
+        border-bottom: 1px solid #ccc;
+        box-shadow: none;
     }
 
     .consult-calendar input:hover{
         cursor: pointer;
-        background-color: #F5F5F5;
+        border-bottom: 2px solid #1f91f3;
     }
 
     .consult-calendar div{
