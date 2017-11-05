@@ -86,7 +86,6 @@
 @push("styles")
     <link rel="stylesheet"
           href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <style>
         .sweet-alert{

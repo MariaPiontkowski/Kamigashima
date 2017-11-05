@@ -71,7 +71,6 @@
 @push("styles")
 <link rel="stylesheet"
       href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <style>
     .sweet-alert{
         background-color: transparent;
@@ -81,6 +80,7 @@
         float: none !important;
         margin: auto;
         width: 230px;
+        padding-bottom: 10px;
     }
 
     .consult-calendar input{
