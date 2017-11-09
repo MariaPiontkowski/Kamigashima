@@ -22,16 +22,33 @@
                     <div class="row">
                         <div class="consult-calendar">
 
-                            <div class="btn bg-blue-grey btn-xs waves-effect" id="prev">
+                            <div class="btn btn-xs waves-effect" id="prevmonth">
                                 <i class="material-icons">arrow_back</i>
+                            </div>
+
+                            <div class="btn btn-xs waves-effect" id="prevweek">
+                                <i class="material-icons">first_page</i>
+                            </div>
+
+                            <div class="btn bg-blue-grey btn-xs waves-effect" id="prev">
+                                <i class="material-icons">chevron_left</i>
                             </div>
 
                             <input type="text" id="date" class="form-control-border text-center"
                                    data-toggle="tooltip" data-placement="top" title="Selecionar Data"
                                    readonly value="{{ date('d/m/Y') }}"/>
 
-                            <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next">
+
+                            <div class="btn btn-xs waves-effect pull-right" id="nextmonth">
                                 <i class="material-icons">arrow_forward</i>
+                            </div>
+
+                            <div class="btn btn-xs waves-effect pull-right" id="nextweek">
+                                <i class="material-icons">last_page</i>
+                            </div>
+
+                            <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next">
+                                <i class="material-icons">chevron_right</i>
                             </div>
 
                         </div>
@@ -77,10 +94,9 @@
     }
 
     .consult-calendar{
-        float: none !important;
         margin: auto;
-        width: 230px;
-        padding-bottom: 10px;
+        width: 410px;
+        height: 55px;
     }
 
     .consult-calendar input{
@@ -100,6 +116,20 @@
     .consult-calendar div{
         float:left;
         margin: 12px 15px;
+        color: #fff;
+    }
+
+    .consult-calendar div:hover{
+        color:#fff;
+    }
+
+    #prevweek, #nextweek{
+        margin: 12px 0;
+        background-color: #76919b;
+    }
+
+    #prevmonth, #nextmonth{
+        background-color: #8b9ea7;
     }
 </style>
 
@@ -167,7 +197,6 @@
             url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
         },
         autoWidth: false,
-        processing: true,
         paging: false,
         bInfo: false,
         ajax: {
@@ -183,7 +212,7 @@
             {data: "name", orderable: false,
                 fnCreatedCell: function (nTd, sData, oData) {
 
-                var name = oData.name !== null ? oData.name : '';
+                    var name = oData.name !== null ? oData.name : '';
                     $(nTd).html("<a href='/admin/paciente/"+oData.patient_id+"/editar' target='_blank'>"+name+"</a>");
                 }
             },
@@ -198,15 +227,38 @@
         }
     });
 
+    $('#prevmonth').on('click', function () {
+        date.setMonth(date.getMonth() - 1);
+        inputdate.val(date.toLocaleDateString());
+        agenda(formatDate(date));
+    });
+
+    $('#prevweek').on('click', function () {
+        date.setDate(date.getDate() - 7);
+        inputdate.val(date.toLocaleDateString());
+        agenda(formatDate(date));
+    });
+
     $('#prev').on('click', function () {
         date.setDate(date.getDate() - 1);
         inputdate.val(date.toLocaleDateString());
         agenda(formatDate(date));
-
     });
 
     $('#next').on('click', function () {
         date.setDate(date.getDate() + 1);
+        inputdate.val(date.toLocaleDateString());
+        agenda(formatDate(date));
+    });
+
+    $('#nextweek').on('click', function () {
+        date.setDate(date.getDate() + 7);
+        inputdate.val(date.toLocaleDateString());
+        agenda(formatDate(date));
+    });
+
+    $('#nextmonth').on('click', function () {
+        date.setMonth(date.getMonth() + 1);
         inputdate.val(date.toLocaleDateString());
         agenda(formatDate(date));
     });
