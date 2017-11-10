@@ -5,22 +5,19 @@
     <div class="form-group">
         <label for="historic">Histórico</label>
         <div class="form-line">
-                <textarea id="historic" name="historic" class="form-control" rows="4"
-                          placeholder="Digite o histórico do paciente" required autofocus>{{ $record->historic }}</textarea>
+                <textarea id="historic" name="historic" class="form-control" rows="4" placeholder="Digite o histórico do paciente" required autofocus>{{ $record->historic }}</textarea>
         </div>
     </div>
     <div class="form-group">
         <label for="evolution">Evolução</label>
         <div class="form-line">
-                <textarea id="evolution" name="evolution" class="form-control" rows="4"
-                          placeholder="Digite a evolução do paciente" required>{{ $record->evolution }}</textarea>
+                <textarea id="evolution" name="evolution" class="form-control" rows="4" placeholder="Digite a evolução do paciente" required>{{ $record->evolution }}</textarea>
         </div>
     </div>
     <div class="form-group">
         <label for="procedure">Procedimentos</label>
         <div class="form-line">
-                <textarea id="procedure" name="procedure" class="form-control" rows="4"
-                          placeholder="Digite os procedimentos utilizados" required>{{ $record->procedure }}</textarea>
+                <textarea id="procedure" name="procedure" class="form-control" rows="4" placeholder="Digite os procedimentos utilizados" required>{{ $record->procedure }}</textarea>
         </div>
     </div>
 
