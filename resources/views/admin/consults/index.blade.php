@@ -15,22 +15,32 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="header">
-                    <h2>
-                        Consultas
-                    </h2>
+                    <div class="row" style="margin: 0">
+                        <h2 class="pull-left">
+                            Consultas
+                        </h2>
 
-                    <div class="row">
+                        <div class="btn bg-green btn-xs waves-effect pull-right" id="today" title="Hoje"
+                             data-toggle="tooltip" data-placement="bottom">
+                            <i class="material-icons">event_note</i>
+                        </div>
+                    </div>
+
+                  <div class="row">
                         <div class="consult-calendar">
 
-                            <div class="btn btn-xs waves-effect" id="prevmonth">
+                            <div class="btn btn-xs waves-effect" id="prevmonth" title="Recuar 1 mês"
+                                 data-toggle="tooltip" data-placement="left">
                                 <i class="material-icons">arrow_back</i>
                             </div>
 
-                            <div class="btn btn-xs waves-effect" id="prevweek">
+                            <div class="btn btn-xs waves-effect" id="prevweek" title="Recuar 1 semana"
+                                 data-toggle="tooltip" data-placement="top">
                                 <i class="material-icons">first_page</i>
                             </div>
 
-                            <div class="btn bg-blue-grey btn-xs waves-effect" id="prev">
+                            <div class="btn bg-blue-grey btn-xs waves-effect" id="prev" title="Recuar 1 dia"
+                                 data-toggle="tooltip" data-placement="bottom">
                                 <i class="material-icons">chevron_left</i>
                             </div>
 
@@ -39,15 +49,18 @@
                                    readonly value="{{ date('d/m/Y') }}"/>
 
 
-                            <div class="btn btn-xs waves-effect pull-right" id="nextmonth">
+                            <div class="btn btn-xs waves-effect pull-right" id="nextmonth" title="Avançar 1 mês"
+                                 data-toggle="tooltip" data-placement="right">
                                 <i class="material-icons">arrow_forward</i>
                             </div>
 
-                            <div class="btn btn-xs waves-effect pull-right" id="nextweek">
+                            <div class="btn btn-xs waves-effect pull-right" id="nextweek" title="Avançar 1 semana"
+                                 data-toggle="tooltip" data-placement="top">
                                 <i class="material-icons">last_page</i>
                             </div>
 
-                            <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next">
+                            <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next" title="Avançar 1 dia"
+                                 data-toggle="tooltip" data-placement="bottom">
                                 <i class="material-icons">chevron_right</i>
                             </div>
 
@@ -131,6 +144,10 @@
     #prevmonth, #nextmonth{
         background-color: #8b9ea7;
     }
+
+    .tooltip{
+        margin: auto !important;;
+    }
 </style>
 
 @endpush
@@ -139,12 +156,26 @@
 <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
 <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
 <script>
-    var date = new Date();
     inputdate = $('#date');
+
     $(function () {
 
         var splitdate = inputdate.val().split("/");
         var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+
+        inputdate.bootstrapMaterialDatePicker({
+            format: "DD/MM/YYYY",
+            switchOnClick: true,
+            time: false,
+            lang: "pt-br",
+            cancelText: "Cancelar"
+        });
+
+        inputdate.on('change', function(){
+            splitdate = this.value.split("/");
+            inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+            agenda(formatDate(inputdateval));
+        });
 
 
         $(document).on({
@@ -213,7 +244,7 @@
                 fnCreatedCell: function (nTd, sData, oData) {
 
                     var name = oData.name !== null ? oData.name : '';
-                    $(nTd).html("<a href='/admin/paciente/"+oData.patient_id+"/editar' target='_blank'>"+name+"</a>");
+                    $(nTd).html("<a href='/admin/paciente/"+oData.patient_id+"/editar'>"+name+"</a>");
                 }
             },
             {data: "phone", orderable: false},
@@ -227,57 +258,50 @@
         }
     });
 
-    $('#prevmonth').on('click', function () {
-        date.setMonth(date.getMonth() - 1);
-        inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
-    });
+        $('#today').on('click', function () {
+            var date = new Date();
+            inputdate.val(date.toLocaleDateString());
+            agenda(formatDate(date));
+        });
 
-    $('#prevweek').on('click', function () {
-        date.setDate(date.getDate() - 7);
-        inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
-    });
+        $('#prevmonth').on('click', function () {
+            inputdateval.setMonth(inputdateval.getMonth() - 1);
+            inputdate.val(inputdateval.toLocaleDateString());
+            agenda(formatDate(inputdateval));
+        });
 
-    $('#prev').on('click', function () {
-        date.setDate(date.getDate() - 1);
-        inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
-    });
+        $('#prevweek').on('click', function () {
+            inputdateval.setDate(inputdateval.getDate() - 7);
+            inputdate.val(inputdateval.toLocaleDateString());
+            agenda(formatDate(inputdateval));
+        });
 
-    $('#next').on('click', function () {
-        date.setDate(date.getDate() + 1);
-        inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
-    });
+        $('#prev').on('click', function () {
+            inputdateval.setDate(inputdateval.getDate() - 1);
+            inputdate.val(inputdateval.toLocaleDateString());
+            agenda(formatDate(inputdateval));
+        });
 
-    $('#nextweek').on('click', function () {
-        date.setDate(date.getDate() + 7);
-        inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
-    });
+        $('#next').on('click', function () {
+            inputdateval.setDate(inputdateval.getDate() + 1);
+            inputdate.val(inputdateval.toLocaleDateString());
+            agenda(formatDate(inputdateval));
+        });
 
-    $('#nextmonth').on('click', function () {
-        date.setMonth(date.getMonth() + 1);
-        inputdate.val(date.toLocaleDateString());
-        agenda(formatDate(date));
-    });
+        $('#nextweek').on('click', function () {
+            inputdateval.setDate(inputdateval.getDate() + 7);
+            inputdate.val(inputdateval.toLocaleDateString());
+            agenda(formatDate(inputdateval));
+        });
 
-    inputdate.bootstrapMaterialDatePicker({
-        format: "DD/MM/YYYY",
-        switchOnClick: true,
-        time: false,
-        lang: "pt-br",
-        cancelText: "Cancelar"
-    });
+        $('#nextmonth').on('click', function () {
+            inputdateval.setMonth(inputdateval.getMonth() + 1);
+            inputdate.val(inputdateval.toLocaleDateString());
+            agenda(formatDate(inputdateval));
+        });
 
-    inputdate.on('change', function(){
-        var splitdate = this.value.split("/");
-        var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
-        agenda(formatDate(inputdateval));
-    });
-    });
 
+    });
 
 
     function formatDate(date) {
