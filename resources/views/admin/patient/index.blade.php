@@ -59,6 +59,7 @@
 @include("layouts.modules.dialogs")
 
 @push("scripts")
+<script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
     <script>
         $(".table").DataTable({
             language: {
@@ -75,5 +76,7 @@
                 {data: "action", orderable: false, searchable: false}
             ]
         });
+
+        new Clipboard('.btn-copy');
     </script>
 @endpush

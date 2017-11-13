@@ -317,7 +317,8 @@
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
             <a href="{{ route("paciente.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
             @if($patient->id)
-                <a href="{{route("paciente.prontuario.index", $patient->id)}}" class="btn bg-teal m-t-15 waves-effect">
+                <a href="{{route("paciente.prontuario.index", $patient->id)}}" class="btn copy bg-teal m-t-15 waves-effect"
+                   data-clipboard-action="copy" data-clipboard-text="{{$patient->name}}">
                     Prontuário
                 </a>
             @endif
@@ -349,6 +350,7 @@
     <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
     <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
     <script src="{{ asset("plugins/jquery-inputmask/jquery.inputmask.bundle.min.js") }}"></script>
+    <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
 
     <script>
         $(function () {
@@ -419,6 +421,8 @@
             responsibleGroup.on("keyup", function () {
                 requiredGroup(responsibleGroup);
             });
+
+            new Clipboard('.copy');
 
         });
 
