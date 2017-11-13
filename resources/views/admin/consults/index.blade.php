@@ -30,17 +30,20 @@
                         <div class="consult-calendar">
 
                             <div class="btn bg-grey btn-xs waves-effect" id="prevmonth" title="Recuar 1 mês"
-                                 data-toggle="tooltip" data-placement="left">
+                                 data-toggle="tooltip" data-placement="left"
+                                 data-type="month" data-direction="back">
                                 <i class="material-icons">arrow_back</i>
                             </div>
 
                             <div class="btn btn-xs waves-effect" id="prevweek" title="Recuar 1 semana"
-                                 data-toggle="tooltip" data-placement="top">
+                                 data-toggle="tooltip" data-placement="top"
+                                 data-type="week" data-direction="back">
                                 <i class="material-icons">first_page</i>
                             </div>
 
                             <div class="btn bg-blue-grey btn-xs waves-effect" id="prev" title="Recuar 1 dia"
-                                 data-toggle="tooltip" data-placement="bottom">
+                                 data-toggle="tooltip" data-placement="bottom"
+                                 data-type="day" data-direction="back">
                                 <i class="material-icons">chevron_left</i>
                             </div>
 
@@ -50,17 +53,20 @@
 
 
                             <div class="btn bg-grey btn-xs waves-effect pull-right" id="nextmonth" title="Avançar 1 mês"
-                                 data-toggle="tooltip" data-placement="right">
+                                 data-toggle="tooltip" data-placement="right"
+                                 data-type="month" data-direction="foward">
                                 <i class="material-icons">arrow_forward</i>
                             </div>
 
                             <div class="btn btn-xs waves-effect pull-right" id="nextweek" title="Avançar 1 semana"
-                                 data-toggle="tooltip" data-placement="top">
+                                 data-toggle="tooltip" data-placement="top"
+                                 data-type="week" data-direction="foward">
                                 <i class="material-icons">last_page</i>
                             </div>
 
                             <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next" title="Avançar 1 dia"
-                                 data-toggle="tooltip" data-placement="bottom">
+                                 data-toggle="tooltip" data-placement="bottom"
+                                 data-type="day" data-direction="foward">
                                 <i class="material-icons">chevron_right</i>
                             </div>
 
@@ -154,11 +160,10 @@
 <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
 <script>
     inputdate = $('#date');
+    var splitdate = inputdate.val().split("/");
+    var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
     $(function () {
-
-        var splitdate = inputdate.val().split("/");
-        var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
         inputdate.bootstrapMaterialDatePicker({
             format: "DD/MM/YYYY",
@@ -172,6 +177,8 @@
             splitdate = this.value.split("/");
             inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
             agenda(formatDate(inputdateval));
+
+            console.log(formatDate(inputdateval));
         });
 
 
@@ -264,42 +271,9 @@
             agenda(formatDate(date));
         });
 
-        $('#prevmonth').on('click', function () {
-            inputdateval.setMonth(inputdateval.getMonth() - 1);
-            inputdate.val(inputdateval.toLocaleDateString());
-            agenda(formatDate(inputdateval));
+        $('#prevmonth, #prevweek, #prev, #next, #nextweek, #nextmonth').on('click', function () {
+            changeDate($(this));
         });
-
-        $('#prevweek').on('click', function () {
-            inputdateval.setDate(inputdateval.getDate() - 7);
-            inputdate.val(inputdateval.toLocaleDateString());
-            agenda(formatDate(inputdateval));
-        });
-
-        $('#prev').on('click', function () {
-            inputdateval.setDate(inputdateval.getDate() - 1);
-            inputdate.val(inputdateval.toLocaleDateString());
-            agenda(formatDate(inputdateval));
-        });
-
-        $('#next').on('click', function () {
-            inputdateval.setDate(inputdateval.getDate() + 1);
-            inputdate.val(inputdateval.toLocaleDateString());
-            agenda(formatDate(inputdateval));
-        });
-
-        $('#nextweek').on('click', function () {
-            inputdateval.setDate(inputdateval.getDate() + 7);
-            inputdate.val(inputdateval.toLocaleDateString());
-            agenda(formatDate(inputdateval));
-        });
-
-        $('#nextmonth').on('click', function () {
-            inputdateval.setMonth(inputdateval.getMonth() + 1);
-            inputdate.val(inputdateval.toLocaleDateString());
-            agenda(formatDate(inputdateval));
-        });
-
 
     });
 
@@ -329,6 +303,32 @@
         });
     }
 
+    function changeDate(object) {
+
+        var splitdate = inputdate.val().split("/");
+        var input = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+
+        var day = object.data('type') === 'week' ? 7 : 1;
+
+        if(object.data('direction') === 'back'){
+
+            if(object.data('type') === 'month'){
+                input.setMonth(input.getMonth() - 1);
+            }else{
+                input.setDate(input.getDate() - day);
+            }
+        }
+
+        if(object.data('direction') === 'foward'){
+            if(object.data('type') === 'month'){
+                input.setMonth(input.getMonth() + 1);
+            }else{
+                input.setDate(input.getDate() + day);
+            }
+        }
+        inputdate.val(input.toLocaleDateString());
+        agenda(formatDate(input));
+    }
 
 </script>
 @endpush
