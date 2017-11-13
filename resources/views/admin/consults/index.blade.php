@@ -15,21 +15,21 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="header">
-                    <div class="row" style="margin: 0">
-                        <h2 class="pull-left">
-                            Consultas
-                        </h2>
+                    <h2>
+                        Consultas
 
-                        <div class="btn bg-green btn-xs waves-effect pull-right" id="today" title="Hoje"
-                             data-toggle="tooltip" data-placement="bottom">
-                            <i class="material-icons">event_note</i>
-                        </div>
+                    </h2>
+
+                    <div class="row text-center" style=" height: 55px;">
+                        <input type="text" id="date" class="form-control-border text-center"
+                               data-toggle="tooltip" data-placement="top" title="Selecionar Data"
+                               readonly value="{{ date('d/m/Y') }}" />
                     </div>
 
-                  <div class="row">
+                    <div class="row">
                         <div class="consult-calendar">
 
-                            <div class="btn btn-xs waves-effect" id="prevmonth" title="Recuar 1 mês"
+                            <div class="btn bg-grey btn-xs waves-effect" id="prevmonth" title="Recuar 1 mês"
                                  data-toggle="tooltip" data-placement="left">
                                 <i class="material-icons">arrow_back</i>
                             </div>
@@ -44,12 +44,12 @@
                                 <i class="material-icons">chevron_left</i>
                             </div>
 
-                            <input type="text" id="date" class="form-control-border text-center"
-                                   data-toggle="tooltip" data-placement="top" title="Selecionar Data"
-                                   readonly value="{{ date('d/m/Y') }}"/>
+                            <div class="btn bg-teal btn-xs waves-effect" id="today" style="width: 80px">
+                                <i class="tiny material-icons">event_note</i> Hoje
+                            </div>
 
 
-                            <div class="btn btn-xs waves-effect pull-right" id="nextmonth" title="Avançar 1 mês"
+                            <div class="btn bg-grey btn-xs waves-effect pull-right" id="nextmonth" title="Avançar 1 mês"
                                  data-toggle="tooltip" data-placement="right">
                                 <i class="material-icons">arrow_forward</i>
                             </div>
@@ -66,6 +66,7 @@
 
                         </div>
                     </div>
+
 
                     <div class="body">
                         <table class="table table-bordered table-hover">
@@ -102,50 +103,45 @@
 <link rel="stylesheet"
       href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
 <style>
-    .sweet-alert{
+    .sweet-alert {
         background-color: transparent;
     }
 
-    .consult-calendar{
+    .consult-calendar {
         margin: auto;
         width: 410px;
-        height: 55px;
     }
 
-    .consult-calendar input{
+    #date {
         margin-top: 8px;
-        width: 110px;
-        border:none;
+        width: 410px;
+        border: none;
         border-radius: 0;
         border-bottom: 1px solid #ccc;
         box-shadow: none;
     }
 
-    .consult-calendar input:hover{
+    #date:hover {
         cursor: pointer;
         border-bottom: 2px solid #1f91f3;
     }
 
-    .consult-calendar div{
-        float:left;
+    .consult-calendar div {
+        float: left;
         margin: 12px 15px;
         color: #fff;
     }
 
-    .consult-calendar div:hover{
-        color:#fff;
+    .consult-calendar div:hover {
+        color: #fff;
     }
 
-    #prevweek, #nextweek{
+    #prevweek, #nextweek {
         margin: 12px 0;
-        background-color: #76919b;
+        background-color: #7F8E95;
     }
 
-    #prevmonth, #nextmonth{
-        background-color: #8b9ea7;
-    }
-
-    .tooltip{
+    .tooltip {
         margin: auto !important;;
     }
 </style>
@@ -155,6 +151,7 @@
 @push("scripts")
 <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
 <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
+<script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
 <script>
     inputdate = $('#date');
 
@@ -171,7 +168,7 @@
             cancelText: "Cancelar"
         });
 
-        inputdate.on('change', function(){
+        inputdate.on('change', function () {
             splitdate = this.value.split("/");
             inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
             agenda(formatDate(inputdateval));
@@ -179,32 +176,32 @@
 
 
         $(document).on({
-            ajaxStart: function() {
-                $(".sweet-alert").css({ 'background-color': "transparent" });
+            ajaxStart: function () {
+                $(".sweet-alert").css({'background-color': "transparent"});
                 swal({
                     title: null,
-                    html:true,
+                    html: true,
                     showConfirmButton: false,
                     text: '<div class="preloader">' +
-                                '<div class="spinner-layer pl-blue-grey">' +
-                                    '<div class="circle-clipper left">' +
-                                        '<div class="circle"></div>' +
-                                    '</div>' +
-                                    '<div class="circle-clipper right">' +
-                                        '<div class="circle"></div>' +
-                                    '</div>' +
-                                '</div>' +
-                           '</div>'
+                    '<div class="spinner-layer pl-blue-grey">' +
+                    '<div class="circle-clipper left">' +
+                    '<div class="circle"></div>' +
+                    '</div>' +
+                    '<div class="circle-clipper right">' +
+                    '<div class="circle"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
                 });
             },
             ajaxStop: function () {
-               swal.close()
+                swal.close()
             }
         });
         $('body').on('click', '#btn-delete', function (e) {
             e.preventDefault();
 
-            $(".sweet-alert").css({ 'background-color': "#fff" });
+            $(".sweet-alert").css({'background-color': "#fff"});
 
             var idform = $(this).data('form');
 
@@ -217,46 +214,49 @@
                 confirmButtonColor: "#f44336",
                 confirmButtonText: "Sim, quero desmarcar!",
                 closeOnConfirm: false
-            },function () {
+            }, function () {
                 var form = $("#" + idform);
                 form.submit();
             });
         });
 
-    table = $(".table").DataTable({
-        language: {
-            url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
-        },
-        autoWidth: false,
-        paging: false,
-        bInfo: false,
-        ajax: {
-            url: "{{ route("api.consult.data") }}",
-            type: 'post',
-            data: {
-                _token: "{{ csrf_token() }}",
-                date: formatDate(inputdateval)
-            }
-        },
-        columns: [
-            {data: "hour", orderable: false, searchable: false},
-            {data: "name", orderable: false,
-                fnCreatedCell: function (nTd, sData, oData) {
-
-                    var name = oData.name !== null ? oData.name : '';
-                    $(nTd).html("<a href='/admin/paciente/"+oData.patient_id+"/editar'>"+name+"</a>");
+        table = $(".table").DataTable({
+            language: {
+                url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
+            },
+            autoWidth: false,
+            paging: false,
+            bInfo: false,
+            ajax: {
+                url: "{{ route("api.consult.data") }}",
+                type: 'post',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    date: formatDate(inputdateval)
                 }
             },
-            {data: "phone", orderable: false},
-            {data: "note", orderable: false},
-            {data: "action", orderable: false, searchable: false}
-        ],
-        createdRow: function (row, data) {
-            if (data['name'] !== null) {
-                $(row).css('background-color', '#E1E1E1');
+            columns: [
+                {data: "hour", orderable: false, searchable: false},
+                {
+                    data: "name", orderable: false,
+                    fnCreatedCell: function (nTd, sData, oData) {
+
+                        var name = oData.name !== null ? oData.name : '';
+                        $(nTd).html("<a class='copy' data-clipboard-action='copy' data-clipboard-text='" + name + "' href='/admin/paciente/" + oData.patient_id + "/editar'>" + name + "</a>");
+                    }
+                },
+                {data: "phone", orderable: false},
+                {data: "note", orderable: false},
+                {data: "action", orderable: false, searchable: false}
+            ],
+            createdRow: function (row, data) {
+                if (data['name'] !== null) {
+                    $(row).css('background-color', '#E1E1E1');
+                }
             }
-        }
-    });
+        });
+
+        new Clipboard('.copy');
 
         $('#today').on('click', function () {
             var date = new Date();
@@ -303,7 +303,6 @@
 
     });
 
-
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -316,7 +315,7 @@
         return [year, month, day].join('-');
     }
 
-    function agenda(date){
+    function agenda(date) {
         $.ajax({
             url: "{{ route("api.consult.data") }}",
             data: {
