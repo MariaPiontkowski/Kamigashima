@@ -25,6 +25,7 @@
         <div class="col-sm-10">
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
             <a href="{{ route("paciente.prontuario.index", $patient->id) }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
+            <a href="{{ route("paciente.edit", $patient->id) }}" class="btn bg-teal m-t-15 waves-effect">Paciente</a>
         </div>
         @if($record->id)
             <div class="col-sm-2">

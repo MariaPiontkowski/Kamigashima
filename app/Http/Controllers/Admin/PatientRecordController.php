@@ -66,14 +66,31 @@ class PatientRecordController extends Controller {
 	 *
 	 */
 	public function edit( $paciente, $prontuario ) {
+
+	    $record = PatientRecord::find( $prontuario );
+
+	    $firstrecord = PatientRecord::where('patient_id', $record['patient_id'])->orderBy('created_at', 'ASC')->first();
+
+	    $prevrecord = PatientRecord::where('patient_id', $record['patient_id'])->where('created_at', '<', $record['created_at'])
+                                    ->orderBy('created_at', 'DESC')->first();
+
+        $nextrecord = PatientRecord::where('patient_id', $record['patient_id'])->where('created_at', '>', $record['created_at'])
+                                    ->orderBy('created_at', 'ASC')->first();
+
+        $lastrecord = PatientRecord::where('patient_id', $record['patient_id'])->orderBy('created_at', 'DESC')->first();
+
 		return view( "admin.records.edit", [
-			"patient" => Patient::find( $paciente ),
-			"record"  => PatientRecord::find( $prontuario ),
-			"action"  => route( "paciente.prontuario.update", [
+			"patient"    => Patient::find( $paciente ),
+			"record"     => $record,
+			"firstrecord" => $firstrecord,
+			"prevrecord" => $prevrecord,
+			"nextrecord" => $nextrecord,
+			"lastrecord" => $lastrecord,
+			"action"     => route( "paciente.prontuario.update", [
 				"paciente"   => $paciente,
 				"prontuario" => $prontuario
 			] ),
-			"method"  => "put"
+			"method"      => "put"
 		] );
 	}
 
