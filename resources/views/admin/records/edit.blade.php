@@ -18,29 +18,30 @@
 
                     <div class="record-navigation pull-right">
 
-                        <a href="{{ route('paciente.prontuario.edit', ['paciente'   => $record->patient_id, 'prontuario' => $firstrecord['id']])}}"
+                        <a href="{{ ($firstrecord['id'] != null && $firstrecord['id']  != $record->id) ? route('paciente.prontuario.edit',
+                        ['paciente'   => $record->patient_id, 'prontuario' => $firstrecord['id']]) : '#'}}"
                             class="btn bg-grey btn-xs waves-effect" title="Primeiro"
                             data-toggle="tooltip" data-placement="top"
                             {{($firstrecord['id'] == $record->id || $firstrecord['id'] == null) ? 'disabled' : ''}}>
                             <i class="material-icons">first_page</i>
                         </a>
 
-                        <a href="{{ route('paciente.prontuario.edit', ['paciente'   => $record->patient_id, 'prontuario' => $prevrecord['id']])}}"
+                        <a href="{{ ($prevrecord['id'] != null && $prevrecord['id']  != $record->id) ? route('paciente.prontuario.edit',
+                        ['paciente'   => $record->patient_id, 'prontuario' => $prevrecord['id']]) : '#'}}"
                             class="btn bg-blue-grey btn-xs waves-effect" title="Anterior"
                             data-toggle="tooltip" data-placement="bottom"
                             {{($prevrecord['id']  == $record->id || $prevrecord['id']  == null) ? 'disabled' : ''}}>
                             <i class="material-icons">chevron_left</i>
                         </a>
 
-
-                        <a href="{{ route('paciente.prontuario.edit', ['paciente'   => $record->patient_id, 'prontuario' => $lastrecord['id']])}}"
+                        <a href="{{ ($lastrecord['id'] != null && $lastrecord['id']  != $record->id)? route('paciente.prontuario.edit', ['paciente'   => $record->patient_id, 'prontuario' => $lastrecord['id']]) : '#'}}"
                             class="btn bg-grey btn-xs waves-effect pull-right" title="Último"
                             data-toggle="tooltip" data-placement="bottom"
                             {{($lastrecord['id']  == $record->id || $lastrecord['id']  == null) ? 'disabled' : ''}}>
                             <i class="material-icons">last_page</i>
                         </a>
 
-                        <a href="{{ route('paciente.prontuario.edit', ['paciente'   => $record->patient_id, 'prontuario' => $nextrecord['id']])}}"
+                        <a href="{{ ($nextrecord['id'] != null && $nextrecord['id']  != $record->id)? route('paciente.prontuario.edit', ['paciente'   => $record->patient_id, 'prontuario' => $nextrecord['id']]) : '#'}}"
                             class="btn bg-blue-grey btn-xs waves-effect pull-right" title="Próximo"
                             data-toggle="tooltip" data-placement="top"
                             {{($nextrecord['id']  == $record->id || $nextrecord['id']  == null) ? 'disabled' : ''}}>
