@@ -22,13 +22,18 @@
     </div>
 
     <div class="row button-demo">
-        <div class="col-sm-10">
+        <div class="col-sm-8">
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
             <a href="{{ route("paciente.prontuario.index", $patient->id) }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
             <a href="{{ route("paciente.edit", $patient->id) }}" class="btn bg-teal m-t-15 waves-effect">Paciente</a>
         </div>
         @if($record->id)
-            <div class="col-sm-2">
+            <div class="col-sm-4">
+
+                <a class="btn bg-grey m-t-15 waves-effect" href="{{ route("paciente.prontuario.clone", ['patient' => $patient->id, 'record' => $record->id]) }}">
+                    Clonar
+                </a>
+
                 <a href="#" class="btn bg-red m-t-15 waves-effect dialog-btn" data-form="form-delete"
                    data-type="confirm">
                     Remover Histórico

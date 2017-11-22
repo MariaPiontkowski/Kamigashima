@@ -147,6 +147,34 @@ class PatientRecordController extends Controller
             ->route("records.index")
             ->with("success", 'Histórico de "' . $patient->name . '" removido com sucesso!');
     }
+    /**
+     * Clone a newly created resource in storage.
+     *
+     * @param $paciente
+     *
+     * @param $prontuario
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function twin($paciente, $prontuario)
+    {
+        $recordClone = PatientRecord::find($prontuario);
+
+        $record = new PatientRecord();
+
+        $record->patient_id = $paciente;
+        $record->historic = $recordClone->historic;
+        $record->evolution = $recordClone->evolution;
+        $record->procedure = $recordClone->procedure;
+        $record->updated_at = null;
+        $record->save();
+
+        return redirect()
+            ->route("paciente.prontuario.index", $paciente)
+            ->with("success", 'Histórico clonado com sucesso!');
+    }
+
+
 
     /**
      * @param PatientRecord $record

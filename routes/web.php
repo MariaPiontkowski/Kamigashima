@@ -25,6 +25,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     Route::resource('paciente', 'Admin\PatientController', ['except' => ['show']]);
     Route::resource('paciente.prontuario', 'Admin\PatientRecordController', ['except' => ['show']]);
+    Route::get('paciente/{patient}/prontuario/{record}/clone', 'Admin\PatientRecordController@twin')->name('paciente.prontuario.clone');
     Route::resource('convenio', 'Admin\AgreementController', ['except' => ['show']]);
     Route::resource('cid', 'Admin\CidController', ['except' => ['show']]);
 

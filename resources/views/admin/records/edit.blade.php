@@ -68,7 +68,8 @@
       href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
 <style>
     .header{
-        height: 60px;
+        height: 65px;
+        padding-bottom: 0;
     }
 
     .record-navigation a {
