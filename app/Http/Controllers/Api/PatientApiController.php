@@ -51,16 +51,16 @@ class PatientApiController extends Controller
             })
             ->addColumn("action", function ($patient) {
                 return '<a href="' . route("paciente.edit", $patient->id) . '" 
-                        class="btn bg-grey btn-xs btn-copy waves-effect" title="Editar paciente"
+                        class="btn bg-blue-grey btn-xs btn-copy waves-effect" title="Detalhes Paciente"
                         data-toggle="tooltip" data-placement="top" 
                         data-clipboard-action="copy" data-clipboard-text="'.$patient->name.'"> 
-                            <i class="material-icons">edit</i>
+                            <i class="material-icons">person</i>
                         </a>
                         <a href="' . route("paciente.prontuario.index", $patient->id) . '" 
                         class="btn bg-teal btn-xs btn-copy waves-effect" title="Prontuário"
                           data-toggle="tooltip" data-placement="top" 
                         data-clipboard-action="copy" data-clipboard-text="'.$patient->name.'"> 
-                            <i class="material-icons">assignment</i>
+                            <i class="material-icons">content_paste</i>
                         </a>';
             })
             ->escapeColumns(false)

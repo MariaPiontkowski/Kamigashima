@@ -2,8 +2,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('paciente.index') }}"><i class="material-icons">supervisor_account</i> Pacientes</a></li>
-    <li><a href="{{ route('paciente.prontuario.index', $patient->id) }}"><i
-                    class="material-icons">supervisor_account</i> Prontuário</a></li>
+    <li><a href="{{ route('paciente.prontuario.index', $patient->id) }}"><i class="material-icons">content_paste</i> Prontuário</a></li>
     <li class="active">Editar Histórico</li>
 @endsection
 

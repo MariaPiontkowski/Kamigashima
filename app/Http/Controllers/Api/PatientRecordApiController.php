@@ -27,9 +27,9 @@ class PatientRecordApiController extends Controller {
 					                 'paciente'   => $patient,
 					                 'prontuario' => $record
 				                 ] ) . '" 
-                        class="btn bg-grey btn-xs waves-effect" title="Editar histórico"
+                        class="btn bg-teal btn-xs waves-effect" title="Detalhar histórico"
                         data-toggle="tooltip" data-placement="top"> 
-                            <i class="material-icons">edit</i>
+                            <i class="material-icons">search</i>
                         </a>';
 		                 } )
 		                 ->escapeColumns( false )

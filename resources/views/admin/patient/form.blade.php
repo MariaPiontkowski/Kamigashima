@@ -21,7 +21,7 @@
     </li>
     <li role="presentation">
         <a href="#tab-responsible" data-toggle="tab">
-            <i class="material-icons">card_membership</i> Responsável
+            <i class="material-icons">supervisor_account</i> Responsável
         </a>
     </li>
 </ul>
