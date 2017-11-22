@@ -43,8 +43,8 @@
                             <i class="material-icons">chevron_right</i>
                         </a>
 
-                        <a href="#" class="btn bg-green btn-xs waves-effect pull-right" disabled>
-                            <i class="material-icons">note_add</i> Novo
+                        <a href="#" class="btn bg-light-green btn-xs waves-effect pull-right" disabled>
+                            <i class="material-icons">content_paste</i> Novo
                         </a>
 
                     </div>

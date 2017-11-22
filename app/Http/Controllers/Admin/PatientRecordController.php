@@ -169,8 +169,9 @@ class PatientRecordController extends Controller
         $record->updated_at = null;
         $record->save();
 
+
         return redirect()
-            ->route("paciente.prontuario.index", $paciente)
+            ->route('paciente.prontuario.edit', ['paciente'   => $paciente, 'prontuario' => $record->id])
             ->with("success", 'Histórico clonado com sucesso!');
     }
 

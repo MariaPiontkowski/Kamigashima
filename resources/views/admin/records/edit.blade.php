@@ -8,6 +8,12 @@
 @endsection
 
 @section('content')
+    @if (session("success"))
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span>&times;</span></button>
+            {{ session("success") }}
+        </div>
+    @endif
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
@@ -49,8 +55,8 @@
                         </a>
 
                         <a href="{{ route("paciente.prontuario.create", $record->patient_id)}}"
-                           class="btn bg-green btn-xs waves-effect pull-right">
-                            <i class="material-icons">note_add</i> Novo
+                           class="btn bg-light-green btn-xs waves-effect pull-right">
+                            <i class="material-icons">content_paste</i> Novo
                         </a>
 
                     </div>
