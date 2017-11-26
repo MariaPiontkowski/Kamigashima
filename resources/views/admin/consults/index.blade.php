@@ -23,52 +23,59 @@
                     <div class="row text-center" style=" height: 55px;">
                         <input type="text" id="date" class="form-control-border text-center"
                                data-toggle="tooltip" data-placement="top" title="Selecionar Data"
-                               readonly value="{{ date('d/m/Y') }}" />
+                               readonly value="{{ date('d/m/Y', strtotime($date)) }}"/>
                     </div>
 
                     <div class="row">
                         <div class="consult-calendar">
 
-                            <div class="btn bg-grey btn-xs waves-effect" id="prevmonth" title="Recuar 1 mês"
-                                 data-toggle="tooltip" data-placement="left"
-                                 data-type="month" data-direction="back">
+                            <a href="{{route('agenda.index', [
+                            "date" =>  date('Y-m-d', strtotime($date . ' -1 month'))]
+                            )}}" class="btn bg-grey btn-xs waves-effect" id="prevmonth" title="Recuar 1 mês"
+                                 data-toggle="tooltip" data-placement="left">
                                 <i class="material-icons">arrow_back</i>
-                            </div>
+                            </a>
 
-                            <div class="btn btn-xs waves-effect" id="prevweek" title="Recuar 1 semana"
-                                 data-toggle="tooltip" data-placement="top"
-                                 data-type="week" data-direction="back">
+                            <a href="{{route('agenda.index', [
+                            "date" =>  date('Y-m-d', strtotime($date . ' -7 days'))]
+                            )}}" class="btn btn-xs waves-effect" id="prevweek" title="Recuar 1 semana"
+                                 data-toggle="tooltip" data-placement="top">
                                 <i class="material-icons">first_page</i>
-                            </div>
+                            </a>
 
-                            <div class="btn bg-blue-grey btn-xs waves-effect" id="prev" title="Recuar 1 dia"
-                                 data-toggle="tooltip" data-placement="bottom"
-                                 data-type="day" data-direction="back">
+                            <a href="{{route('agenda.index', [
+                            "date" =>  date('Y-m-d', strtotime($date . ' -1 day'))]
+                            )}}" class="btn bg-blue-grey btn-xs waves-effect" id="prev" title="Recuar 1 dia"
+                                 data-toggle="tooltip" data-placement="bottom">
                                 <i class="material-icons">chevron_left</i>
-                            </div>
+                            </a>
 
-                            <div class="btn bg-teal btn-xs waves-effect" id="today" style="width: 80px">
+                            <a href="{{route('agenda.index', ["date" =>  ""])}}"
+                               class="btn bg-teal btn-xs waves-effect" id="today" style="width: 80px">
                                 <i class="tiny material-icons">event_note</i> Hoje
-                            </div>
+                            </a>
 
 
-                            <div class="btn bg-grey btn-xs waves-effect pull-right" id="nextmonth" title="Avançar 1 mês"
-                                 data-toggle="tooltip" data-placement="right"
-                                 data-type="month" data-direction="foward">
+                            <a href="{{route('agenda.index', [
+                            "date" =>  date('Y-m-d', strtotime($date . ' +1 month'))]
+                            )}}" class="btn bg-grey btn-xs waves-effect pull-right" id="nextmonth" title="Avançar 1 mês"
+                                 data-toggle="tooltip" data-placement="right">
                                 <i class="material-icons">arrow_forward</i>
-                            </div>
+                            </a>
 
-                            <div class="btn btn-xs waves-effect pull-right" id="nextweek" title="Avançar 1 semana"
-                                 data-toggle="tooltip" data-placement="top"
-                                 data-type="week" data-direction="foward">
+                            <a href="{{route('agenda.index', [
+                            "date" =>  date('Y-m-d', strtotime($date . ' +7 days'))]
+                            )}}" class="btn btn-xs waves-effect pull-right" id="nextweek" title="Avançar 1 semana"
+                                 data-toggle="tooltip" data-placement="top">
                                 <i class="material-icons">last_page</i>
-                            </div>
+                            </a>
 
-                            <div class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next" title="Avançar 1 dia"
-                                 data-toggle="tooltip" data-placement="bottom"
-                                 data-type="day" data-direction="foward">
+                            <a href="{{route('agenda.index', [
+                            "date" =>  date('Y-m-d', strtotime($date . ' +1 day'))]
+                            )}}" class="btn bg-blue-grey btn-xs waves-effect pull-right" id="next" title="Avançar 1 dia"
+                                 data-toggle="tooltip" data-placement="bottom">
                                 <i class="material-icons">chevron_right</i>
-                            </div>
+                            </a>
 
                         </div>
                     </div>
@@ -82,7 +89,7 @@
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th width="10%">Ações</th>
+                                <th width="10%">Ação</th>
                             </tr>
                             </thead>
                             <tfoot>
@@ -91,9 +98,61 @@
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th width="10%">Ações</th>
+                                <th width="10%">Ação</th>
                             </tr>
                             </tfoot>
+                            <tbody>
+                            @foreach($consults as $consult)
+                                <tr>
+                                    <td><input id="hour{{str_replace(':', '', $consult->hour)}}" value="{{$consult->hour}}" readonly/></td>
+                                    <td>
+                                        <input id="name{{str_replace(':', '', $consult->hour)}}" class="name"
+                                               value="{{$consult->patient}}" data-button="btn{{str_replace(':', '', $consult->hour)}}"/>
+                                    @if($consult->patient != '')
+                                            <button href="#" class="btn btn-xs btn-copy waves-effect"
+                                                    title="Copiar Paciente"
+                                            data-toggle="tooltip" data-placement="bottom"
+                                            data-clipboard-action="copy" data-clipboard-text="{{$consult->patient}}">
+                                                <i class="material-icons">content_copy</i>
+                                            </button>
+
+                                                <a href="{{$consult->patient_id != '' ? route("paciente.edit", $consult->patient_id) : '#'}}"
+                                                   class="btn btn-xs btn-copy waves-effect" title="Paciente"
+                                                   data-toggle="tooltip" data-placement="top"
+                                                   data-clipboard-action="copy" data-clipboard-text="{{$consult->patient}}"
+                                                {{$consult->patient_id == '' ? 'disabled' : ''}}>
+                                                    <i class="material-icons">person</i>
+                                                </a>
+
+                                    @endif
+                                    </td>
+                                    <td><input id="phone{{str_replace(':', '', $consult->hour)}}" value="{{$consult->phone}}"/></td>
+                                    <td><input id="note{{str_replace(':', '', $consult->hour)}}" value="{{$consult->note}}"/></td>
+                                    <td style="padding: 10px !important;">
+
+                                        <button class="btn-submit btn bg-green btn-xs waves-effect hidden"
+                                                id="btn{{str_replace(':', '', $consult->hour)}}"
+                                                title="Salvar" data-toggle="tooltip" data-placement="top"
+                                                data-hour="{{str_replace(':', '', $consult->hour)}}"
+                                                data-hourf="{{$consult->hour}}">
+                                            <i class="material-icons">event_available</i>
+                                        </button>
+                                        @if($consult->patient != '')
+                                            <form id="form-delete{{$consult->id}}" method="post"
+                                                  action="{{route("agenda.destroy", $consult->id)}}">
+                                            <button type="submit" class="btn bg-red btn-xs waves-effect" title="Desmarcar"
+                                                    data-toggle="tooltip" data-placement="top" id="btn-delete"
+                                                    data-form="form-delete{{$consult->id}}" data-hour="{{$consult->hour}}">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="_method" value="delete">
+                                                <i class="material-icons">event_busy</i>
+                                            </button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -106,229 +165,221 @@
 @include("layouts.modules.dialogs")
 
 @push("styles")
-<link rel="stylesheet"
-      href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
-<style>
-    .sweet-alert {
-        background-color: transparent;
-    }
+    <link rel="stylesheet"
+          href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
+    <style>
+        .sweet-alert {
+            background-color: transparent;
+        }
 
-    .consult-calendar {
-        margin: auto;
-        width: 410px;
-    }
+        .consult-calendar {
+            margin: auto;
+            width: 410px;
+        }
 
-    #date {
-        margin-top: 8px;
-        width: 410px;
-        border: none;
-        border-radius: 0;
-        border-bottom: 1px solid #ccc;
-        box-shadow: none;
-    }
+        #date {
+            margin-top: 8px;
+            width: 410px;
+            border: none;
+            border-radius: 0;
+            border-bottom: 1px solid #ccc;
+            box-shadow: none;
+        }
 
-    #date:hover {
-        cursor: pointer;
-        border-bottom: 2px solid #1f91f3;
-    }
+        #date:hover {
+            cursor: pointer;
+            border-bottom: 2px solid #1f91f3;
+        }
 
-    .consult-calendar div {
-        float: left;
-        margin: 12px 15px;
-        color: #fff;
-    }
+        .consult-calendar a {
+            float: left;
+            margin: 12px 15px;
+            color: #fff;
+        }
 
-    .consult-calendar div:hover {
-        color: #fff;
-    }
+        .consult-calendar a:hover {
+            color: #fff;
+        }
 
-    #prevweek, #nextweek {
-        margin: 12px 0;
-        background-color: #7F8E95;
-    }
+        #prevweek, #nextweek {
+            margin: 12px 0;
+            background-color: #7F8E95;
+        }
 
-    .tooltip {
-        margin: auto !important;;
-    }
-</style>
+        .tooltip {
+            margin: auto !important;
+        }
+        td input {
+            height: 40px;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 0 10px;
+        }
+        td {
+            padding: 0 !important;
+        }
+        .name{
+            width: 75% !important;
+         }
+        .btn-copy{
+            background: #fff;
+            color: #337ab7;
+        }
+        .btn-copy:hover{
+            color: #000;
+        }
+        .btn-submit{
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
 
 @endpush
 
 @push("scripts")
-<script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
-<script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
-<script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
-<script>
-    inputdate = $('#date');
-    var splitdate = inputdate.val().split("/");
-    var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
-
-    $(function () {
-
-        inputdate.bootstrapMaterialDatePicker({
-            format: "DD/MM/YYYY",
-            switchOnClick: true,
-            time: false,
-            lang: "pt-br",
-            cancelText: "Cancelar"
-        });
-
-        inputdate.on('change', function () {
-            splitdate = this.value.split("/");
-            inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
-            agenda(formatDate(inputdateval));
-
-            console.log(formatDate(inputdateval));
-        });
-
-
-        $(document).on({
-            ajaxStart: function () {
-                $(".sweet-alert").css({'background-color': "transparent"});
-                swal({
-                    title: null,
-                    html: true,
-                    showConfirmButton: false,
-                    text: '<div class="preloader">' +
-                    '<div class="spinner-layer pl-blue-grey">' +
-                    '<div class="circle-clipper left">' +
-                    '<div class="circle"></div>' +
-                    '</div>' +
-                    '<div class="circle-clipper right">' +
-                    '<div class="circle"></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>'
-                });
-            },
-            ajaxStop: function () {
-                swal.close()
-            }
-        });
-        $('body').on('click', '#btn-delete', function (e) {
-            e.preventDefault();
-
-            $(".sweet-alert").css({'background-color': "#fff"});
-
-            var idform = $(this).data('form');
-
-            swal({
-                title: "Deseja realmente desmarcar?",
-                text: "Você não poderá mais recuperar esta informação!",
-                type: "warning",
-                showCancelButton: true,
-                cancelButtonText: "Cancelar",
-                confirmButtonColor: "#f44336",
-                confirmButtonText: "Sim, quero desmarcar!",
-                closeOnConfirm: false
-            }, function () {
-                var form = $("#" + idform);
-                form.submit();
-            });
-        });
-
-        table = $(".table").DataTable({
-            language: {
-                url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
-            },
-            autoWidth: false,
-            paging: false,
-            bInfo: false,
-            ajax: {
-                url: "{{ route("api.consult.data") }}",
-                type: 'post',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    date: formatDate(inputdateval)
-                }
-            },
-            columns: [
-                {data: "hour", orderable: false, searchable: false},
-                {
-                    data: "name", orderable: false,
-                    fnCreatedCell: function (nTd, sData, oData) {
-
-                        var name = oData.name !== null ? oData.name : '';
-                        $(nTd).html("<a class='copy' data-clipboard-action='copy' data-clipboard-text='" + name + "' href='/admin/paciente/" + oData.patient_id + "/editar'>" + name + "</a>");
-                    }
-                },
-                {data: "phone", orderable: false},
-                {data: "note", orderable: false},
-                {data: "action", orderable: false, searchable: false}
-            ],
-            createdRow: function (row, data) {
-                if (data['name'] !== null) {
-                    $(row).css('background-color', '#E1E1E1');
-                }
-            }
-        });
-
-        new Clipboard('.copy');
-
-        $('#today').on('click', function () {
-            var date = new Date();
-            inputdate.val(date.toLocaleDateString());
-            agenda(formatDate(date));
-        });
-
-        $('#prevmonth, #prevweek, #prev, #next, #nextweek, #nextmonth').on('click', function () {
-            changeDate($(this));
-        });
-
-    });
-
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
-
-    function agenda(date) {
-        $.ajax({
-            url: "{{ route("api.consult.data") }}",
-            data: {
-                date: date,
-                _token: "{{ csrf_token() }}"
-            },
-            type: "post"
-        }).done(function (result) {
-            table.clear().draw();
-            table.rows.add(result['data']).draw();
-        });
-    }
-
-    function changeDate(object) {
-
+    <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
+    <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
+    <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
+    <script>
+        inputdate = $('#date');
         var splitdate = inputdate.val().split("/");
-        var input = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+        var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
-        var day = object.data('type') === 'week' ? 7 : 1;
+        $(function () {
 
-        if(object.data('direction') === 'back'){
-
-            if(object.data('type') === 'month'){
-                input.setMonth(input.getMonth() - 1);
-            }else{
-                input.setDate(input.getDate() - day);
+            if($('.name').val() != ''){
+                $('.name').closest('tr').css('background-color', '#f5f5f5');
             }
+            
+            $('.btn-submit').on('click', function () {
+
+                var hour = $(this).data('hour');
+                var hourf = $(this).data('hourf');
+
+                var name = table.$('#name' + hour).val();
+                var phone = table.$('#phone' + hour).val();
+                var note = table.$('#note' + hour).val();
+
+                $.ajax({
+                    url: "{{ route("agenda.store") }}",
+                    data: {
+                        name: name,
+                        date: formatDate(inputdateval),
+                        hour: hourf,
+                        phone: phone,
+                        note: note,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    type: "post"
+                }).done(function (result) {
+                    location.reload();
+                });
+
+            });
+
+            $('.name').on('keypress', function () {
+                var button =  $(this).data('button');
+                if($(this).val() !== ''){
+                    $("#"+button).removeClass('hidden');
+                }else{
+                    $("#"+button).addClass('hidden');
+                }
+            });
+
+            inputdate.bootstrapMaterialDatePicker({
+                format: "DD/MM/YYYY",
+                switchOnClick: true,
+                time: false,
+                lang: "pt-br",
+                cancelText: "Cancelar"
+            });
+
+            inputdate.on('change', function () {
+                splitdate = this.value.split("/");
+                inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+
+                location.href = "/admin/agenda/"+formatDate(inputdateval);
+
+            });
+
+
+            $(document).on({
+                ajaxStart: function () {
+                    $(".sweet-alert").css({'background-color': "transparent"});
+                    swal({
+                        title: null,
+                        html: true,
+                        showConfirmButton: false,
+                        text: '<div class="preloader">' +
+                        '<div class="spinner-layer pl-blue-grey">' +
+                        '<div class="circle-clipper left">' +
+                        '<div class="circle"></div>' +
+                        '</div>' +
+                        '<div class="circle-clipper right">' +
+                        '<div class="circle"></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    });
+                },
+                ajaxStop: function () {
+                    swal.close()
+                }
+            });
+            $('body').on('click', '#btn-delete', function (e) {
+                e.preventDefault();
+
+                $(".sweet-alert").css({'background-color': "#fff"});
+
+                var idform = $(this).data('form');
+
+                swal({
+                    title: "Deseja realmente desmarcar?",
+                    text: "Você não poderá mais recuperar esta informação!",
+                    type: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#f44336",
+                    confirmButtonText: "Sim, quero desmarcar!",
+                    closeOnConfirm: false
+                }, function () {
+                    var form = $("#" + idform);
+                    form.submit();
+                });
+            });
+
+            table = $(".table").DataTable({
+                language: {
+                    url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
+                },
+                autoWidth: false,
+                paging: false,
+                bInfo: false
+            });
+
+            new Clipboard('.copy');
+
+            $('#today').on('click', function () {
+                var date = new Date();
+                inputdate.val(date.toLocaleDateString());
+                agenda(formatDate(date));
+            });
+
+        });
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
         }
 
-        if(object.data('direction') === 'foward'){
-            if(object.data('type') === 'month'){
-                input.setMonth(input.getMonth() + 1);
-            }else{
-                input.setDate(input.getDate() + day);
-            }
-        }
-        inputdate.val(input.toLocaleDateString());
-        agenda(formatDate(input));
-    }
 
-</script>
+    </script>
 @endpush

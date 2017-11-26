@@ -25,20 +25,8 @@
         </div>
         <div class="menu">
             <ul class="list">
-                <li {{ Route::is('admin.dashboard') ? 'class=active' : '' }}>
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="material-icons">home</i>
-                        <span>Início</span>
-                    </a>
-                </li>
-                <li {{ Route::is('paciente.*') ? 'class=active' : '' }}>
-                    <a href="{{ route('paciente.index') }}">
-                        <i class="material-icons">supervisor_account</i>
-                        <span>Pacientes</span>
-                    </a>
-                </li>
-                <li {{ Route::is('agenda.*') ? 'class=active' : '' }}>
-                    <a href="{{ route('agenda.index') }}">
+                <li {{ Route::is('agenda.*') || Route::is('admin.dashboard') ? 'class=active' : '' }}>
+                    <a href="{{ route('agenda.index', ['date' => '']) }}">
                         <i class="material-icons">event_note</i>
                         <span>Agenda</span>
                     </a>
@@ -54,6 +42,9 @@
                         </li>
                         <li>
                             <a href="{{ route('cid.index') }}">CID</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('paciente.index') }}">Pacientes</a>
                         </li>
                     </ul>
                 </li>

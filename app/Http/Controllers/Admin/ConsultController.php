@@ -13,11 +13,21 @@ class ConsultController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view("admin.consults.index");
+
+        $date = $request->date && $request->date !== '' ? $request->date : date('Y-m-d');
+
+        $consults = DB::select('CALL sp_se_consults(?)', [$date]);
+
+        return view("admin.consults.index", [
+            "consults" => $consults,
+            "date" => $date
+        ]);
     }
 
     /**
@@ -41,26 +51,26 @@ class ConsultController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  String $date
-     * @param  String $hour
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $date, $hour)
+    public function store(Request $request)
     {
-        $id = str_replace('-', '', $date).str_replace(':', '', $hour);
+        $id = str_replace('-', '', $request->date).str_replace(':', '', $request->hour);
 
-        $consult = new Consult();
+        $check = Consult::find($id);
+
+        $consult = ($check) ? $check : new Consult();
+
         $consult->id = $id;
-        $consult->date = $date;
-        $consult->hour = $hour;
-        $consult->patient_id = $request->patient;
-        $consult->note = $request->note;
+        $consult->date = $request->date;
+        $consult->hour = $request->hour;
+        $consult->patient = $request->name;
+        $consult->phone = $request->phone;
+        $consult->note =  $request->note;
         $consult->save();
 
-        return redirect()
-            ->route("agenda.index")
-            ->with("success", "Consulta dia " . date('d/m/Y', strtotime($date)) . " às ". $hour. " agendada com sucesso!");
+        return $consult;
     }
 
     /**
@@ -92,7 +102,6 @@ class ConsultController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update( Request $request, $id ) {
-//        $this->saveCid( Cid::find( $id ), $request );
         $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
 
         $newid = str_replace('-', '', $date).str_replace(':', '', $request->hour);
@@ -126,7 +135,7 @@ class ConsultController extends Controller
 
 
         return redirect()
-            ->route("agenda.index")
+            ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
             ->with("success", 'Consulta dia ' . date('d/m/Y', strtotime($consult->date)) . ' às ' . $consult->hour . ' removida com sucesso!', $consult->date);
 
     }

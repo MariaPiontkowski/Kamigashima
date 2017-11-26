@@ -69,11 +69,11 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="birthday">Data de Aniversário <span></span></label>
+                        <label for="birthday">Nascimento <span></span></label>
                         <div class="form-line">
                             <input id="birthday" name="birthday" class="form-control"
                                    value="{{ $patient->birthday ? \Carbon\Carbon::parse($patient->birthday)->format("d/m/Y") : "" }}"
-                                   placeholder="Escolha a data de aniversário do paciente">
+                                   placeholder="Escolha a data de nascimento do paciente">
                         </div>
                     </div>
                 </div>
