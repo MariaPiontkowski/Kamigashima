@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Consult;
 use App\Models\Patient;
+use App\Models\PatientPhone;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Mail;
 
 class ConsultController extends Controller
 {
@@ -20,7 +22,7 @@ class ConsultController extends Controller
     public function index(Request $request)
     {
 
-        $date = $request->date && $request->date !== '' ? $request->date : date('Y-m-d');
+        $date = $request->date ? $request->date : date('Y-m-d');
 
         $consults = DB::select('CALL sp_se_consults(?)', [$date]);
 
@@ -52,11 +54,33 @@ class ConsultController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function store(Request $request)
     {
-        $id = str_replace('-', '', $request->date).str_replace(':', '', $request->hour);
+        $id  = str_replace('-', '', $request->date);
+        $id .= str_replace(':', '', $request->hour);
+        $email = '';
+
+        $patient = Patient::where('name', $request->name)->first();
+
+        if($patient){
+            $email = $patient->email;
+            $phone = PatientPhone::where("patient_id", $patient->id)
+                    ->first();
+
+
+            if(!($request->phone) && ($phone)){
+                $request->phone = $phone->phone;
+            }
+//            else{
+//                if(!($phone)){
+//                    $patientphone = new PatientPhone();
+//                    $patientphone->patient_id = $patient->id;
+//                    $patientphone->phone = $request->phone;
+//                    $patientphone->save();
+//            }
+        }
 
         $check = Consult::find($id);
 
@@ -70,7 +94,7 @@ class ConsultController extends Controller
         $consult->note =  $request->note;
         $consult->save();
 
-        return $consult;
+        return $email;
     }
 
     /**

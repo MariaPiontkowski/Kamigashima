@@ -104,48 +104,64 @@
                             <tbody>
                             @foreach($consults as $consult)
                                 <tr>
-                                    <td><input id="hour{{str_replace(':', '', $consult->hour)}}" value="{{$consult->hour}}" readonly/></td>
                                     <td>
-                                        <input id="name{{str_replace(':', '', $consult->hour)}}" class="name"
-                                               value="{{$consult->patient}}" data-button="btn{{str_replace(':', '', $consult->hour)}}"/>
-                                    @if($consult->patient != '')
+                                        <input id="hour{{str_replace(':', '', $consult->hour)}}"
+                                               value="{{$consult->hour}}" readonly/>
+                                    </td>
+                                    <td>
+                                        <input id="name{{str_replace(':', '', $consult->hour)}}"
+                                               value="{{$consult->patient}}" style="width: 75% !important;"
+                                               data-reference="{{str_replace(':', '', $consult->hour)}}"/>
+
+                                        @if($consult->patient != '')
                                             <button href="#" class="btn btn-xs btn-copy waves-effect"
-                                                    title="Copiar Paciente"
-                                            data-toggle="tooltip" data-placement="bottom"
-                                            data-clipboard-action="copy" data-clipboard-text="{{$consult->patient}}">
+                                                    title="Copiar Paciente" data-toggle="tooltip"
+                                                    data-placement="bottom" data-clipboard-action="copy"
+                                                    data-clipboard-text="{{$consult->patient}}">
                                                 <i class="material-icons">content_copy</i>
                                             </button>
 
-                                                <a href="{{$consult->patient_id != '' ? route("paciente.edit", $consult->patient_id) : '#'}}"
-                                                   class="btn btn-xs btn-copy waves-effect" title="Paciente"
-                                                   data-toggle="tooltip" data-placement="top"
-                                                   data-clipboard-action="copy" data-clipboard-text="{{$consult->patient}}"
+                                            <a href="{{$consult->patient_id != '' ? route("paciente.edit", $consult->patient_id) : '#'}}"
+                                                class="btn btn-xs btn-copy waves-effect"
+                                                title="Paciente{{$consult->patient_id == '' ? ' sem Cadastro' : ''}}"
+                                                data-toggle="tooltip" data-placement="top"
+                                                data-clipboard-action="copy"
+                                                data-clipboard-text="{{$consult->patient}}"
                                                 {{$consult->patient_id == '' ? 'disabled' : ''}}>
-                                                    <i class="material-icons">person</i>
-                                                </a>
-
-                                    @endif
+                                                <i class="material-icons">person</i>
+                                            </a>
+                                        @endif
                                     </td>
-                                    <td><input id="phone{{str_replace(':', '', $consult->hour)}}" value="{{$consult->phone}}"/></td>
-                                    <td><input id="note{{str_replace(':', '', $consult->hour)}}" value="{{$consult->note}}"/></td>
-                                    <td style="padding: 10px !important;">
-
+                                    <td>
+                                        <input id="phone{{str_replace(':', '', $consult->hour)}}"
+                                               value="{{$consult->phone}}"
+                                               data-reference="{{str_replace(':', '', $consult->hour)}}"/>
+                                    </td>
+                                    <td>
+                                        <input id="note{{str_replace(':', '', $consult->hour)}}"
+                                               value="{{$consult->note}}"
+                                               data-reference="{{str_replace(':', '', $consult->hour)}}"/>
+                                    </td>
+                                    <td class="text-center" style="padding: 10px !important;">
                                         <button class="btn-submit btn bg-green btn-xs waves-effect hidden"
                                                 id="btn{{str_replace(':', '', $consult->hour)}}"
                                                 title="Salvar" data-toggle="tooltip" data-placement="top"
                                                 data-hour="{{str_replace(':', '', $consult->hour)}}"
                                                 data-hourf="{{$consult->hour}}">
-                                            <i class="material-icons">event_available</i>
+                                            <i class="material-icons">check</i>
                                         </button>
                                         @if($consult->patient != '')
                                             <form id="form-delete{{$consult->id}}" method="post"
-                                                  action="{{route("agenda.destroy", $consult->id)}}">
-                                            <button type="submit" class="btn bg-red btn-xs waves-effect" title="Desmarcar"
+                                                  action="{{route("agenda.destroy", $consult->id)}}"
+                                                    style="width: 30px;">
+                                            <button type="submit" class="btn bg-red btn-xs waves-effect"
+                                                    title="Desmarcar"
                                                     data-toggle="tooltip" data-placement="top" id="btn-delete"
-                                                    data-form="form-delete{{$consult->id}}" data-hour="{{$consult->hour}}">
+                                                    data-form="form-delete{{$consult->id}}"
+                                                    data-hour="{{$consult->hour}}">
                                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                 <input type="hidden" name="_method" value="delete">
-                                                <i class="material-icons">event_busy</i>
+                                                <i class="material-icons">clear</i>
                                             </button>
                                             </form>
                                         @endif
@@ -219,19 +235,12 @@
         td {
             padding: 0 !important;
         }
-        .name{
-            width: 75% !important;
-         }
         .btn-copy{
             background: #fff;
             color: #337ab7;
         }
         .btn-copy:hover{
             color: #000;
-        }
-        .btn-submit{
-            float: left;
-            margin-right: 10px;
         }
     </style>
 
@@ -247,10 +256,6 @@
         var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
         $(function () {
-
-            if($('.name').val() != ''){
-                $('.name').closest('tr').css('background-color', '#f5f5f5');
-            }
             
             $('.btn-submit').on('click', function () {
 
@@ -273,18 +278,24 @@
                     },
                     type: "post"
                 }).done(function (result) {
-                    location.reload();
+//                    location.reload();
+                    console.log(result);
                 });
 
             });
 
-            $('.name').on('keypress', function () {
-                var button =  $(this).data('button');
-                if($(this).val() !== ''){
-                    $("#"+button).removeClass('hidden');
-                }else{
-                    $("#"+button).addClass('hidden');
-                }
+            $('td input').on('keypress', function () {
+
+                button($(this));
+
+//                var button =  $(this).data('button');
+//
+//                if($(this).val() !== ''){
+//                    $("#"+button).removeClass('hidden').css('float', 'left');
+//                }else{
+//                    $("#"+button).addClass('hidden');
+//                }
+
             });
 
             inputdate.bootstrapMaterialDatePicker({
@@ -360,12 +371,6 @@
 
             new Clipboard('.copy');
 
-            $('#today').on('click', function () {
-                var date = new Date();
-                inputdate.val(date.toLocaleDateString());
-                agenda(formatDate(date));
-            });
-
         });
 
         function formatDate(date) {
@@ -378,6 +383,19 @@
             if (day.length < 2) day = '0' + day;
 
             return [year, month, day].join('-');
+        }
+
+        function button(object){
+
+            var reference =  object.data('reference');
+
+            console.log(($("#name"+reference).val()));
+
+            if($("#name"+reference).val() !== ''){
+                $("#btn"+reference).removeClass('hidden').css('float', 'right');
+            }else{
+                $("#btn"+reference).addClass('hidden');
+            }
         }
 
 
