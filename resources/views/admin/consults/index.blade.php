@@ -103,15 +103,16 @@
                             </tfoot>
                             <tbody>
                             @foreach($consults as $consult)
+                                <?php $id =  str_replace(':', '', $consult->hour)?>
                                 <tr>
                                     <td>
-                                        <input id="hour{{str_replace(':', '', $consult->hour)}}"
+                                        <input id="hour{{$id}}"
                                                value="{{$consult->hour}}" readonly/>
                                     </td>
                                     <td>
-                                        <input id="name{{str_replace(':', '', $consult->hour)}}"
-                                               value="{{$consult->patient}}" style="width: 75% !important;"
-                                               data-reference="{{str_replace(':', '', $consult->hour)}}"/>
+                                        <input id="name{{$id}}"
+                                               value="{{$consult->patient}}" class="name"
+                                               data-reference="{{$id}}"/>
 
                                         @if($consult->patient != '')
                                             <button href="#" class="btn btn-xs btn-copy waves-effect"
@@ -133,27 +134,28 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <input id="phone{{str_replace(':', '', $consult->hour)}}"
+                                        <input id="phone{{$id}}"
                                                value="{{$consult->phone}}"
-                                               data-reference="{{str_replace(':', '', $consult->hour)}}"/>
+                                               data-reference="{{$id}}"/>
                                     </td>
                                     <td>
-                                        <input id="note{{str_replace(':', '', $consult->hour)}}"
+                                        <input id="note{{$id}}"
                                                value="{{$consult->note}}"
-                                               data-reference="{{str_replace(':', '', $consult->hour)}}"/>
+                                               data-reference="{{$id}}"/>
                                     </td>
                                     <td class="text-center" style="padding: 10px !important;">
                                         <button class="btn-submit btn bg-green btn-xs waves-effect hidden"
-                                                id="btn{{str_replace(':', '', $consult->hour)}}"
+                                                id="btn{{$id}}"
                                                 title="Salvar" data-toggle="tooltip" data-placement="top"
-                                                data-hour="{{str_replace(':', '', $consult->hour)}}"
+                                                data-hour="{{$id}}"
                                                 data-hourf="{{$consult->hour}}">
                                             <i class="material-icons">check</i>
                                         </button>
+                                        <input type="hidden" id="check{{$id}}" value="{{$consult->patient != '' ? 'form'.$id : ''}}"/>
                                         @if($consult->patient != '')
                                             <form id="form-delete{{$consult->id}}" method="post"
                                                   action="{{route("agenda.destroy", $consult->id)}}"
-                                                    style="width: 30px;">
+                                                class="form{{$id}}">
                                             <button type="submit" class="btn bg-red btn-xs waves-effect"
                                                     title="Desmarcar"
                                                     data-toggle="tooltip" data-placement="top" id="btn-delete"
@@ -184,9 +186,9 @@
     <link rel="stylesheet"
           href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
     <style>
-        .sweet-alert {
-            background-color: transparent;
-        }
+        /*.sweet-alert {*/
+            /*background-color: transparent;*/
+        /*}*/
 
         .consult-calendar {
             margin: auto;
@@ -235,6 +237,9 @@
         td {
             padding: 0 !important;
         }
+        .name{
+            width: 75% !important;
+        }
         .btn-copy{
             background: #fff;
             color: #337ab7;
@@ -256,7 +261,7 @@
         var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
         $(function () {
-            
+
             $('.btn-submit').on('click', function () {
 
                 var hour = $(this).data('hour');
@@ -278,23 +283,46 @@
                     },
                     type: "post"
                 }).done(function (result) {
-//                    location.reload();
-                    console.log(result);
+                    swal({
+                        title: "Enviar E-mail",
+                        text: "Envio de e-mail ao paciente",
+                        type: "input",
+                        inputValue: result,
+                        showCancelButton: true,
+                        closeOnConfirm: false,
+                        inputPlaceholder: "Write something"
+                    }, function (inputValue) {
+                        if (inputValue === false) return false;
+                        if (inputValue === "") {
+                            swal.showInputError("You need to write something!");
+                            return false
+                        }
+                        swal("Nice!", "You wrote: " + inputValue, "success");
+                    });
                 });
 
             });
 
-            $('td input').on('keypress', function () {
+                $('.name').mousedown(function(event) {
+                    if(event.which === 2 || event.which === 3){
+                        alert(window.clipboardData);
+                    }
+                });
 
-                button($(this));
+            $('td input').on('keyup', function () {
+                var reference =  $(this).data('reference');
+                var button = $('#btn'+reference);
+                var form = $('.form'+reference);
 
-//                var button =  $(this).data('button');
-//
-//                if($(this).val() !== ''){
-//                    $("#"+button).removeClass('hidden').css('float', 'left');
-//                }else{
-//                    $("#"+button).addClass('hidden');
-//                }
+                if($("#name"+reference).val() !== ''){
+                    button.removeClass('hidden');
+                    if($('#check'+reference).val() !== ''){
+                        button.css('float', 'right');
+                        form.css('float', 'left');
+                    }
+                }else{
+                    button.addClass('hidden');
+                }
 
             });
 
@@ -315,29 +343,30 @@
             });
 
 
-            $(document).on({
-                ajaxStart: function () {
-                    $(".sweet-alert").css({'background-color': "transparent"});
-                    swal({
-                        title: null,
-                        html: true,
-                        showConfirmButton: false,
-                        text: '<div class="preloader">' +
-                        '<div class="spinner-layer pl-blue-grey">' +
-                        '<div class="circle-clipper left">' +
-                        '<div class="circle"></div>' +
-                        '</div>' +
-                        '<div class="circle-clipper right">' +
-                        '<div class="circle"></div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                    });
-                },
-                ajaxStop: function () {
-                    swal.close()
-                }
-            });
+//            $(document).on({
+//                ajaxStart: function () {
+//                    $(".sweet-alert").css({'background-color': "transparent"});
+//                    swal({
+//                        title: null,
+//                        html: true,
+//                        showConfirmButton: false,
+//                        text: '<div class="preloader">' +
+//                        '<div class="spinner-layer pl-blue-grey">' +
+//                        '<div class="circle-clipper left">' +
+//                        '<div class="circle"></div>' +
+//                        '</div>' +
+//                        '<div class="circle-clipper right">' +
+//                        '<div class="circle"></div>' +
+//                        '</div>' +
+//                        '</div>' +
+//                        '</div>'
+//                    });
+//                },
+//                ajaxStop: function () {
+//                    swal.close()
+//                }
+//            });
+
             $('body').on('click', '#btn-delete', function (e) {
                 e.preventDefault();
 
@@ -369,7 +398,7 @@
                 bInfo: false
             });
 
-            new Clipboard('.copy');
+            new Clipboard('.btn-copy');
 
         });
 
@@ -384,20 +413,6 @@
 
             return [year, month, day].join('-');
         }
-
-        function button(object){
-
-            var reference =  object.data('reference');
-
-            console.log(($("#name"+reference).val()));
-
-            if($("#name"+reference).val() !== ''){
-                $("#btn"+reference).removeClass('hidden').css('float', 'right');
-            }else{
-                $("#btn"+reference).addClass('hidden');
-            }
-        }
-
 
     </script>
 @endpush

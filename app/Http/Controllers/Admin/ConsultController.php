@@ -54,7 +54,7 @@ class ConsultController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return
+     * @return string $email
      */
     public function store(Request $request)
     {
@@ -73,13 +73,15 @@ class ConsultController extends Controller
             if(!($request->phone) && ($phone)){
                 $request->phone = $phone->phone;
             }
-//            else{
-//                if(!($phone)){
-//                    $patientphone = new PatientPhone();
-//                    $patientphone->patient_id = $patient->id;
-//                    $patientphone->phone = $request->phone;
-//                    $patientphone->save();
-//            }
+            else{
+                if(!($phone)){
+                    $patientphone = new PatientPhone();
+                    $patientphone->patient_id = $patient->id;
+                    $patientphone->phone = $request->phone;
+                    $patientphone->type = 1;
+                    $patientphone->save();
+           }
+        }
         }
 
         $check = Consult::find($id);
