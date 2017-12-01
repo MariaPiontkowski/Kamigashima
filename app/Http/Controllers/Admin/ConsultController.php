@@ -58,6 +58,7 @@ class ConsultController extends Controller
      */
     public function store(Request $request)
     {
+
         $id  = str_replace('-', '', $request->date);
         $id .= str_replace(':', '', $request->hour);
         $email = '';
@@ -95,6 +96,30 @@ class ConsultController extends Controller
         $consult->phone = $request->phone;
         $consult->note =  $request->note;
         $consult->save();
+
+        for($i = 1; $i < 10; $i++){
+
+            $request->date = date('Y-m-d', strtotime($request->date . ' +7 day'));
+
+            $id  = str_replace('-', '', $request->date);
+            $id .= str_replace(':', '', $request->hour);
+
+            $checkloop[$i] = Consult::find($id);
+
+            if(!$checkloop[$i]){
+                $consultsession =  new Consult();
+
+                $consultsession->id = $id;
+                $consultsession->date = $request->date;
+                $consultsession->hour = $request->hour;
+                $consultsession->patient = $request->name;
+                $consultsession->phone = $request->phone;
+                $consultsession->note =  $request->note;
+                $consultsession->save();
+
+            }
+
+        }
 
         return $email;
     }
