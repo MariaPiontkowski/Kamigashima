@@ -191,4 +191,26 @@ class ConsultController extends Controller
 
     }
 
+    /**
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\Response
+     * @internal param int $id
+     *
+     */
+    public function presence(Request $request, $id)
+    {
+        $consult = Consult::find($id);
+        $consult->presence = $request->_method;
+        $consult->save();
+
+        $msg =$request->_method == 'FT' ? 'Falta' : 'Ausência';
+
+        return redirect()
+            ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
+            ->with("success", $msg. " registrada com sucesso!");
+
+    }
+
 }

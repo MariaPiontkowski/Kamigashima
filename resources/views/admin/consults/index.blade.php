@@ -85,20 +85,20 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th width="5%">Hora</th>
+                                <th width="115px">Hora</th>
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th width="10%">Ação</th>
+                                <th>Ação</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
-                                <th width="5%">Hora</th>
+                                <th width="115px">Hora</th>
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th width="10%">Ação</th>
+                                <th>Ação</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -155,16 +155,42 @@
                                         @if($consult->patient != '')
                                             <form id="form-delete{{$consult->id}}" method="post"
                                                   action="{{route("agenda.destroy", $consult->id)}}"
-                                                class="form{{$id}}">
+                                                class="form{{$id}}" style="float: left">
                                             <button type="submit" class="btn bg-red btn-xs waves-effect"
                                                     title="Desmarcar"
                                                     data-toggle="tooltip" data-placement="top" id="btn-delete"
                                                     data-form="form-delete{{$consult->id}}"
                                                     data-hour="{{$consult->hour}}">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="_method" value="delete">
                                                 <i class="material-icons">clear</i>
                                             </button>
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="_method" value="delete">
+                                            </form>
+                                            <form id="form-ft{{$consult->id}}" method="get"
+                                                  action="{{route("agenda.presence", $consult->id)}}"
+                                                  class="form{{$id}}" style="float: left; width: 36px; height: 27px;">
+                                                <button type="submit" class="btn btn-copy btn-xs waves-effect"
+                                                        title="{{$consult->presence && $consult->presence == 'FT' ? "Desfazer Falta" : "Faltou"}}"
+                                                        style="width: 30px; height: 27px; margin: 0 2px"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        data-form="form-ft{{$consult->id}}">
+                                                    <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">FT</i>
+{{--                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+                                                    <input type="hidden" name="_method" value="FT">
+                                                </button>
+                                            </form>
+
+                                            <form id="form-nv{{$consult->id}}" method="post"
+                                                  action="{{route("agenda.presence", [$consult->id, 'NV'])}}"
+                                                  class="form{{$id}}" style="float: left;">
+                                                <button type="submit" class="btn btn-copy btn-xs waves-effect"
+                                                        title="Não Vem" style="width: 30px; height: 27px;"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        data-form="form-ft{{$consult->id}}">
+                                                    <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">NV</i>
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <input type="hidden" name="_method" value="nv">
+                                                </button>
                                             </form>
                                         @endif
                                     </td>
@@ -238,7 +264,7 @@
             padding: 0 !important;
         }
         .name{
-            width: 75% !important;
+            width: 72% !important;
         }
         .btn-copy{
             background: #fff;
@@ -301,6 +327,31 @@
                     });
                 });
 
+            });
+
+            $('#btn-ft').on('click', function (e) {
+
+                var id = $(this).data('id');
+
+                    e.preventDefault();
+
+                    $(".sweet-alert").css({'background-color': "#fff"});
+
+                    var idform = $(this).data('form');
+
+                    swal({
+                        title: "Deseja realmente desmarcar?",
+                        text: "Você não poderá mais recuperar esta informação!",
+                        type: "warning",
+                        showCancelButton: true,
+                        cancelButtonText: "Cancelar",
+                        confirmButtonColor: "#f44336",
+                        confirmButtonText: "Sim, quero desmarcar!",
+                        closeOnConfirm: false
+                    }, function () {
+                        var form = $("#" + idform);
+                        form.submit();
+                    });
             });
 
                 $('.name').mousedown(function(event) {

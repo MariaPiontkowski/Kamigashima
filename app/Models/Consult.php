@@ -15,7 +15,9 @@ class Consult extends Eloquent
         'date',
         'hour',
         'patient_id',
-        'note'
+        'note',
+        'session',
+        'presence'
     ];
     public $timestamps = false;
 

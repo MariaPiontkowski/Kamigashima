@@ -32,4 +32,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('agenda', 'Admin\ConsultController', ['except' => ['show', 'create']]);
     Route::get('agenda/marcar/{date}/{hour}', 'Admin\ConsultController@create')->name('agenda.create');
     Route::get('agenda/{date}', 'Admin\ConsultController@index')->name('agenda.index');
+    Route::get('agenda/presenca/{id}', 'Admin\ConsultController@presence')->name('agenda.presence');
 });
