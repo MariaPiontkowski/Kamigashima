@@ -104,7 +104,7 @@
                             <tbody>
                             @foreach($consults as $consult)
                                 <?php $id =  str_replace(':', '', $consult->hour)?>
-                                <tr>
+                                <tr style="{{$consult->presence != '' ? "background-color:#9C9C9C; color:#fff" : ""}}">
                                     <td>
                                         <input id="hour{{$id}}"
                                                value="{{$consult->hour}}" readonly/>
@@ -171,7 +171,7 @@
                                                   class="form{{$id}}" style="float: left; width: 36px; height: 27px;">
                                                 <button type="submit" class="btn btn-copy btn-xs waves-effect"
                                                         title="{{$consult->presence && $consult->presence == 'FT' ? "Desfazer Falta" : "Faltou"}}"
-                                                        style="width: 30px; height: 27px; margin: 0 2px"
+                                                        style="width: 30px; height: 27px; margin: 0 2px; {{$consult->presence == 'FT' ? "background: #DCDCDC; box-shadow: none; color: #9C9C9C;" : ""}}"
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ft{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">FT</i>
@@ -180,16 +180,17 @@
                                                 </button>
                                             </form>
 
-                                            <form id="form-nv{{$consult->id}}" method="post"
-                                                  action="{{route("agenda.presence", [$consult->id, 'NV'])}}"
+                                            <form id="form-nv{{$consult->id}}" method="get"
+                                                  action="{{route("agenda.presence", $consult->id)}}"
                                                   class="form{{$id}}" style="float: left;">
                                                 <button type="submit" class="btn btn-copy btn-xs waves-effect"
-                                                        title="Não Vem" style="width: 30px; height: 27px;"
+                                                        title="{{$consult->presence && $consult->presence == 'NV' ? "Desfazer Ausência" : "Não Vem"}}"
+                                                        style="width: 30px; height: 27px;{{$consult->presence == 'NV' ? "background: #DCDCDC; box-shadow: none; color: #9C9C9C;" : ""}}"
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ft{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">NV</i>
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="hidden" name="_method" value="nv">
+                                                    <input type="hidden" name="_method" value="NV">
                                                 </button>
                                             </form>
                                         @endif
@@ -309,22 +310,23 @@
                     },
                     type: "post"
                 }).done(function (result) {
-                    swal({
-                        title: "Enviar E-mail",
-                        text: "Envio de e-mail ao paciente",
-                        type: "input",
-                        inputValue: result,
-                        showCancelButton: true,
-                        closeOnConfirm: false,
-                        inputPlaceholder: "Write something"
-                    }, function (inputValue) {
-                        if (inputValue === false) return false;
-                        if (inputValue === "") {
-                            swal.showInputError("You need to write something!");
-                            return false
-                        }
-                        swal("Nice!", "You wrote: " + inputValue, "success");
-                    });
+//                    swal({
+//                        title: "Enviar E-mail",
+//                        text: "Envio de e-mail ao paciente",
+//                        type: "input",
+//                        inputValue: result,
+//                        showCancelButton: true,
+//                        closeOnConfirm: false,
+//                        inputPlaceholder: "Write something"
+//                    }, function (inputValue) {
+//                        if (inputValue === false) return false;
+//                        if (inputValue === "") {
+//                            swal.showInputError("You need to write something!");
+//                            return false
+//                        }
+//                        swal("Nice!", "You wrote: " + inputValue, "success");
+//                    });
+                    console.log(result);
                 });
 
             });

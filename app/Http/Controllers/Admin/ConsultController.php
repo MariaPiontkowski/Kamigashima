@@ -68,7 +68,7 @@ class ConsultController extends Controller
         if($patient){
             $email = $patient->email;
             $phone = PatientPhone::where("patient_id", $patient->id)
-                    ->first();
+                ->first();
 
 
             if(!($request->phone) && ($phone)){
@@ -81,13 +81,18 @@ class ConsultController extends Controller
                     $patientphone->phone = $request->phone;
                     $patientphone->type = 1;
                     $patientphone->save();
-           }
-        }
+                }
+            }
         }
 
         $check = Consult::find($id);
 
-        $consult = ($check) ? $check : new Consult();
+        if($check){
+            $consult =  $check;
+        }else{
+            $consult = new Consult();
+            $consult->session = 1;
+        }
 
         $consult->id = $id;
         $consult->date = $request->date;
@@ -97,31 +102,39 @@ class ConsultController extends Controller
         $consult->note =  $request->note;
         $consult->save();
 
-        for($i = 1; $i < 10; $i++){
+        $arrConsults[0] = $consult;
 
-            $request->date = date('Y-m-d', strtotime($request->date . ' +7 day'));
+        if(!isset($check)){
+            for($i = 1; $i < 10; $i++){
 
-            $id  = str_replace('-', '', $request->date);
-            $id .= str_replace(':', '', $request->hour);
+                $request->date = date('Y-m-d', strtotime($request->date . ' +7 day'));
 
-            $checkloop[$i] = Consult::find($id);
+                $id  = str_replace('-', '', $request->date);
+                $id .= str_replace(':', '', $request->hour);
 
-            if(!$checkloop[$i]){
-                $consultsession =  new Consult();
+                $checkloop[$i] = Consult::find($id);
 
-                $consultsession->id = $id;
-                $consultsession->date = $request->date;
-                $consultsession->hour = $request->hour;
-                $consultsession->patient = $request->name;
-                $consultsession->phone = $request->phone;
-                $consultsession->note =  $request->note;
-                $consultsession->save();
+                if(!$checkloop[$i]){
+                    $consultsession =  new Consult();
+
+                    $consultsession->id = $id;
+                    $consultsession->date = $request->date;
+                    $consultsession->hour = $request->hour;
+                    $consultsession->patient = $request->name;
+                    $consultsession->phone = $request->phone;
+                    $consultsession->note =  $request->note;
+                    $consultsession->session = ($i+1);
+                    $consultsession->save();
+
+                    $arrConsults[] = $consultsession;
+
+                }
 
             }
-
         }
 
-        return $email;
+//        return $email;
+        return $arrConsults;
     }
 
     /**
@@ -201,15 +214,24 @@ class ConsultController extends Controller
      */
     public function presence(Request $request, $id)
     {
+
         $consult = Consult::find($id);
-        $consult->presence = $request->_method;
+
+        if($request->_method == $consult->presence){
+            $presence = null;
+            $op = " desfeita";
+        }else{
+            $presence = $request->_method;
+            $op = " registrada";
+        }
+        $consult->presence = $presence;
         $consult->save();
 
-        $msg =$request->_method == 'FT' ? 'Falta' : 'Ausência';
+        $msg=$request->_method == 'FT' ? 'Falta' : 'Ausência';
 
         return redirect()
             ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
-            ->with("success", $msg. " registrada com sucesso!");
+            ->with("success", $msg. $op ." com sucesso!");
 
     }
 
