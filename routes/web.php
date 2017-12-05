@@ -33,4 +33,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('agenda/marcar/{date}/{hour}', 'Admin\ConsultController@create')->name('agenda.create');
     Route::get('agenda/{date}', 'Admin\ConsultController@index')->name('agenda.index');
     Route::get('agenda/presenca/{id}', 'Admin\ConsultController@presence')->name('agenda.presence');
+    Route::get('agenda/paciente/{patient}', 'Admin\ConsultController@patient')->name('agenda.paciente');
 });

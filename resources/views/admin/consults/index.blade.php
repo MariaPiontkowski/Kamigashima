@@ -89,6 +89,7 @@
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
+                                <th width="30px">Sessão</th>
                                 <th width="82px">Presença</th>
                                 <th width="50px">Ação</th>
                             </tr>
@@ -99,6 +100,7 @@
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
+                                <th width="30px">Sessão</th>
                                 <th width="82px">Presença</th>
                                 <th>Ação</th>
                             </tr>
@@ -138,6 +140,13 @@
                                                 {{$consult->patient_id == '' ? 'disabled' : ''}}>
                                                 <i class="material-icons">person</i>
                                             </a>
+
+                                            <a href="{{route("agenda.paciente", $consult->patient)}}"
+                                               class="btn btn-xs btn-copy waves-effect"
+                                               title="Ver agendamentos "
+                                               data-toggle="tooltip" data-placement="top">
+                                                <i class="material-icons">event_note</i>
+                                            </a>
                                         @endif
                                     </td>
                                     <td>
@@ -148,6 +157,12 @@
                                     <td>
                                         <input id="note{{$id}}"
                                                value="{{$consult->note}}"
+                                               data-reference="{{$id}}"/>
+                                    </td>
+
+                                    <td>
+                                        <input id="session{{$id}}"
+                                               value="{{$consult->session}}"
                                                data-reference="{{$id}}"/>
                                     </td>
                                     <td class="text-center" style="padding: 10px !important;">
@@ -287,7 +302,7 @@
             padding: 0 !important;
         }
         .name{
-            width: 72% !important;
+            width: 65% !important;
         }
         .btn-copy{
             background: #fff;

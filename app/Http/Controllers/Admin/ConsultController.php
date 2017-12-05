@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Consult;
 use App\Models\Patient;
 use App\Models\PatientPhone;
+use App\Models\PatientRecord;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Mail;
@@ -238,6 +239,15 @@ class ConsultController extends Controller
         return redirect()
             ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
             ->with("success", $msg. $op ." com sucesso!");
+
+    }
+
+    public function patient($name)
+    {
+        $consults = Consult::where('patient', $name)->get();
+        $patient = Patient::where('name', $name)->first();
+
+        return view("admin.patient.consults", ['consults' => $consults  , 'patient' => $patient, 'name' => $name]);
 
     }
 
