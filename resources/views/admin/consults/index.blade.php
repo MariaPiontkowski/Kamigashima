@@ -85,26 +85,33 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th width="115px">Hora</th>
+                                <th width="40px">Hora</th>
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
-                                <th>Ação</th>
+                                <th width="82px">Presença</th>
+                                <th width="50px">Ação</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
-                                <th width="115px">Hora</th>
+                                <th width="40px">Hora</th>
                                 <th>Paciente</th>
                                 <th>Contato</th>
                                 <th>Observação</th>
+                                <th width="82px">Presença</th>
                                 <th>Ação</th>
                             </tr>
                             </tfoot>
                             <tbody>
                             @foreach($consults as $consult)
-                                <?php $id =  str_replace(':', '', $consult->hour)?>
-                                <tr style="{{$consult->presence != '' ? "background-color:#9C9C9C; color:#fff" : ""}}">
+                                <?php $id =  str_replace(':', '', $consult->hour);
+
+                                $bg = ($consult->presence && $consult->presence == 'OK') ? "rgba(33, 150, 243, 0.3)" : "#9C9C9C";
+                                $color = ($consult->presence && $consult->presence == 'OK') ? "#555" : "#fff";
+
+                                ?>
+                                <tr style="{{$consult->presence != '' ? "background-color:".$bg."; color:".$color : ""}}">
                                     <td>
                                         <input id="hour{{$id}}"
                                                value="{{$consult->hour}}" readonly/>
@@ -144,28 +151,7 @@
                                                data-reference="{{$id}}"/>
                                     </td>
                                     <td class="text-center" style="padding: 10px !important;">
-                                        <button class="btn-submit btn bg-green btn-xs waves-effect hidden"
-                                                id="btn{{$id}}"
-                                                title="Salvar" data-toggle="tooltip" data-placement="top"
-                                                data-hour="{{$id}}"
-                                                data-hourf="{{$consult->hour}}">
-                                            <i class="material-icons">check</i>
-                                        </button>
-                                        <input type="hidden" id="check{{$id}}" value="{{$consult->patient != '' ? 'form'.$id : ''}}"/>
                                         @if($consult->patient != '')
-                                            <form id="form-delete{{$consult->id}}" method="post"
-                                                  action="{{route("agenda.destroy", $consult->id)}}"
-                                                class="form{{$id}}" style="float: left">
-                                            <button type="submit" class="btn bg-red btn-xs waves-effect"
-                                                    title="Desmarcar"
-                                                    data-toggle="tooltip" data-placement="top" id="btn-delete"
-                                                    data-form="form-delete{{$consult->id}}"
-                                                    data-hour="{{$consult->hour}}">
-                                                <i class="material-icons">clear</i>
-                                            </button>
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="_method" value="delete">
-                                            </form>
                                             <form id="form-ft{{$consult->id}}" method="get"
                                                   action="{{route("agenda.presence", $consult->id)}}"
                                                   class="form{{$id}}" style="float: left; width: 36px; height: 27px;">
@@ -175,7 +161,6 @@
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ft{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">FT</i>
-{{--                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
                                                     <input type="hidden" name="_method" value="FT">
                                                 </button>
                                             </form>
@@ -189,9 +174,46 @@
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ft{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">NV</i>
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                     <input type="hidden" name="_method" value="NV">
                                                 </button>
+                                            </form>
+
+                                            <form id="form-ok{{$consult->id}}" method="get"
+                                                  action="{{route("agenda.presence", $consult->id)}}"
+                                                  class="form{{$id}}" style="float: left;">
+                                                <button type="submit" class="btn btn-copy btn-xs waves-effect"
+                                                        title="{{$consult->presence && $consult->presence == 'OK' ? "Desfazer Presença" : "Confirmar Presença"}}"
+                                                        style="width: 30px; height: 27px; margin: 0 3px;{{$consult->presence == 'OK' ? "background: #DCDCDC; box-shadow: none; color: #9C9C9C;" : ""}}"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        data-form="form-ok{{$consult->id}}">
+                                                    <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">OK</i>
+                                                    <input type="hidden" name="_method" value="OK">
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                    <td class="text-center" style="padding: 10px !important;">
+                                        <button class="btn-submit btn bg-green btn-xs waves-effect hidden"
+                                                id="btn{{$id}}"
+                                                title="Salvar" data-toggle="tooltip" data-placement="top"
+                                                data-hour="{{$id}}"
+                                                data-hourf="{{$consult->hour}}">
+                                            <i class="material-icons">check</i>
+                                        </button>
+                                        <input type="hidden" id="check{{$id}}" value="{{$consult->patient != '' ? 'form'.$id : ''}}"/>
+                                        @if($consult->patient != '')
+                                            <form id="form-delete{{$consult->id}}" method="post"
+                                                  action="{{route("agenda.destroy", $consult->id)}}"
+                                                class="form{{$id}}">
+                                            <button type="submit" class="btn bg-red btn-xs waves-effect"
+                                                    title="Desmarcar"
+                                                    data-toggle="tooltip" data-placement="top" id="btn-delete"
+                                                    data-form="form-delete{{$consult->id}}"
+                                                    data-hour="{{$consult->hour}}">
+                                                <i class="material-icons">clear</i>
+                                            </button>
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="_method" value="delete">
                                             </form>
                                         @endif
                                     </td>
@@ -355,12 +377,6 @@
                         form.submit();
                     });
             });
-
-                $('.name').mousedown(function(event) {
-                    if(event.which === 2 || event.which === 3){
-                        alert(window.clipboardData);
-                    }
-                });
 
             $('td input').on('keyup', function () {
                 var reference =  $(this).data('reference');

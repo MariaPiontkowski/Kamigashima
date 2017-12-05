@@ -227,7 +227,13 @@ class ConsultController extends Controller
         $consult->presence = $presence;
         $consult->save();
 
-        $msg=$request->_method == 'FT' ? 'Falta' : 'Ausência';
+        if($request->_method == 'FT'){
+            $msg = 'Falta';
+        }elseif($request->_method == 'NV'){
+            $msg = 'Ausência';
+        }elseif($request->_method == 'OK'){
+            $msg = 'Presença';
+        }
 
         return redirect()
             ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
