@@ -313,7 +313,7 @@
     </div>
 
     <div class="row button-demo">
-        <div class="col-sm-10">
+        <div class="col-sm-8">
             <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
             <a href="{{ route("paciente.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
             @if($patient->id)
@@ -324,7 +324,11 @@
             @endif
         </div>
         @if($patient->id)
-            <div class="col-sm-2">
+            <div class="col-sm-4">
+                <a href="{{route("agenda.paciente", $patient->name)}}"
+                   class="btn copy bg-grey m-t-15 waves-effect">
+                    Agendamentos
+                </a>
                 <a href="#" class="btn bg-red m-t-15 waves-effect dialog-btn" data-form="form-delete"
                    data-type="confirm">
                     Remover Paciente

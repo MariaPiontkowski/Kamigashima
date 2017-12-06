@@ -24,6 +24,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
+                            <th width="40px">Data</th>
                             <th width="40px">Hora</th>
                             <th>Paciente</th>
                             <th>Contato</th>
@@ -34,6 +35,7 @@
                         </thead>
                         <tfoot>
                         <tr>
+                            <th width="40px">Data</th>
                             <th width="40px">Hora</th>
                             <th>Paciente</th>
                             <th>Contato</th>
@@ -55,6 +57,10 @@
 
                             ?>
                             <tr style="{{$consult->presence != '' ? "background-color:".$bg."; color:".$color : ""}}">
+
+                                <td>
+                                    {{date('d/m/Y', strtotime($consult->hour))}}
+                                </td>
                                 <td>
                                     {{$consult->hour}}
                                 </td>
@@ -68,13 +74,13 @@
                                             <i class="material-icons">content_copy</i>
                                         </button>
 
-                                        <a href="{{$consult->patient_id != '' ? route("paciente.edit", $consult->patient_id) : '#'}}"
+                                        <a href="{{$patient->id ? route("paciente.edit", $patient->id) : '#'}}"
                                            class="btn btn-xs btn-copy waves-effect"
-                                           title="Paciente{{$consult->patient_id == '' ? ' sem Cadastro' : ''}}"
+                                           title="Paciente{{!$patient->id ? ' sem Cadastro' : ''}}"
                                            data-toggle="tooltip" data-placement="top"
                                            data-clipboard-action="copy"
                                            data-clipboard-text="{{$consult->patient}}"
-                                                {{$consult->patient_id == '' ? 'disabled' : ''}}>
+                                                {{!$patient->id ? 'disabled' : ''}}>
                                             <i class="material-icons">person</i>
                                         </a>
                                     @endif
@@ -88,17 +94,15 @@
                                 </td>
                                 <td class="text-center" style="padding: 10px !important;">
                                     @if($consult->patient != '')
-                                        <form id="form-ft{{$consult->id}}" method="get"
-                                              action="{{route("agenda.presence", $consult->id)}}"
-                                              class="form{{$id}}" style="float: left; width: 36px; height: 27px;">
+                                        <form method="get" action="{{route("agenda.presence", $consult->id)}}" style="float: left; width: 36px; height: 27px;">
                                             <button type="submit" class="btn btn-copy btn-xs waves-effect"
                                                     title="{{$consult->presence && $consult->presence == 'FT' ? "Desfazer Falta" : "Faltou"}}"
                                                     style="width: 30px; height: 27px; margin: 0 2px; {{$consult->presence == 'FT' ? "background: #DCDCDC; box-shadow: none; color: #9C9C9C;" : ""}}"
-                                                    data-toggle="tooltip" data-placement="top"
-                                                    data-form="form-ft{{$consult->id}}">
+                                                    data-toggle="tooltip" data-placement="top">
                                                 <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">FT</i>
-                                                <input type="hidden" name="_method" value="FT">
                                             </button>
+                                            <input type="hidden" name="_method" value="FT">
+                                            <input type="hidden" name="page" value="paciente">
                                         </form>
 
                                         <form id="form-nv{{$consult->id}}" method="get"
@@ -110,8 +114,10 @@
                                                     data-toggle="tooltip" data-placement="top"
                                                     data-form="form-ft{{$consult->id}}">
                                                 <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">NV</i>
-                                                <input type="hidden" name="_method" value="NV">
                                             </button>
+                                                <input type="hidden" name="_method" value="NV">
+                                                <input type="hidden" name="page" value="paciente">
+
                                         </form>
 
                                         <form id="form-ok{{$consult->id}}" method="get"
@@ -123,8 +129,9 @@
                                                     data-toggle="tooltip" data-placement="top"
                                                     data-form="form-ok{{$consult->id}}">
                                                 <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">OK</i>
-                                                <input type="hidden" name="_method" value="OK">
                                             </button>
+                                                <input type="hidden" name="_method" value="OK">
+                                                <input type="hidden" name="page" value="paciente">
                                         </form>
                                     @endif
                                 </td>
@@ -145,7 +152,7 @@
       href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
 <style>
     .name{
-        width: 80% !important;
+        width: 75% !important;
         float: left;
     }
     .btn-copy{

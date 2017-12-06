@@ -176,8 +176,8 @@
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ft{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">FT</i>
-                                                    <input type="hidden" name="_method" value="FT">
                                                 </button>
+                                                <input type="hidden" name="_method" value="FT">
                                             </form>
 
                                             <form id="form-nv{{$consult->id}}" method="get"
@@ -189,8 +189,8 @@
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ft{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">NV</i>
-                                                    <input type="hidden" name="_method" value="NV">
                                                 </button>
+                                                <input type="hidden" name="_method" value="NV">
                                             </form>
 
                                             <form id="form-ok{{$consult->id}}" method="get"
@@ -202,8 +202,8 @@
                                                         data-toggle="tooltip" data-placement="top"
                                                         data-form="form-ok{{$consult->id}}">
                                                     <i class="material-icons text-center" style="font-family: inherit; font-size: 15px">OK</i>
-                                                    <input type="hidden" name="_method" value="OK">
                                                 </button>
+                                                <input type="hidden" name="_method" value="OK">
                                             </form>
                                         @endif
                                     </td>
@@ -302,7 +302,7 @@
             padding: 0 !important;
         }
         .name{
-            width: 65% !important;
+            width: 55% !important;
         }
         .btn-copy{
             background: #fff;
@@ -310,6 +310,25 @@
         }
         .btn-copy:hover{
             color: #000;
+        }
+        .easy-autocomplete-container{
+            position:absolute;
+            list-style: none;
+            background-color: #ffffff;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        .easy-autocomplete-container ul{
+            list-style:none;
+            padding:0;
+        }
+        .easy-autocomplete-container li{
+            padding:15px;
+        }
+        .easy-autocomplete-container li:hover{
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.5);
+            color: #fff;
         }
     </style>
 
@@ -319,12 +338,37 @@
     <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
     <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
     <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
+    <script src="{{ asset("plugins/easyautocomplete/jquery.easy-autocomplete.min.js") }}"></script>
     <script>
         inputdate = $('#date');
         var splitdate = inputdate.val().split("/");
         var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
 
         $(function () {
+
+            var options = {
+                url: "{{route('api.patient.name')}}",
+
+                getValue: "name",
+
+                list: {match: {
+                    enabled: true
+                },
+
+                    onChooseEvent: function(e, i) {
+                       var value = $(".name").getSelectedItemData().name;
+//
+//                        $("#data-holder").val(value).trigger("change");
+
+                    console.log(value);
+                    console.log(e);
+
+                    }
+                },
+                requestDelay: 300
+            };
+
+            $(".name").easyAutocomplete(options);
 
             $('.btn-submit').on('click', function () {
 
@@ -479,7 +523,16 @@
                 },
                 autoWidth: false,
                 paging: false,
-                bInfo: false
+                bInfo: false,
+                columns: [
+                    null,
+                    null,
+                    { orderable: false },
+                    { orderable: false },
+                    { orderable: false },
+                    { orderable: false },
+                    { orderable: false }
+                ]
             });
 
             new Clipboard('.btn-copy');

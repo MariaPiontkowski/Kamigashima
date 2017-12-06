@@ -26,10 +26,14 @@ class ConsultController extends Controller
         $date = $request->date ? $request->date : date('Y-m-d');
 
         $consults = DB::select('CALL sp_se_consults(?)', [$date]);
+        $patient = Patient::select('name')->get()->toArray();
+
+//                var_dump($patient);die;
 
         return view("admin.consults.index", [
             "consults" => $consults,
-            "date" => $date
+            "date" => $date,
+            "patient" => $patient
         ]);
     }
 
@@ -236,6 +240,16 @@ class ConsultController extends Controller
             $msg = 'Presença';
         }
 
+        if($request->page && $request->page == "paciente"){
+            return redirect()
+                ->route("agenda.paciente", $consult->patient)
+                ->with("success", $msg. $op ." com sucesso!");
+        }else{
+            return redirect()
+                ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
+                ->with("success", $msg. $op ." com sucesso!");
+        }
+
         return redirect()
             ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
             ->with("success", $msg. $op ." com sucesso!");
@@ -245,6 +259,7 @@ class ConsultController extends Controller
     public function patient($name)
     {
         $consults = Consult::where('patient', $name)->get();
+
         $patient = Patient::where('name', $name)->first();
 
         return view("admin.patient.consults", ['consults' => $consults  , 'patient' => $patient, 'name' => $name]);

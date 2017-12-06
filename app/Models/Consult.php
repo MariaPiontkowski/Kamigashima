@@ -10,6 +10,8 @@ class Consult extends Eloquent
 
     public $primaryKey = 'id';
 
+    public $incrementing = false;
+
     protected $fillable=[
         'id',
         'date',
