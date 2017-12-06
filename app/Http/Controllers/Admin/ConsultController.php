@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Agenda;
 use App\Models\Consult;
 use App\Models\Patient;
 use App\Models\PatientPhone;
 use App\Models\PatientRecord;
 use Illuminate\Http\Request;
 use DB;
-use Illuminate\Mail;
+use Mail;
 
 class ConsultController extends Controller
 {
@@ -23,12 +24,12 @@ class ConsultController extends Controller
     public function index(Request $request)
     {
 
+//        Mail::to('maria.piontkowski@hotmail.com')->send(new Agenda());die;
+
         $date = $request->date ? $request->date : date('Y-m-d');
 
         $consults = DB::select('CALL sp_se_consults(?)', [$date]);
         $patient = Patient::select('name')->get()->toArray();
-
-//                var_dump($patient);die;
 
         return view("admin.consults.index", [
             "consults" => $consults,
@@ -92,12 +93,7 @@ class ConsultController extends Controller
 
         $check = Consult::find($id);
 
-        if($check){
-            $consult =  $check;
-        }else{
-            $consult = new Consult();
-            $consult->session = 1;
-        }
+        $consult = ($check) ? $check : new Consult();
 
         $consult->id = $id;
         $consult->date = $request->date;
@@ -105,9 +101,13 @@ class ConsultController extends Controller
         $consult->patient = $request->name;
         $consult->phone = $request->phone;
         $consult->note =  $request->note;
+        $consult->session = ($check) ? ($check->session) : 1;
         $consult->save();
 
-        $arrConsults[0] = $consult;
+        $return = array();
+
+        $return[] = $email;
+        $return[] = $consult;
 
         if(!isset($check)){
             for($i = 1; $i < 10; $i++){
@@ -131,15 +131,14 @@ class ConsultController extends Controller
                     $consultsession->session = ($i+1);
                     $consultsession->save();
 
-                    $arrConsults[] = $consultsession;
+                    $return[] = $consultsession;
 
                 }
 
             }
         }
 
-//        return $email;
-        return $arrConsults;
+        return $return;
     }
 
     /**
@@ -249,10 +248,6 @@ class ConsultController extends Controller
                 ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
                 ->with("success", $msg. $op ." com sucesso!");
         }
-
-        return redirect()
-            ->route("agenda.index", date('Y-m-d', strtotime($consult->date)))
-            ->with("success", $msg. $op ." com sucesso!");
 
     }
 

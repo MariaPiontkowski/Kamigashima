@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Agendamentos para o paciente {{$name}}
+                        Agendamentos para o paciente <b>{{$name}}</b>
                     </h2>
                 </div>
                 <div class="body">
@@ -59,7 +59,7 @@
                             <tr style="{{$consult->presence != '' ? "background-color:".$bg."; color:".$color : ""}}">
 
                                 <td>
-                                    {{date('d/m/Y', strtotime($consult->hour))}}
+                                    {{date('d/m/Y', strtotime($consult->date))}}
                                 </td>
                                 <td>
                                     {{$consult->hour}}
@@ -67,6 +67,7 @@
                                 <td><div class="name">{{$consult->patient}}</div>
 
                                     @if($consult->patient != '')
+                                        <div style="float: right; width: 65px;">
                                         <button href="#" class="btn btn-xs btn-copy waves-effect"
                                                 title="Copiar Paciente" data-toggle="tooltip"
                                                 data-placement="bottom" data-clipboard-action="copy"
@@ -74,15 +75,16 @@
                                             <i class="material-icons">content_copy</i>
                                         </button>
 
-                                        <a href="{{$patient->id ? route("paciente.edit", $patient->id) : '#'}}"
+                                        <a href="{{$patient ? route("paciente.edit", $patient->id) : '#'}}"
                                            class="btn btn-xs btn-copy waves-effect"
-                                           title="Paciente{{!$patient->id ? ' sem Cadastro' : ''}}"
+                                           title="Paciente{{!$patient ? ' sem Cadastro' : ''}}"
                                            data-toggle="tooltip" data-placement="top"
                                            data-clipboard-action="copy"
                                            data-clipboard-text="{{$consult->patient}}"
-                                                {{!$patient->id ? 'disabled' : ''}}>
+                                                {{!$patient ? 'disabled' : ''}}>
                                             <i class="material-icons">person</i>
                                         </a>
+                                        </div>
                                     @endif
                                 </td>
                                 <td>{{$consult->phone}}
@@ -152,7 +154,8 @@
       href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
 <style>
     .name{
-        width: 75% !important;
+        width: auto !important;
+        min-width: 150px;
         float: left;
     }
     .btn-copy{
@@ -192,8 +195,16 @@
                 url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
             },
             autoWidth: false,
-            paging: false,
-            bInfo: false
+            columns: [
+                null,
+                null,
+                null,
+                { orderable: false },
+                { orderable: false },
+                { orderable: false },
+                { orderable: false },
+                { orderable: false }
+            ]
         });
     </script>
 @endpush

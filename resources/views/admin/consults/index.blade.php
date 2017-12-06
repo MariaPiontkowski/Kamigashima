@@ -124,6 +124,7 @@
                                                data-reference="{{$id}}"/>
 
                                         @if($consult->patient != '')
+                                        <div style="float: right; width: 100px; margin-top: 10px">
                                             <button href="#" class="btn btn-xs btn-copy waves-effect"
                                                     title="Copiar Paciente" data-toggle="tooltip"
                                                     data-placement="bottom" data-clipboard-action="copy"
@@ -147,6 +148,7 @@
                                                data-toggle="tooltip" data-placement="top">
                                                 <i class="material-icons">event_note</i>
                                             </a>
+                                        </div>
                                         @endif
                                     </td>
                                     <td>
@@ -163,7 +165,7 @@
                                     <td>
                                         <input id="session{{$id}}"
                                                value="{{$consult->session}}"
-                                               data-reference="{{$id}}"/>
+                                               data-reference="{{$id}}" readonly/>
                                     </td>
                                     <td class="text-center" style="padding: 10px !important;">
                                         @if($consult->patient != '')
@@ -302,7 +304,9 @@
             padding: 0 !important;
         }
         .name{
-            width: 55% !important;
+            width: auto !important;
+            min-width: 200px;
+            float: left;
         }
         .btn-copy{
             background: #fff;
@@ -311,21 +315,18 @@
         .btn-copy:hover{
             color: #000;
         }
-        .easy-autocomplete-container{
-            position:absolute;
+        .ui-menu{
+            max-width: 300px;
             list-style: none;
+            padding:0;
             background-color: #ffffff;
             box-shadow: 0 0 30px rgba(0,0,0,0.3);
         }
 
-        .easy-autocomplete-container ul{
-            list-style:none;
-            padding:0;
-        }
-        .easy-autocomplete-container li{
+        .ui-menu .ui-menu-item{
             padding:15px;
         }
-        .easy-autocomplete-container li:hover{
+        .ui-menu .ui-menu-item:hover{
             cursor: pointer;
             background-color: rgba(0,0,0,0.5);
             color: #fff;
@@ -338,7 +339,7 @@
     <script src="{{ asset("plugins/momentjs/moment-with-locales.min.js") }}"></script>
     <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
     <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
-    <script src="{{ asset("plugins/easyautocomplete/jquery.easy-autocomplete.min.js") }}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         inputdate = $('#date');
         var splitdate = inputdate.val().split("/");
@@ -346,29 +347,16 @@
 
         $(function () {
 
-            var options = {
-                url: "{{route('api.patient.name')}}",
+            var names = [<?php for($i=0; $i<count($patient); $i++){ echo (count($patient) - 1) == $i ? '"'.$patient[$i]['name'].'"' : '"'.$patient[$i]['name'].'",';} ?>];
 
-                getValue: "name",
+           $('.name').autocomplete({
+               source: function(request, response) {
+                   var results = $.ui.autocomplete.filter(names, request.term);
 
-                list: {match: {
-                    enabled: true
-                },
-
-                    onChooseEvent: function(e, i) {
-                       var value = $(".name").getSelectedItemData().name;
-//
-//                        $("#data-holder").val(value).trigger("change");
-
-                    console.log(value);
-                    console.log(e);
-
-                    }
-                },
-                requestDelay: 300
-            };
-
-            $(".name").easyAutocomplete(options);
+                   response(results.slice(0, 5));
+               },
+               autoFocus: true
+           });
 
             $('.btn-submit').on('click', function () {
 
@@ -378,6 +366,7 @@
                 var name = table.$('#name' + hour).val();
                 var phone = table.$('#phone' + hour).val();
                 var note = table.$('#note' + hour).val();
+                var session = table.$('#session' + hour).val();
 
                 $.ajax({
                     url: "{{ route("agenda.store") }}",
@@ -407,7 +396,7 @@
 //                        }
 //                        swal("Nice!", "You wrote: " + inputValue, "success");
 //                    });
-                    console.log(result);
+                    console.log(result[0]);
                 });
 
             });

@@ -7,6 +7,7 @@ use App\Models\Agreement;
 use App\Models\Patient;
 use App\Models\PatientRecord;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Array_;
 use Psy\Util\Json;
 use Yajra\Datatables\Datatables;
 
@@ -36,17 +37,4 @@ class PatientRecordApiController extends Controller {
 		                 ->escapeColumns( false )
 		                 ->make( true );
 	}
-
-    /**
-     * Display List patients.
-     *
-     * @return Json
-     */
-    public function getPatientsData() {
-        $patient = Patient::select('name')->get();
-
-        return $patient->toJson();
-    }
-
-
 }
