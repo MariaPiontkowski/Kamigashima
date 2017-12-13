@@ -124,7 +124,7 @@
                                                data-reference="{{$id}}"/>
 
                                         @if($consult->patient != '')
-                                        <div style="float: right; width: 100px; margin-top: 10px">
+                                        <div style="width: 100px; margin: 5px auto">
                                             <button href="#" class="btn btn-xs btn-copy waves-effect"
                                                     title="Copiar Paciente" data-toggle="tooltip"
                                                     data-placement="bottom" data-clipboard-action="copy"
@@ -256,6 +256,10 @@
             /*background-color: transparent;*/
         /*}*/
 
+        table.dataTable tbody td {
+            vertical-align: middle;
+        }
+
         .consult-calendar {
             margin: auto;
             width: 410px;
@@ -299,15 +303,12 @@
             background: transparent;
             border: none;
             padding: 0 10px;
+            text-align: center;
         }
         td {
             padding: 0 !important;
         }
-        .name{
-            width: auto !important;
-            min-width: 200px;
-            float: left;
-        }
+
         .btn-copy{
             background: #fff;
             color: #337ab7;
@@ -396,7 +397,8 @@
 //                        }
 //                        swal("Nice!", "You wrote: " + inputValue, "success");
 //                    });
-                    console.log(result[0]);
+                    location.reload();
+                    console.log(result);
                 });
 
             });

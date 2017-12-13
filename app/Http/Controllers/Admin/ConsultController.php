@@ -80,15 +80,14 @@ class ConsultController extends Controller
             if(!($request->phone) && ($phone)){
                 $request->phone = $phone->phone;
             }
-            else{
-                if(!($phone)){
+            elseif(!($phone)&& ($request->phone)){
                     $patientphone = new PatientPhone();
                     $patientphone->patient_id = $patient->id;
                     $patientphone->phone = $request->phone;
                     $patientphone->type = 1;
                     $patientphone->save();
                 }
-            }
+
         }
 
         $check = Consult::find($id);
