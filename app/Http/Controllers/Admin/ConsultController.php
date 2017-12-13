@@ -100,7 +100,7 @@ class ConsultController extends Controller
         $consult->patient = $request->name;
         $consult->phone = $request->phone;
         $consult->note =  $request->note;
-        $consult->session = ($check) ? ($check->session) : 1;
+        $consult->session = ($request->sess) ? ($request->sess) : 1;
         $consult->save();
 
         $return = array();
@@ -108,7 +108,7 @@ class ConsultController extends Controller
         $return[] = $email;
         $return[] = $consult;
 
-        if(!isset($check)){
+        if(!isset($check) && $request->sess == 0){
             for($i = 1; $i < 10; $i++){
 
                 $request->date = date('Y-m-d', strtotime($request->date . ' +7 day'));
@@ -150,11 +150,8 @@ class ConsultController extends Controller
     public function edit( $id ) {
         $consult = Consult::find( $id );
         return view( "admin.consults.edit", [
-            "date" => $consult->date,
-            "hour" => substr($consult->hour, 0, 5),
+            "consult" => $consult,
             "hours" => DB::select('CALL sp_se_hour_available(?)', [$consult->date]),
-            "patient" => Patient::find($consult->patient_id),
-            "note" => $consult->note,
             "action" => route( "agenda.update", $id ),
             "method" => "put"
         ] );
@@ -169,21 +166,22 @@ class ConsultController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update( Request $request, $id ) {
-        $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
 
+        $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
         $newid = str_replace('-', '', $date).str_replace(':', '', $request->hour);
 
         $consult = Consult::find($id);
         $consult->id = $newid;
         $consult->date = $date;
+        $consult->phone = $request->phone;
         $consult->hour = $request->hour;
         $consult->note = $request->note;
+        $consult->session = $request->sess;
         $consult->save();
 
-
         return redirect()
-            ->route("agenda.index")
-            ->with("success", "Consulta dia " . $request->date . " às ". $request->hour. " remarcada com sucesso!");
+            ->route("agenda.index", $date)
+            ->with("success", "Consulta dia " . date('d/m/Y', strtotime($request->date)) . " às ". $request->hour. " remarcada com sucesso!");
 
     }
 

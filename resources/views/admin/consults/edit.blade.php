@@ -1,7 +1,7 @@
 @extends('layouts.admin', ['title' => 'Remarcar Consulta'])
 
 @section('breadcrumb')
-    <li><a href="{{ route('agenda.index') }}"><i class="material-icons">supervisor_account</i>Agenda</a></li>
+    <li><a href="{{ route('agenda.index', '') }}"><i class="material-icons">supervisor_account</i>Agenda</a></li>
     <li class="active">Remarcar Consulta</li>
 @endsection
 
@@ -24,8 +24,10 @@
                                 <div class="form-group text-center">
                                     <label for="date">Data</label>
                                     <div class="form-line">
-                                        <input id="date" name="date" class="form-control text-center"
-                                               value="{{ date('d/m/Y', strtotime($date)) }}" style="padding: 0" autofocus>
+                                        <input type="text" id="date" name="date" class="form-control text-center"
+                                               readonly
+                                               value="{{ date('d/m/Y', strtotime($consult->date)) }}" style="padding: 0"
+                                               autofocus>
                                     </div>
                                 </div>
                             </div>
@@ -45,13 +47,24 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="patient">Paciente</label>
                                     <div class="form-line">
-                                        <input type="text" name="patient" id="patient" class="form-control" disabled value="{{ $patient->name }}"/>
+                                        <input type="text" name="patient" id="patient" class="form-control" disabled
+                                               value="{{ $consult->patient }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="patient">Telefone</label>
+                                    <div class="form-line">
+                                        <input type="text" name="phone" id="phone" class="form-control"
+                                               value="{{ $consult->phone }}"/>
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +74,19 @@
                                 <div class="form-group">
                                     <label for="note">Observações</label>
                                     <div class="form-line">
-                                        <textarea name="note" class="form-control" rows="4" placeholder="Observações" autofocus>{{$note}}</textarea>
+                                            <textarea name="note" class="form-control" rows="4"
+                                                      placeholder="Observações" autofocus>{{$consult->note}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="patient">Sessão</label>
+                                    <div class="form-line">
+                                        <input type="text" name="sess" id="sess" class="form-control"
+                                               value="{{ $consult->session }}"/>
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +95,8 @@
                         <div class="row button-demo">
                             <div class="col-sm-10">
                                 <button class="btn bg-light-green m-t-15 waves-effect">Salvar</button>
-                                <a href="{{ route("agenda.index") }}" class="btn bg-grey m-t-15 waves-effect">Voltar</a>
+                                <a href="{{ route("agenda.index", $consult->date) }}"
+                                   class="btn bg-grey m-t-15 waves-effect">Voltar</a>
                             </div>
                         </div>
                     </form>
@@ -88,11 +114,11 @@
           href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
 
     <style>
-        .sweet-alert{
+        .sweet-alert {
             background-color: transparent !important;
         }
 
-        .filter-option{
+        .filter-option {
             text-align: center !important;
         }
     </style>
@@ -115,10 +141,10 @@
         });
 
         $(document).on({
-            ajaxStart: function() {
+            ajaxStart: function () {
                 swal({
                     title: null,
-                    html:true,
+                    html: true,
                     showConfirmButton: false,
                     text: '<div class="preloader">' +
                     '<div class="spinner-layer pl-blue-grey">' +
@@ -137,7 +163,7 @@
             }
         });
 
-        inputdate.on('change', function(){
+        inputdate.on('change', function () {
 
             var splitdate = this.value.split("/");
             var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
@@ -161,8 +187,8 @@
                 type: "post"
             }).done(function (hours) {
                 hour.empty();
-                for(i = 0; i < hours.length; i++){
-                    hour.append('<option value="'+hours[i].hour+'">'+hours[i].hour+'</option>');
+                for (i = 0; i < hours.length; i++) {
+                    hour.append('<option value="' + hours[i].hour + '">' + hours[i].hour + '</option>');
                 }
             });
         });

@@ -165,7 +165,7 @@
                                     <td>
                                         <input id="session{{$id}}"
                                                value="{{$consult->session}}"
-                                               data-reference="{{$id}}" readonly/>
+                                               data-reference="{{$id}}" class="session"/>
                                     </td>
                                     <td class="text-center" style="padding: 10px !important;">
                                         @if($consult->patient != '')
@@ -219,9 +219,14 @@
                                         </button>
                                         <input type="hidden" id="check{{$id}}" value="{{$consult->patient != '' ? 'form'.$id : ''}}"/>
                                         @if($consult->patient != '')
+                                            <a href="{{route("agenda.edit", $consult->id)}}" class="btn bg-grey btn-xs waves-effect"
+                                               title="Remarcar"
+                                               data-toggle="tooltip" data-placement="top">
+                                                <i class="material-icons">edit</i>
+                                            </a>
                                             <form id="form-delete{{$consult->id}}" method="post"
                                                   action="{{route("agenda.destroy", $consult->id)}}"
-                                                class="form{{$id}}">
+                                                class="form{{$id}} pull-right">
                                             <button type="submit" class="btn bg-red btn-xs waves-effect"
                                                     title="Desmarcar"
                                                     data-toggle="tooltip" data-placement="top" id="btn-delete"
@@ -359,6 +364,22 @@
                autoFocus: true
            });
 
+            $(".session").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
             $('.btn-submit').on('click', function () {
 
                 var hour = $(this).data('hour');
@@ -377,6 +398,7 @@
                         hour: hourf,
                         phone: phone,
                         note: note,
+                        sess: session,
                         _token: "{{ csrf_token() }}"
                     },
                     type: "post"
