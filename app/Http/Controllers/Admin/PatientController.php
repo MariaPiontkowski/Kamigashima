@@ -33,7 +33,8 @@ class PatientController extends Controller {
 			"patient"    => new Patient(),
 			"agreements" => Agreement::all(),
 			"action"     => route( "paciente.store" ),
-			"method"     => "post"
+			"method"     => "post",
+            "names"      => Patient::select('name')->get()->toArray()
 		] );
 	}
 
@@ -60,11 +61,45 @@ class PatientController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit( $id ) {
+
+		$patient = Patient::find($id);
+
+		$group =  $patient->responsible ? PatientResponsible::where('name', $patient->responsible->name)->get() : null;
+		$responsible = PatientResponsible::where('name', $patient->name)->get();
+		$patientgroup = null;
+		$patientresponsible = null;
+
+		if($group){
+
+			$idresponsible = Patient::where('name', $patient->responsible->name)->first();
+
+			foreach ($group as $key => $value) {
+				$patientgroup['responsible'] = $group[$key]->name;
+				$patientgroup['idresponsible'] = ($idresponsible) ? $idresponsible->id : null;
+				$patientgroup['patient'][] = [
+					'name' => Patient::find($group[$key]->patient_id)->name,
+					'id' => $group[$key]->patient_id,
+				];
+			}
+		}
+		
+		if($responsible){
+			foreach ($responsible as $key => $value) {
+				$patientresponsible['patient'][] = [
+					'name' => Patient::find($responsible[$key]->patient_id)->name,
+					'id' => $responsible[$key]->patient_id,
+				];
+			}
+		}
+
 		return view( "admin.patient.edit", [
-			"patient"    => Patient::find( $id ),
-			"agreements" => Agreement::all(),
-			"action"     => route( "paciente.update", $id ),
-			"method"     => "put"
+			"patient"     => $patient,
+			"agreements"  => Agreement::all(),
+			"action"      => route( "paciente.update", $id ),
+			"method"      => "put",
+            "names"       => Patient::select('name')->get()->toArray(),
+            "group"       => $patientgroup,
+            "responsible" => $patientresponsible
 		] );
 	}
 
