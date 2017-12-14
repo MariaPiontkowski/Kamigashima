@@ -24,6 +24,13 @@
             <i class="material-icons">supervisor_account</i> Responsável
         </a>
     </li>
+    @if($group || $responsible)
+        <li role="presentation">
+            <a href="#tab-group" data-toggle="tab">
+                <i class="material-icons">group_work</i> Grupo
+            </a>
+        </li>
+    @endif
 </ul>
 
 <form class="form-validation" action="{{ $action }}" method="post">
@@ -310,6 +317,99 @@
                 </div>
             </div>
         </div>
+
+        <div id="tab-group" class="tab-pane fade" role="tabpanel">
+
+            @if($responsible)
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>Grupo que o paciente atual é responsável</h4>   
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Propietário: <i>{{$patient->name}}</i></th>
+                                    <th width="5%">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($responsible['patient'] as $patientresponsible)
+                                    <tr>
+                                        <td>
+                                            {{$patientresponsible['name']}}
+                                        </td>
+                                    
+                                        <td>
+                                            <a href="{{route('paciente.edit', $patientresponsible['id'])}}"
+                                                    class="btn bg-blue-grey btn-xs btn-copy waves-effect"
+                                                    title="Abrir Paciente"
+                                                    data-toggle="tooltip" data-placement="top">
+                                                    <i class="material-icons">person</i>
+                                            </a>        
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
+
+
+             @if($group && $responsible)
+                <br/>
+                <hr/>
+                <br/>
+            @endif
+
+            @if($group)
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>Grupo que o paciente atual é dependente</h4>   
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Propietário: 
+                                         <a href="{{$group['idresponsible'] ? route('paciente.edit', $group['idresponsible']) : '#'}}">
+                                            <i>{{$group['responsible']}}</i>
+                                        </a>
+                                        </th>
+                                    <th width="5%">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($group['patient'] as $patientgroup)
+                                    <tr>
+                                        <td>
+                                            {{$patientgroup['name']}}
+                                        </td>
+                                    
+                                        <td>
+                                            <a href="{{$patientgroup['id'] != $patient->id ? route('paciente.edit', $patientgroup['id']) : '#'}}"
+                                                    class="btn bg-blue-grey btn-xs btn-copy waves-effect"
+                                                    title="{{$patientgroup['id'] != $patient->id ? 'Abrir Paciente' : 'Paciente Atual'}}"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    {{$patientgroup['id'] == $patient->id ? 'disabled' : ''}}>
+                                                    <i class="material-icons">person</i>
+                                            </a>        
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif  
+        </div>
     </div>
 
     <div class="row button-demo">
@@ -348,6 +448,25 @@
 @push("styles")
     <link rel="stylesheet"
           href="{{ asset("plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css") }}">
+
+<style>
+    .ui-menu{
+        max-width: 300px;
+        list-style: none;
+        padding:0;
+        background-color: #ffffff;
+        box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    }
+
+    .ui-menu .ui-menu-item{
+        padding:15px;
+    }
+    .ui-menu .ui-menu-item:hover{
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.5);
+        color: #fff;
+    }
+</style>
 @endpush
 
 @push("scripts")
@@ -355,6 +474,7 @@
     <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
     <script src="{{ asset("plugins/jquery-inputmask/jquery.inputmask.bundle.min.js") }}"></script>
     <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         $(function () {
@@ -427,6 +547,17 @@
             });
 
             new Clipboard('.copy');
+
+            var names = [<?php for($i=0; $i<count($names); $i++){ echo (count($names) - 1) == $i ? '"'.$names[$i]['name'].'"' : '"'.$names[$i]['name'].'",';} ?>];
+
+            responsibleGroup.autocomplete({
+                source: function(request, response) {
+                    var results = $.ui.autocomplete.filter(names, request.term);
+
+                    response(results.slice(0, 5));
+                },
+                autoFocus: true
+            });
 
         });
 

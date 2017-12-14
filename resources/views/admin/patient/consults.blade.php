@@ -165,6 +165,9 @@
     .btn-copy:hover{
         color: #000;
     }
+    table.dataTable tbody td {
+        vertical-align: middle;
+    }
 </style>
 
 @endpush
