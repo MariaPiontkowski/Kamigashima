@@ -19,6 +19,8 @@
                     <h2>
                         Agendamentos para o paciente <b>{{$name}}</b>
                     </h2>
+                    <br/>
+                    <p>Sessões restantes: {{$remaining}}</p>
                 </div>
                 <div class="body">
                     <table class="table table-bordered table-hover">

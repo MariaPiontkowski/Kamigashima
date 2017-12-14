@@ -254,7 +254,19 @@ class ConsultController extends Controller
 
         $patient = Patient::where('name', $name)->first();
 
-        return view("admin.patient.consults", ['consults' => $consults  , 'patient' => $patient, 'name' => $name]);
+        $sessions = count($consults);
+        $presence = 0;
+
+
+        foreach ($consults as $consult){
+            if($consult->presence == 'OK'){
+                $presence = $presence+1;
+            }
+        }
+
+        $remaining = $sessions - $presence;
+
+        return view("admin.patient.consults", ['consults' => $consults  , 'patient' => $patient, 'name' => $name, 'remaining' => $remaining]);
 
     }
 
