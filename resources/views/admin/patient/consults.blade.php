@@ -31,6 +31,7 @@
                             <th>Observação</th>
                             <th width="30px">Sessão</th>
                             <th width="82px">Presença</th>
+                            <th width="7%">Ação</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -42,6 +43,7 @@
                             <th>Observação</th>
                             <th width="30px">Sessão</th>
                             <th width="82px">Presença</th>
+                            <th width="7%">Ação</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -137,6 +139,26 @@
                                         </form>
                                     @endif
                                 </td>
+                                <td class="text-center" style="padding: 10px !important;">
+                                    <a href="{{route("agenda.edit", $consult->id)}}" class="btn bg-grey btn-xs waves-effect"
+                                       title="Remarcar"
+                                       data-toggle="tooltip" data-placement="top">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <form id="form-delete{{$consult->id}}" method="post"
+                                          action="{{route("agenda.destroy", $consult->id)}}"
+                                          class="form{{$id}} pull-right">
+                                        <button type="submit" class="btn bg-red btn-xs waves-effect"
+                                                title="Desmarcar"
+                                                data-toggle="tooltip" data-placement="top" id="btn-delete"
+                                                data-form="form-delete{{$consult->id}}"
+                                                data-hour="{{$consult->hour}}">
+                                            <i class="material-icons">clear</i>
+                                        </button>
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="_method" value="delete">
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -167,6 +189,7 @@
     }
     table.dataTable tbody td {
         vertical-align: middle;
+        text-align: center;
     }
 </style>
 
@@ -190,6 +213,28 @@
                 {{--{data: "action", orderable: false, searchable: false}--}}
             {{--]--}}
         {{--});--}}
+
+        $('body').on('click', '#btn-delete', function (e) {
+            e.preventDefault();
+
+            $(".sweet-alert").css({'background-color': "#fff"});
+
+            var idform = $(this).data('form');
+
+            swal({
+                title: "Deseja realmente desmarcar?",
+                text: "Você não poderá mais recuperar esta informação!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: "#f44336",
+                confirmButtonText: "Sim, quero desmarcar!",
+                closeOnConfirm: false
+            }, function () {
+                var form = $("#" + idform);
+                form.submit();
+            });
+        });
 
         new Clipboard('.btn-copy');
 

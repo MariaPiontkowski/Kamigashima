@@ -425,31 +425,6 @@
 
             });
 
-            $('#btn-ft').on('click', function (e) {
-
-                var id = $(this).data('id');
-
-                    e.preventDefault();
-
-                    $(".sweet-alert").css({'background-color': "#fff"});
-
-                    var idform = $(this).data('form');
-
-                    swal({
-                        title: "Deseja realmente desmarcar?",
-                        text: "Você não poderá mais recuperar esta informação!",
-                        type: "warning",
-                        showCancelButton: true,
-                        cancelButtonText: "Cancelar",
-                        confirmButtonColor: "#f44336",
-                        confirmButtonText: "Sim, quero desmarcar!",
-                        closeOnConfirm: false
-                    }, function () {
-                        var form = $("#" + idform);
-                        form.submit();
-                    });
-            });
-
             $('td input').on('keyup', function () {
                 var reference =  $(this).data('reference');
                 var button = $('#btn'+reference);
