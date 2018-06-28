@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use DB;
 use Mail;
 
+setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+date_default_timezone_set('America/Sao_Paulo');
+
 class ConsultController extends Controller
 {
     /**
@@ -24,9 +27,7 @@ class ConsultController extends Controller
     public function index(Request $request)
     {
 
-//        Mail::to('maria.piontkowski@hotmail.com')->send(new Agenda());die;
-
-        $date = $request->date ? $request->date : date('Y-m-d');
+        $date = $request->date ? date('Y-m-d', strtotime($request->date)) : date('Y-m-d');
 
         $consults = DB::select('CALL sp_se_consults(?)', [$date]);
         $patient = Patient::select('name')->get()->toArray();
@@ -60,7 +61,7 @@ class ConsultController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return string $email
+     * @return array
      */
     public function store(Request $request)
     {
@@ -105,7 +106,6 @@ class ConsultController extends Controller
 
         $return = array();
 
-        $return[] = $email;
         $return[] = $consult;
 
         if(!isset($check) && $request->sess == 0){
@@ -133,11 +133,15 @@ class ConsultController extends Controller
                     $return[] = $consultsession;
 
                 }
-
             }
         }
 
+     if($email){
+         //Mail::to('maria@customit.com.br')->send(new Agenda($return));
+     }
+
         return $return;
+
     }
 
     /**
@@ -181,7 +185,7 @@ class ConsultController extends Controller
 
         return redirect()
             ->route("agenda.index", $date)
-            ->with("success", "Consulta dia " . date('d/m/Y', strtotime($request->date)) . " às ". $request->hour. " remarcada com sucesso!");
+            ->with("success", "Consulta dia " . ucwords(strftime('%d de %B de %Y', strtotime(str_replace('/', '-', $request->date)))) . " às ". $request->hour. " marcada com sucesso!");
 
     }
 

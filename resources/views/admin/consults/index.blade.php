@@ -1,3 +1,7 @@
+<?php
+setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+date_default_timezone_set('America/Sao_Paulo');
+?>
 @extends("layouts.admin", ["title" => "Agenda"])
 
 @section("breadcrumb")
@@ -20,10 +24,17 @@
 
                     </h2>
 
+                    {{--<div class="row text-center" style=" height: 55px;">--}}
+                        {{--<input type="text" id="date" class="form-control-border text-center"--}}
+                               {{--data-toggle="tooltip" data-placement="top" title="Selecionar Data"--}}
+                               {{--readonly value="{{ date('d/m/Y', strtotime($date)) }}"/>--}}
+                    {{--</div>--}}
+
                     <div class="row text-center" style=" height: 55px;">
                         <input type="text" id="date" class="form-control-border text-center"
                                data-toggle="tooltip" data-placement="top" title="Selecionar Data"
-                               readonly value="{{ date('d/m/Y', strtotime($date)) }}"/>
+                               value="{{ utf8_encode(ucwords(strftime('%A, %d %B %Y', strtotime($date)))) }}"
+                               readonly/>
                     </div>
 
                     <div class="row">
@@ -348,8 +359,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         inputdate = $('#date');
-        var splitdate = inputdate.val().split("/");
-        var inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+
+        var splitdate = inputdate.val().split(" ");
+        var inputdateval = splitdate[3] + "-" + getMonthDate(splitdate[2]) + "-" + splitdate[1];
 
         $(function () {
 
@@ -394,7 +406,7 @@
                     url: "{{ route("agenda.store") }}",
                     data: {
                         name: name,
-                        date: formatDate(inputdateval),
+                        date: inputdateval,
                         hour: hourf,
                         phone: phone,
                         note: note,
@@ -403,6 +415,8 @@
                     },
                     type: "post"
                 }).done(function (result) {
+
+
 //                    swal({
 //                        title: "Enviar E-mail",
 //                        text: "Envio de e-mail ao paciente",
@@ -419,8 +433,7 @@
 //                        }
 //                        swal("Nice!", "You wrote: " + inputValue, "success");
 //                    });
-                    location.reload();
-                    console.log(result);
+                   location.reload();
                 });
 
             });
@@ -443,18 +456,20 @@
             });
 
             inputdate.bootstrapMaterialDatePicker({
-                format: "DD/MM/YYYY",
-                switchOnClick: true,
-                time: false,
-                lang: "pt-br",
-                cancelText: "Cancelar"
+                 //format: "DD/MM/YYYY",
+                 format: "dddd, DD MMMM YYYY",
+                 switchOnClick: true,
+                 time: false,
+                 lang: "pt-br",
+                 cancelText: "Cancelar",
+                 date: new Date()
             });
 
             inputdate.on('change', function () {
-                splitdate = this.value.split("/");
-                inputdateval = new Date(splitdate[2], splitdate[1] - 1, splitdate[0]);
+                splitdate = this.value.split(" ");
+                inputdateval = splitdate[3] + "-" + getMonthDate(splitdate[2]) + "-" + splitdate[1];
 
-                location.href = "/admin/agenda/"+formatDate(inputdateval);
+                location.href = "/admin/agenda/"+inputdateval;
 
             });
 
@@ -509,6 +524,10 @@
                 language: {
                     url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
                 },
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
                 autoWidth: false,
                 paging: false,
                 bInfo: false,
@@ -537,6 +556,33 @@
             if (day.length < 2) day = '0' + day;
 
             return [year, month, day].join('-');
+        }
+
+        function getMonthDate(date) {
+            if(date === 'Janeiro')
+                return '01';
+            if(date === 'Fevereiro')
+                return '02';
+            if(date === 'Março')
+                return '03';
+            if(date === 'Abril')
+                return '04';
+            if(date === 'Maio')
+                return '05';
+            if(date === 'Junho')
+                return '06';
+            if(date === 'Julho')
+                return '07';
+            if(date === 'Agosto')
+                return '08';
+            if(date === 'Setembro')
+                return '09';
+            if(date === 'Janeiro')
+                return '10';
+            if(date === 'Janeiro')
+                return '11';
+            if(date === 'Janeiro')
+                return '12';
         }
 
     </script>
