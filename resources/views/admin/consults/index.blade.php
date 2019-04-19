@@ -15,14 +15,39 @@ date_default_timezone_set('America/Sao_Paulo');
             {{ session("success") }}
         </div>
     @endif
+    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Como marcar um agendamento:</h4>
+                </div>
+                <div class="modal-body">
+                    <b>1.</b> Escolha a data e o horário do agendamento.<br/><br/>
+                    <b>2.</b> Clique na coluna Paciente (na data e horário escolhido), digite o nome do paciente (ou parte do nome para carregar). Caso o cliente exista no sistema, basta selecioná-lo na listagem automática. Caso o nome do paciente não seja listado, faça o cadastro do mesmo antes de efeuar o agendamento.<br/><br/>
+                    <b>3.</b> Após selecionar o paciente, clique na coluna “Sessão” e digite o número correspondente aos número de sessões que gostaria de agendar.<br/><br/>
+                    <b>4.</b> Terminando os passos acima, basta clicar no botão verde na coluna Ação, para salvar o agendamento.<br/><br/>
+                    <b>5.</b> O agendamento será criado automaticamente respeitando o horário e intervalo de dias escolhido. Caso exista um agendamento no mesmo dia e horário, o sistema irá agendar no próximo horário disponível.<br/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="header">
-                    <h2>
-                        Consultas
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>Consultas</h2>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal"><i class="material-icons">help</i> Ajuda</button>
+                        </div>
+                    </div>
 
-                    </h2>
 
                     {{--<div class="row text-center" style=" height: 55px;">--}}
                         {{--<input type="text" id="date" class="form-control-border text-center"--}}
@@ -113,7 +138,7 @@ date_default_timezone_set('America/Sao_Paulo');
                                 <th>Observação</th>
                                 <th width="30px">Sessão</th>
                                 <th width="82px">Presença</th>
-                                <th>Ação</th>
+                                <th width="50px">Ação</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -348,6 +373,8 @@ date_default_timezone_set('America/Sao_Paulo');
             background-color: rgba(0,0,0,0.5);
             color: #fff;
         }
+
+        .fixedHeader-floating{ top: 53px !important;}
     </style>
 
 @endpush
@@ -357,6 +384,8 @@ date_default_timezone_set('America/Sao_Paulo');
     <script src="{{ asset("plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js") }}"></script>
     <script src="{{ asset("plugins/clipboardjs/clipboard.min.js") }}"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css"/>
     <script>
         inputdate = $('#date');
 
@@ -525,8 +554,7 @@ date_default_timezone_set('America/Sao_Paulo');
                     url: "{{ asset("plugins/jquery-datatable/i18n/Portuguese-Brasil.json") }}"
                 },
                 fixedHeader: {
-                    header: true,
-                    footer: true
+                    header: true
                 },
                 autoWidth: false,
                 paging: false,

@@ -33,7 +33,7 @@
                             <th>Observação</th>
                             <th width="30px">Sessão</th>
                             <th width="82px">Presença</th>
-                            <th width="7%">Ação</th>
+                            <th width="50px">Ação</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -45,7 +45,7 @@
                             <th>Observação</th>
                             <th width="30px">Sessão</th>
                             <th width="82px">Presença</th>
-                            <th width="7%">Ação</th>
+                            <th width="50px">Ação</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -63,6 +63,7 @@
                             <tr style="{{$consult->presence != '' ? "background-color:".$bg."; color:".$color : ""}}">
 
                                 <td>
+                                    <span class="hidden">{{date('Ymd', strtotime($consult->date))}}</span>
                                     {{date('d/m/Y', strtotime($consult->date))}}
                                 </td>
                                 <td>
